@@ -1,0 +1,97 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    line-height: 19px;
+    font-style: normal;
+    font-weight: normal;
+}
+div, section {
+    display: inline-block;
+    float: left;
+    width: 100%;
+}
+p, h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+.page-title {
+    font-size: 75px;
+    line-height: 102.14px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    float: left;
+    width: 100%;
+    &.regular {
+        font-weight: normal;
+    }
+}
+h1 {
+    font-size: 54px;
+    line-height: 74px;
+}
+h2 {
+    font-size: 43px;
+    line-height: 59px;
+}
+h3 {
+    font-size: 35px;
+    line-height: 48px;
+}
+h4 {
+    font-size: 28px;
+    line-height: 38px;
+}
+h5 {
+    font-size: 22px;
+    line-height: 30px;
+}
+h6 {
+    font-size: 16px;
+    line-height: 22px;
+}
+a {
+    color: var(--dark-neutral-1);
+    &:hover {
+        color: var(--primary-1);
+    }
+}
+
+
+.primary-txt {
+    color: var(--primary-1);
+}
+.secondary-txt {
+    color: var(--secondary-1);
+}
+.pull-left {
+    float: left;
+}
+.pull-right {
+    float: right;
+}
+.full-width {
+    width: 100%;
+}
+.auto-width {
+    width: auto;
+}
+.relative {
+    position: relative;
+}
+.center, .center-text {
+    text-align: center;
+}
+.right, .right-text, .right-txt, .txt-right, .text-right {
+    text-align: right;
+}
+.left, .left-text, .left-txt, .txt-left, .text-left {
+    text-align: left;
+}
+.table {
+    display: table;
+}
+.transparent-bg {
+    background-color: transparent !important;
+}

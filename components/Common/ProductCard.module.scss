@@ -1,0 +1,31 @@
+.product-card {
+    border-radius: 13px;
+    overflow: hidden;
+
+    .product-image {
+        position: relative;
+        width: 100%;
+        background-color: var(--dark-neutral-4);
+        &:before {
+            content: '';
+            float: left;
+            display: inline-block;
+            width: 100%;
+            padding-top: 70%;
+        }
+    }
+    .product-details {
+        border: var(--border-neutral-2);
+        border-radius: inherit;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        width: 100%;
+        padding: 5px 14px 15px;
+        overflow: hidden;
+    }
+    .product-rating {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+}

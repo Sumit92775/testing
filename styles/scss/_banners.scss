@@ -1,0 +1,17 @@
+.banner {
+    position: relative;
+    background-color: var(--light-neutral-3);
+    min-height: 288px;
+    border-radius: 17px;
+    
+    &.home {
+        height: 650px;
+    }
+
+    &.banner-2 {
+        height: 479px;
+    }
+    &.banner-3 {
+        height: 288px;
+    }
+}

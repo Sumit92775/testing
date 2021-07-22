@@ -1,0 +1,104 @@
+.ant-table {
+    --border: 2px solid var(--light-neutral-2);
+    --row-border: 1px solid var(--light-neutral-3);
+    --border-radius: 8px;
+    table {
+        td, th {
+            background-color: var(--white);
+            color: var(--dark-neutral-2);
+            padding: 16px 13px 18px;
+        }
+        th {
+            font-size: 11px;
+            text-transform: uppercase;
+            padding-top: 13px;
+            &:before {
+                display: none;
+            }
+        }
+        td {
+            font-size: 14px;
+        }
+    }
+    &.bordered {
+        table {
+            td, th {
+                &:first-child {
+                    border-left: var(--border);
+                }
+                &:last-child {
+                    border-right: var(--border);
+                }
+                border-bottom: var(--row-border);
+            }
+            thead {
+                tr:first-child {
+                    th {
+                        border-top: var(--border);
+                        &:first-child {
+                            border-top-left-radius: var(--border-radius);
+                        }
+                        &:last-child {
+                            border-top-right-radius: var(--border-radius);
+                        }
+                    }
+                }
+            }
+            tbody {
+                tr:last-child {
+                    td {
+                        border-bottom: var(--border);
+                        &:first-child {
+                            border-bottom-left-radius: var(--border-radius);
+                        }
+                        &:last-child {
+                            border-bottom-right-radius: var(--border-radius);
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+
+.dashboard-mini-table {
+    box-shadow: var(--shadow-3);
+    border-radius: var(--card-border-radius);
+    border: var(--border-neutral-3);
+    .ant-table {
+        background-color: transparent;
+    }
+    table {
+        th {
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: none;
+            &:first-child {
+                padding-left: 25px;
+            }
+        }
+        tbody {
+            tr {
+                td {
+                    font-weight: bold;
+                    &:first-child {
+                        font-weight: normal;
+                        padding-left: 25px;
+                    }
+                }
+                &:last-child {
+                    td {
+                        &:first-child {
+                            border-bottom-left-radius: var(--card-border-radius);
+                        }
+                        &:last-child {
+                            border-bottom-right-radius: var(--card-border-radius);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
