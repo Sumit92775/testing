@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { authenticate } from '../actions/user';
 
 export default function Search(props:any) {
-    const userid = 'admin@saloonplus.com',
+    const userid = 'customer@saloonplus.com',
     pass = '12345678';
 
     const [form] = Form.useForm(),
