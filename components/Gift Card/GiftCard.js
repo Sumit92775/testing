@@ -1,11 +1,30 @@
-import { Avatar, Switch } from 'antd';
+import { Avatar, Modal, Switch } from 'antd';
 import { UserOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Form, Input, Button, Radio } from 'antd';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { useState } from 'react';
+import ShareGiftCardModal from './ShareGiftCardModal'
 
 const GiftCard = (props) => {
     let onSwitch = event => props.card.visibleToStore = event;
+    
+    const [shareGiftCard, setShareGiftCard] = useState(false);
+    // const [chooseModalName, setchooseModalName] = useState("");
+
+    const handleOk = (evt) => {
+        console.log('ok clicked', evt)
+    };
+    
+    const handleCancel = () => {
+        setShareGiftCard(false)
+    };
+    
+    const openModal = (type) => {
+        setShareGiftCard(true)
+    };
+
+    
     return (
         <div className="gift-card">
             <div className="gift-card-header">
@@ -13,7 +32,7 @@ const GiftCard = (props) => {
                 <h6>{ props.card.cardName }</h6>
                 <span>#{ props.card.cardNumber }</span>
                 <span></span>
-                <span>
+                {/* <span>
                     Visible In Store
                     <Switch
                         className="ml-15" size="small"
@@ -21,7 +40,7 @@ const GiftCard = (props) => {
                         unCheckedChildren={<CloseOutlined />}
                         onChange={ onSwitch }
                         defaultChecked={ props.card.visibleToStore } />
-                </span>
+                </span> */}
             </div>
             <div className="gift-card-description">
                 <strong className="full-width">Description</strong>
@@ -29,12 +48,8 @@ const GiftCard = (props) => {
             </div>
             <div className="grid-view grid-3 colgap-14 gift-card-validity">
                 <div>
-                    <strong>Valid For</strong>
-                    <p><strong>{ props.card.validity }</strong> After Purchase</p>
-                </div>
-                <div className="span-2">
-                    <strong>Dates</strong>
-                    <p>{ props.card.dates }</p>
+                    <strong>Expiry</strong>
+                    <p className="primary-txt">{ props.card.expiry }</p>
                 </div>
             </div>
             <div className="grid-view grid-3 colgap-14 gift-card-pricing">
@@ -47,29 +62,44 @@ const GiftCard = (props) => {
                     <p>${ props.card.value }</p>
                 </div>
                 <div>
-                    <strong>Quantity</strong>
-                    <p>{ props.card.quantity }</p>
+                    <strong>Service Provider</strong>
+                    <p className="primary-txt">{ props.card.servicProvider }</p>
                 </div>
             </div>
             <div className="grid-view grid-3 colgap-14 gift-card-meta">
                 <div>
-                    <strong  className="primary-txt">{ props.card.purchases }</strong>
-                    <p>Purchases</p>
+                    <strong  className="primary-txt">${ props.card.balance }</strong>
+                    <p>In Balance</p>
                 </div>
-                <div>
+                {/* <div>
                     <strong className="primary-txt">{ props.card.timesUsed }</strong>
                     <p>Times Used</p>
                 </div>
                 <div>
                     <strong className="primary-txt">{ props.card.cardsExpired }</strong>
                     <p>Cards Expired</p>
-                </div>
+                </div> */}
 
             </div>
             <div className="gift-card-actions">
-                <Button className="primary small mr-33" type="link"><span className="icon-wrap"><EditIcon /></span>Edit Details</Button>
-                <Button className="danger small" type="link"><span className="icon-wrap"><DeleteIcon /></span>Remove Gift Card</Button>
+                <Button className="primary small mr-33" type="link" onClick={openModal}><span className="icon-wrap"><EditIcon /></span>Share Gift Card</Button>
+                {/* <Button className="danger small" type="link"><span className="icon-wrap"><DeleteIcon /></span>Remove Gift Card</Button> */}
             </div>
+
+            <Modal style={{borderRadius :"15px", overflow : "hidden"}} title={
+                            <div style={{width : "100%", 
+                            height: "100%",
+                            display: "grid",
+                            gridTemplateColumns: "1fr",
+                            alignItems: "center"}}>
+                                <h4 className="primary-txt">Share Gift Card</h4>
+                            </div>
+                    } footer={""} 
+                    visible={shareGiftCard} onOk={handleOk} onCancel={handleCancel}>
+                        {
+                           <ShareGiftCardModal/>
+                        }
+                    </Modal>
         </div>
     )
 }

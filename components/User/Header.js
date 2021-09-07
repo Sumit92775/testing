@@ -29,6 +29,11 @@ const Header = (props) => {
                                     Logout
                                 </Link>
                             </Menu.Item>
+                            <Menu.Item key="giftcard-1">
+                                <Link href={ process.env.base_url + "gift-cards" } passHref={true}>
+                                    Gift Cards
+                                </Link>
+                            </Menu.Item>
                         </SubMenu>
                     </Menu>
                 </div>
