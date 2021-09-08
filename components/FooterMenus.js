@@ -1,4 +1,5 @@
 import { Menu } from 'antd'
+import Link from 'next/link';
 const { SubMenu } = Menu;
 
 const FooterMenus = () => {
@@ -21,17 +22,29 @@ const FooterMenus = () => {
             <div className="menu-group">
                 <strong className="menu-group-title">Company</strong>
                 <Menu>
-                    <Menu.Item key="about-us">About Us</Menu.Item>
-                    <Menu.Item key="provider-subscription">Provider Subscription</Menu.Item>
-                    <Menu.Item key="freelancer-subscription">Freelancer Subscription</Menu.Item>
+                    <Menu.Item key="about-us"> 
+                        <Link href="/aboutus" passHref={true}>
+                            About Us
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item key="provider-subscription"><Link href="/sp-subscription-tier" passHref={true}>Provider Subscription</Link></Menu.Item>
+                    <Menu.Item key="freelancer-subscription"><Link href="/freelancer-subscription-tier" passHref={true}>Freelancer Subscription</Link></Menu.Item>
                     <Menu.Item key="partnership-programs">Partnership Programs</Menu.Item>
                 </Menu>
             </div>
             <div className="menu-group">
                 <strong className="menu-group-title">Support</strong>
                 <Menu>
-                    <Menu.Item key="faq">FAQ</Menu.Item>
-                    <Menu.Item key="contact-us">Contact Us</Menu.Item>
+                    <Menu.Item key="faq">
+                        <Link href="/faq" passHref={true}>
+                          FAQ
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item key="contact-us">
+                        <Link href="/contact-us" passHref={true}>
+                            Contact Us
+                        </Link>
+                    </Menu.Item>
                 </Menu>
             </div>
             <div className="menu-group">

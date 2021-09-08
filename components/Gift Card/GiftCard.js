@@ -63,7 +63,7 @@ const GiftCard = (props) => {
                 </div>
                 <div>
                     <strong>Service Provider</strong>
-                    <p className="primary-txt">{ props.card.servicProvider }</p>
+                    <p className="primary-txt">{ props.card.serviceProvider }</p>
                 </div>
             </div>
             <div className="grid-view grid-3 colgap-14 gift-card-meta">
@@ -71,19 +71,9 @@ const GiftCard = (props) => {
                     <strong  className="primary-txt">${ props.card.balance }</strong>
                     <p>In Balance</p>
                 </div>
-                {/* <div>
-                    <strong className="primary-txt">{ props.card.timesUsed }</strong>
-                    <p>Times Used</p>
-                </div>
-                <div>
-                    <strong className="primary-txt">{ props.card.cardsExpired }</strong>
-                    <p>Cards Expired</p>
-                </div> */}
-
             </div>
             <div className="gift-card-actions">
                 <Button className="primary small mr-33" type="link" onClick={openModal}><span className="icon-wrap"><EditIcon /></span>Share Gift Card</Button>
-                {/* <Button className="danger small" type="link"><span className="icon-wrap"><DeleteIcon /></span>Remove Gift Card</Button> */}
             </div>
 
             <Modal style={{borderRadius :"15px", overflow : "hidden"}} title={

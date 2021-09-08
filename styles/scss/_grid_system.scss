@@ -4,16 +4,8 @@
   @for $i from 1 through 10 {
     &.grid-#{$i} {
       grid-template-columns: repeat(#{$i}, 1fr);
-      & > .full {
-        grid-column-start: 1;
-        grid-column-end: #{$i + 1};
-      }
       &.have-checkboxes {
         grid-template-columns: auto repeat(#{$i}, 1fr);
-        & > .full {
-          grid-column-start: 2;
-          grid-column-end: #{$i + 2};
-        }
         & > .fullrow {
           grid-column-start: 1;
           grid-column-end: #{$i + 2};
@@ -21,10 +13,6 @@
       }
       &.formarray {
         grid-template-columns: repeat(#{$i}, 1fr) auto;
-        & > .full {
-          grid-column-start: 1;
-          grid-column-end: #{$i + 1};
-        }
         & > .fullrow {
           grid-column-start: 1;
           grid-column-end: #{$i + 2};
@@ -32,16 +20,16 @@
       }
       &.have-checkboxes.formarray {
         grid-template-columns: auto repeat(#{$i}, 1fr) auto;
-        & > .full {
-          grid-column-start: 2;
-          grid-column-end: #{$i + 2};
-        }
         & > .fullrow {
           grid-column-start: 1;
           grid-column-end: #{$i + 3};
         }
       }
     }
+  }
+  & > .full {
+    grid-column-start: 1;
+    grid-column-end: -1;
   }
 
   .label-value {

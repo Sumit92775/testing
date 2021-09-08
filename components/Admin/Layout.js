@@ -59,7 +59,7 @@ const Layout = ({children}) => {
         {
             path: '/admin/sponsored-results',
             label: 'Sponsored Results',
-            icon: 'campaign'
+            icon: ' '
         }
     ]
 

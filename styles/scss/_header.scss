@@ -1,4 +1,38 @@
 header {
+    // background-color: var(--white);
+    // @extend .border-bottom;
+    // position: sticky;
+    // height: 57px;
+    // top: 0px;
+    // left: 0;
+    // padding: 12px 28px;
+    // display: grid;
+    // grid-template-columns: 1fr 1fr;
+    // z-index: 9999;
+    .header-search {
+        border: none;
+        background-color: var(--light-neutral-4);
+        padding-left: 24px;
+        padding-right: 24px;
+        border-radius: 16px;
+        width: 488px;
+        background: #F8F8F8;
+        border-radius: 16px;
+        .ant-input-prefix {
+            color: var(--light-neutral-1);
+            margin-right: 8px;
+        }
+        input {
+            width: 100%;
+            background-color: transparent;
+            &::placeholder {
+                color: var(--dark-neutral-4);
+            }
+            border: none;
+            outline: none;
+            padding-left: 10px;
+        }
+    }
     &.user-header {
         background-color: var(--white);
         @extend .border-bottom;
@@ -10,24 +44,6 @@ header {
         display: grid;
         grid-template-columns: 1fr 1fr;
         z-index: 9999;
-        .header-search {
-            border: none;
-            background-color: var(--light-neutral-4);
-            padding-left: 24px;
-            border-radius: 16px;
-            height: 32px;
-            line-height: 32px;
-            .ant-input-prefix {
-                color: var(--light-neutral-1);
-                margin-right: 8px;
-            }
-            input {
-                background-color: transparent;
-                &::placeholder {
-                    color: var(--dark-neutral-4);
-                }
-            }
-        }
         .heder-actions {
             display: grid;
             grid-template-columns: 1fr auto auto auto auto;

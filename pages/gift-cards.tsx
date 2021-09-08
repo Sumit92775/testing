@@ -2,11 +2,11 @@ import Head from 'next/head'
 import GiftCard from '../components/Gift Card/GiftCard';
 import ExpiredGiftCards from '../components/Gift Card/Expired-GiftCards';
 import ShopCard from '../components/Gift Card/ShopCard';
-import AdminLayout from '../components/Admin/Layout';
 import { Tabs, Button } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import CustomerLayout from '../components/User/Customer-Layout';
 
 const { TabPane } = Tabs;
 
@@ -15,44 +15,38 @@ export default function GiftCards() {
         {
             cardName: 'Gift Card 1',
             cardNumber: '22AW-L8CT-20',
-            visibleToStore: false,
             description: 'A short Description about the gift card goes here for getting an initial idea.',
             expiry: '14 Nov, 2020',
             dates: 'Nov 11, 2020 - Nov 11, 2021',
             price: '25',
             remainingBalance: '100',
-            storeName: 'Halais',
+            serviceProvider: 'Halais',
+            value: '25',
             balance: '25',
-            timesUsed: '17',
-            cardsExpired: '08',
         },
         {
             cardName: 'Gift Card 1',
             cardNumber: '22AW-L8CT-20',
-            visibleToStore: false,
             description: 'A short Description about the gift card goes here for getting an initial idea.',
             expiry: '14 Nov, 2020',
             dates: 'Nov 11, 2020 - Nov 11, 2021',
             price: '25',
             remainingBalance: '100',
-            storeName: 'Halais',
+            serviceProvider: 'Halais',
+            value: '25',
             balance: '25',
-            timesUsed: '17',
-            cardsExpired: '08',
         },
         {
             cardName: 'Gift Card 1',
             cardNumber: '22AW-L8CT-20',
-            visibleToStore: false,
             description: 'A short Description about the gift card goes here for getting an initial idea.',
             expiry: '14 Nov, 2020',
             dates: 'Nov 11, 2020 - Nov 11, 2021',
             price: '25',
             remainingBalance: '100',
-            storeName: 'Halais',
+            serviceProvider: 'Halais',
+            value: '25',
             balance: '25',
-            timesUsed: '17',
-            cardsExpired: '08',
         },
        
     ];
@@ -63,14 +57,23 @@ export default function GiftCards() {
             cardNumber: '22AW-L8CT-20',
             description: 'A short Description about the gift card goes here for getting an initial idea.',
             validFor: '10 Days After Purchase',
-            dates: 'Nov 11, 2020 - Nov 11, 2021',
             price: '25',
             date: 'Nov 11, 2020 - Dec 31, 2020',
             value: '50',
-            cardsExpired: '08',
         },
     ];
-
+    
+    const ExpiredCardList = [
+        {
+            cardName: 'Gift Card 1',
+            cardNumber: '22AW-L8CT-20',
+            description: 'A short Description about the gift card goes here for getting an initial idea.',
+            expiry: '14 Nov, 2020',
+            price: '25',
+            remainingBalance: '50',
+            storeName: 'halais',
+        },
+    ];
 
     const [createGiftCard, setCreateGiftCard] = useState(false);
 
@@ -91,7 +94,6 @@ export default function GiftCards() {
         }
     };
 
-
     const router = useRouter(),
     { slug } = router.query,
     selected_tab = slug && slug[0] ? slug[0] : 'providers',
@@ -101,7 +103,7 @@ export default function GiftCards() {
     };
 
     return (
-        <AdminLayout>
+        <CustomerLayout>
             <div className="">
                 <h3 className="mb-24">
                     Gift Cards
@@ -140,71 +142,26 @@ export default function GiftCards() {
                         </div>
                     </TabPane>
 
-                    {/* <TabPane tab="Expired" key="2">
+                    <TabPane tab="Expired" key="2">
                         <h5>Your Expired Gift Cards</h5>
+                        <div className="grid-view grid-2 colgap-30 rowgap-30 mt-30">
+                            {ExpiredCardList.map((a, i) => {
+                                return <ExpiredGiftCards key={i} card={a} />
+                            })}
+                        </div>
+                    </TabPane>
+
+                    <TabPane tab="Shop" key="3">
+                        <h5>Your Shop Gift Cards</h5>
                         <div className="grid-view grid-2 colgap-30 rowgap-30 mt-30">
                             {ShopGiftCardList.map((a, i) => {
                                 return <ShopCard key={i} card={a} />
                             })}
                         </div>
                     </TabPane>
-                     */}
-                    <TabPane tab="Expired" key="2">
-                        <h5>Your Expired Gift Cards</h5>
-                        <div className="grid-view grid-2 colgap-30 rowgap-30 mt-30">
-                            {ShopGiftCardList.map((a, i) => {
-                                return <ExpiredGiftCards key={i} card={a} />
-                            })}
-                        </div>
-                    </TabPane>
-                    {/* <TabPane tab="Shop" key="1">
-                        <h5>Your Expired Gift Cards</h5>
-                        <div className="grid-view grid-2 colgap-30 rowgap-30 mt-30">
-                            {count.map((a, i) => {
-                                return <GiftCard key={i} card={a} />
-                            })}
-                        </div>
-                    </TabPane> */}
-
-                    {/* <TabPane tab="Validity Checker" key="3">
-                        <h5>Validity Checker</h5>
-                        <div className="grid-view grid-2 colgap-30 rowgap-30 mt-30">
-                            {count.map((a, i) => {
-                                return <GiftCard key={i} card={a} />
-                            })}
-                        </div>
-                    </TabPane> */}
-
+                    
                 </Tabs>
-
-                {/* <Tabs defaultActiveKey="1">
-                    <TabPane tab="Active Gift Cards" key="1">
-                        <h5>Active Gift Cards</h5>
-                        <div className="grid-view grid-2 colgap-30 rowgap-30 mt-30">
-                            {count.map((a, i) => {
-                                return <GiftCard key={i} card={a} />
-                            })}
-                        </div>
-                    </TabPane>
-                    <TabPane tab="Inactive Gift Cards" key="2">
-                        <h5>Inactive Gift Cards</h5>
-                        <div className="grid-view grid-2 colgap-30 rowgap-30 mt-30">
-                            {count.map((a, i) => {
-                                return <GiftCard key={i} card={a} />
-                            })}
-                        </div>
-                    </TabPane>
-                    <TabPane tab="Validity Checker" key="3">
-                        <h5>Validity Checker</h5>
-                        <div className="grid-view grid-2 colgap-30 rowgap-30 mt-30">
-                            {count.map((a, i) => {
-                                return <GiftCard key={i} card={a} />
-                            })}
-                        </div>
-                    </TabPane>
-                </Tabs>
-            */}
             </div>
-        </AdminLayout>
+        </CustomerLayout>
     )
 }

@@ -1,4 +1,4 @@
-.ant-table {
+.ant-table-wrapper  {
     --border: 2px solid var(--light-neutral-2);
     --row-border: 1px solid var(--light-neutral-3);
     --border-radius: 8px;
@@ -60,8 +60,151 @@
 
         }
     }
+
+    &.transaction {
+        .ant-table-content {
+            border-radius: var(--card-border-radius);
+            box-shadow: var(--shadow-3);
+            padding: 28px 22px;
+        }
+        table {
+            border-collapse: separate;
+            border-spacing: 0 3px;
+            thead {
+                th {
+                    background-color: var(--primary-1);
+                    border: none;
+                    color: var(--white);
+                    font-size: 14px;
+                    font-weight: 700;
+                    padding: 6px 13px;
+                }
+            }
+            td {
+                padding: 9px 13px;
+                border-top: var(--border-neutral-3);
+                border-bottom: var(--border-neutral-3);
+                &:first-child {
+                    border-left: var(--border-neutral-3);
+                }
+                &:last-child {
+                    border-right: var(--border-neutral-3);
+                }
+            }
+            tr {
+                &:nth-child(even) {
+                    td {
+                        background-color: var(--light-neutral-4);
+                    }
+                }
+            }
+        }
+    }
+
+    .table-action-btn {
+        border: none;
+        background-color: transparent;
+        display: inline-block;
+        & > .ant-menu-submenu {
+            & > .ant-menu-submenu-title {
+                position: relative;
+                display: inline-block;
+                float: left;
+                width: 20px;
+                height: 40px;
+                color: var(--dark-neutral-4);
+                transition: all linear 0.3s;
+                &:before {
+                    content: '';
+                    width: 5px;
+                    height: 5px;
+                    border-radius: 4px;
+                    background-color: currentColor;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translateX(-50%) translateY(-50%);
+                    box-shadow: 0 -8px 0 currentColor, 0  8px 0 currentColor;
+                    transition: inherit;
+                }
+
+                &:hover {
+                    color: var(--primary-1);
+                }
+
+            }
+            &:after {
+                display: none;
+            }
+        }
+    }
 }
 
+.ant-menu-submenu-popup {
+    ul.ant-menu {
+        display: flex;
+        flex-direction: column;
+        grid-row-gap: 5px;
+        padding: 5px 0;
+    }
+    .ant-menu-item {
+        height: 30px;
+        line-height: 30px;
+        margin: 0 !important;
+        font-size: 14px;
+        transition: all linear 0.3s;
+        &:not(.primary):not(.secondary):not(.success):not(.danger) {
+            color: var(--dark-neutral-4);
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+        &.ant-menu-item-selected {
+            background-color: var(--light-neutral-3) !important;
+        }
+
+        &.primary {
+            &:hover {
+                color: var(--primary-2)
+            }
+            &.ant-menu-item-selected {
+                background-color: var(--primary-4) !important;
+            }
+        }
+        &.secondary {
+            &:hover {
+                color: var(--secondary-2)
+            }
+            &.ant-menu-item-selected {
+                background-color: var(--secondary-4) !important;
+            }
+        }
+        &.danger {
+            &:hover {
+                color: var(--red-2)
+            }
+            &.ant-menu-item-selected {
+                background-color: var(--red-4) !important;
+            }
+        }
+        &.success {
+            &:hover {
+                color: var(--green-2)
+            }
+            &.ant-menu-item-selected {
+                background-color: var(--green-4) !important;
+            }
+        }
+
+        & > * {
+            float: left;
+        }
+        .ant-menu-item-icon {
+            font-size: 20px;
+            line-height: 30px;
+        }
+    }
+}
 
 .dashboard-mini-table {
     box-shadow: var(--shadow-3);

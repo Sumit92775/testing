@@ -26,12 +26,27 @@ const Header = (props) => {
                         <SubMenu key="SubMenu" icon={<Avatar className="mr-5" size={22} icon={<UserOutlined />} />} title="Halais">
                             <Menu.Item key="setting-1">
                                 <Link href={ process.env.base_url + "login" } passHref={true}>
-                                    Logout
+                                    My Bookings
                                 </Link>
                             </Menu.Item>
                             <Menu.Item key="giftcard-1">
                                 <Link href={ process.env.base_url + "gift-cards" } passHref={true}>
+                                    My Reviews
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item key="setting-1">
+                                <Link href={ process.env.base_url + "login" } passHref={true}>
+                                    My Wallets
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item key="setting-1">
+                                <Link href={ process.env.base_url + "login" } passHref={true}>
                                     Gift Cards
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item key="giftcard-1">
+                                <Link href={ process.env.base_url + "gift-cards" } passHref={true}>
+                                    Logout
                                 </Link>
                             </Menu.Item>
                         </SubMenu>

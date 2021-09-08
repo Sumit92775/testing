@@ -10,6 +10,12 @@
     font-style: normal;
     border: none;
     box-sizing: border-box;
+    cursor: pointer;
+
+    &.disabled {
+        pointer-events: none;
+    }
+    
     &[ant-click-animating-without-extra-node="true"]::after {
         animation: none;
     }
@@ -20,6 +26,16 @@
         font-size: 14px;
         line-height: 28px;
         padding: 0 15px;
+        border-radius: 5px;
+    }
+    &.medium2 {
+        height: 35px;
+        font-weight: 400;
+        border-radius: 3px;
+        font-size: 14px;
+        line-height: 35px;
+        padding-block: 0;
+        padding-inline: 15px;
         border-radius: 5px;
     }
     &.small {
@@ -40,6 +56,10 @@
                 margin: auto;
             }
         }
+    }
+    &.link-btn {
+        padding-block: 10px !important;
+        line-height: 20px;
     }
     // &:before {
     //     content: '';
@@ -88,6 +108,17 @@
             background-color: var(--red-active);
         }
     }
+    &.dark {
+        background-color: var(--dark-neutral-2);
+        color: var(--white);
+        border-color: transparent;
+        &:hover {
+            background-color: var(--dark-neutral-3);
+        }
+        &:active {
+            background-color: var(--dark-neutral-1);
+        }
+    }
 
     &.ant-btn-link {
         padding: 0;
@@ -134,6 +165,34 @@
             &:active {
                 color: var(--red-active);
             }
+        }
+        &.dark {
+            color: var(--dark-neutral-2);
+            .icon-wrap {
+                background-color: var(--white);
+            }
+            &:hover {
+                color: var(--dark-neutral-3);
+            }
+            &:active {
+                color: var(--dark-neutral-1);
+            }
+        }
+    }
+    &.ghost {
+        background-color: transparent;
+        border-color: currentColor;
+        &.primary{
+            color: var(--primary-1);
+        }
+        &.secondary{
+            color: var(--secondary-1);
+        }
+        &.danger{
+            color: var(--red-1);
+        }
+        &.success{
+            color: var(--green-1);
         }
     }
 }

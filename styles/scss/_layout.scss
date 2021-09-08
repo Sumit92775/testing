@@ -9,3 +9,10 @@
         }
     }
 }
+
+.service-details-page-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    grid-column-gap: 40px;
+    padding: 30px;
+}

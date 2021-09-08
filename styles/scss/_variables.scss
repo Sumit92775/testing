@@ -1,4 +1,4 @@
-body {
+:root {
     --white: #FFFFFF;
     --black: #000000;
     --dark-neutral-1: #212A41;
@@ -29,16 +29,26 @@ body {
     --light-neutral-3: #E8EAEF;
     --light-neutral-4: #F8F8F8;
     --input-icon-1: #DADADA;
+    --gray-1: #333333;
+    --gray-3: #828282;
     --gray-5: #E0E0E0;
     
     --border-2: 1px solid #C0CCDA;
+    --border-primary-1: 1px solid var(--primary-1);
     --border-dark-neutral-1: 1px solid var(--dark-neutral-1);
     --border-neutral-1: 1px solid var(--light-neutral-1);
     --border-neutral-2: 1px solid var(--light-neutral-2);
     --border-neutral-3: 1px solid var(--light-neutral-3);
     --border-neutral-4: 1px solid var(--light-neutral-4);
+    --border-dark-1: 1px solid var(--dark-neutral-1);
+    --border-dark-2: 1px solid var(--dark-neutral-2);
+    --border-dark-3: 1px solid var(--dark-neutral-3);
+    --border-dark-4: 1px solid var(--dark-neutral-4);
+    --border-grey-5: 1px solid var(--gray-5);
+    --page-bg: #ebebeb;
     
     --card-border-radius: 15px;
+    --font-11: 11px;
     
     --shadow-1: 0px -2px 5px rgba(242, 242, 242, 0.25), 0px 4px 8px #F2F2F2;
     --shadow-2: 0px -3px 5px rgba(242, 242, 242, 0.25), 0px 8px 10px #F2F2F2;
