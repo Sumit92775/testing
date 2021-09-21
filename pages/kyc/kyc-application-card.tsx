@@ -93,7 +93,7 @@ const KycApplicationCard = () =>{
 
                 <Form.Item>
                     <div className={styles['check-btn-container']}>
-                        <Checkbox>I'm the signing authority for this business</Checkbox>
+                        <Checkbox>Im the signing authority for this business</Checkbox>
                         <div className="mt-20" style={{display : 'flex', minWidth : "200px", height : "50px", alignItems : "center",justifyContent : "center", border : "2px dashed gray", borderRadius : "6px"}}>
                             <span className="material-icons">add</span>
                             <span className="auto-width">Upload Image</span>

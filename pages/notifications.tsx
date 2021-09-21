@@ -5,18 +5,27 @@ import Layout from '../components/User/Layout'
 import SettingCard from '../components/Common/SettingCard'
 import Modal from 'antd/lib/modal/Modal';
 import ResetPassword from '../components/Common/ResetPassword';
+import NotificationCard from '../components/Common/notification-card';
 import GeneralSettingsModal from '../pages/settings-modals/Edit-General-Settings_Modal';
 import BookingAndPaymentsModal from './settings-modals/Booking-Payments-Modal';
 import NotificationAndSecurity from './settings-modals/Notification-And-Security.Modal';
 import Link from 'next/link';
 import ProfileLeft from './profile-left';
+import CustomerLayout from '../components/User/Customer-Layout';
 
 const Notifications = () => {
 
-    let profileCards = [
-        {title : "Notification & Security",modalName : "notification_and_security", content : [{0 : "Notification Methods", 1 : "SMS, E-Mail"},
-            {0 : "Password", 1 : "xxxxxx"},
-            {0 : "Date Format", 1 : "18 Nov, 2020"}]}
+    let notificationCard = [
+        {title : "Notification",modalName : "notification_and_security", content : 
+        [
+            {titleColor : "var(--secondary-1)", title : "Review", msg : "Reminder to provide review for completed booking SP15912501 Go to Completed bookings", date : "02/11/2020 12:05 PM"},
+            {titleColor : "var(--primary-1)", title : "Review", msg : "Reminder to update the status of booking SP15912501 Go to  bookings", date : "02/11/2020 12:05 PM"},
+            {titleColor : "var(--red-1)", title : "Review", msg : "A new booking is made by Chris J for Beard Shaving. Respond to the booking now  Go to booking requests", date : "02/11/2020 12:05 PM"},
+            {titleColor : "var(--red-1)", title : "Review", msg : "Chris J has rescheduled the booking SP15912505 to 10/11/2020. Go to booking Requests ", date : "02/11/2020 12:05 PM"},
+            {titleColor : "var(--primary-1)", title : "Review", msg : "Chris J has cancelled the booking SP15912505.", date : "02/11/2020 12:05 PM"},
+            {titleColor : "var(--red-1)", title : "Review", msg : "Halais 2 is requstion to join as your branch. Go to Branch Requests ", date : "02/11/2020 12:05 PM"},
+        ]
+    }
 ];
 
 const [selectedModalName, setSelectedModalName] = useState("");
@@ -54,30 +63,24 @@ const openModal = (type : any) => {
 
 
     return(
-        <Layout>
+        <CustomerLayout>
             <div className={styles['main-container']}>
                 <div>
                     <ProfileLeft></ProfileLeft>
                 </div>
                 <div className={styles['main-container-right']}>
             <div className={styles['wallet-deposit-container']}>
-                <div className="card card2 p-0" style={{height : "fit-content", position : "relative"}}>
-                    <h5 className="mt-22 pb-21 pl-27 pr-27">Notifications</h5>
-                    <Divider className="mt-0"></Divider>
-                   <div className="pt-20 pl-38 pr-38">
+                
                        {
-                           profileCards.map((cardDetails) =>{
+                           notificationCard.map((cardDetails) =>{
                                return(
                                    <div className="mb-40" key={`${cardDetails}`}>
-                                       <SettingCard modal={openModal} modalName={cardDetails.modalName} cardDetails={cardDetails}></SettingCard>
+                                       <NotificationCard modal={openModal} modalName={cardDetails.modalName} cardDetails={cardDetails}></NotificationCard>
                                    </div>
                                )
                            })
                        }
-                   </div>
 
-                   
-                </div>
 
                 <Modal style={{borderRadius :"15px", overflow : "hidden",width : "fit-content"}} title={
                         <div style={{width : "100%", 
@@ -109,7 +112,7 @@ const openModal = (type : any) => {
             </div>     
             </div>
             </div>    
-        </Layout>
+        </CustomerLayout>
     
     )
 }

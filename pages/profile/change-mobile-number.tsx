@@ -57,7 +57,7 @@ const ChangePassword = () => {
                 <h6 style={{color : "var(--dark-neutral-4)"}}>Otp <span style={{color : "red"}}>*</span></h6>
                 <Input placeholder="Enter Otp*" className={styles['password-input']} onChange={(event) => {setOtp(event.target.value)}}></Input>
                 <span style={{color : "green"}}>One Time Password Successfuly Sent To Registered Mobile Number</span>
-                <span>Did't Received Otp ? <span style={{color : hidden}}>Resend Otp</span> {"("+"00 :"+time+")"}</span>
+                <span>Didnt Received Otp ? <span style={{color : hidden}}>Resend Otp</span> {"("+"00 :"+time+")"}</span>
                 <Button className="primary txt mt-20" onClick={()=>validateOtp()}>Enter Code</Button>
             </div>
 

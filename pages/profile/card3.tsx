@@ -22,7 +22,7 @@ const Card3 = () =>{
 
                 {itemList.map((obj) =>{
                     return(
-                        <div>
+                        <div key={`${obj}`}>
                             <strong>{obj.title}</strong>
                             <span>{obj.value}</span>
                         </div>

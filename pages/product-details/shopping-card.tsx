@@ -12,7 +12,7 @@ const ShoppingCard = (props : any) =>{
                 <div>
                     {productDetailDataObj.map((obj) =>{
                         return(
-                            <div>
+                            <div key={`${obj}`}>
                                 <ShoppingItem modal={props.modal}></ShoppingItem>
                                 {obj.len === productDetailDataObj.length ? 
                                 <>

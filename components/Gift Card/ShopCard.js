@@ -10,7 +10,7 @@ const ShopCard = (props) => {
                 <div style={{display : "flex", justifyContent : "flex-start", flexDirection : "column"}}>
                     <h6>{ props.card.cardName } <span style={{color : "var(--dark-neutral-3) !important"}}>#{ props.card.cardNumber }</span></h6>
                     <span className="primary-txt">by Halais</span>
-                    <span style={{color : "var(--dark-neutral-2)"}}>Fitness Club <span class="material-icons" style={{fontSize : "10px", color : "var(--light-neutral-2)"}}>fiber_manual_record</span> Sports Activity</span>
+                    <span style={{color : "var(--dark-neutral-2)"}}>Fitness Club <span className="material-icons" style={{fontSize : "10px", color : "var(--light-neutral-2)"}}>fiber_manual_record</span> Sports Activity</span>
                 </div>
             </div>
 

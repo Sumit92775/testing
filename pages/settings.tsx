@@ -20,7 +20,6 @@ const Settings = () => {
 ]},
         {title : "Notification & Security",modalName : "notification_and_security", content : [{0 : "Notification Methods", 1 : "SMS, E-Mail"},
             {0 : "Password", 1 : "xxxxxx"},
-            {0 : "Date Format", 1 : "18 Nov, 2020"},
 ]},
         {title : "Booking & Payments",modalName : "booking_and_payments", content : [{0 : "Payout Frequency", 1 : "Daily"},
             {0 : "Pay at Venue", 1 : "Yes"},
@@ -63,7 +62,7 @@ const openModal = (type : any) => {
         case "booking_and_payments" : setSelectedModalName("Booking And Payments");
         break;
         
-        case "subscription_tier" : setSubscriptionTiers(true);
+        case "subscription_tier" : setSubscriptionTiers(false);
         break;
 
         case "Change Password" : setSelectedModalName("Change Password");

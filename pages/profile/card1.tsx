@@ -10,13 +10,15 @@ const Card1 = (props : any) =>{
         console.log(`switch to ${checked}`);
     }
 
-    const openModal = (type : any) =>{
-        props.modal(type);
-        props.title("General details");
-    }
+    // const openModal = (type : any) =>{
+    //     console.log(type);
+        
+    //     props.modal(type);
+    //     // props.title("General details");
+    // }
 
     return(
-        <CardTemplate title={"General Details"} modal={openModal}>
+        <CardTemplate title={"General details"} modal={props.modal} modalTitle={props.title}>
             <div className={styles['main-content-container']}>
                 <div>
                     <strong>Store</strong>
@@ -36,7 +38,9 @@ const Card1 = (props : any) =>{
                         <span>Halais123@gmail.com</span>
                     </div>
                     <div className={styles['switch-container']}>
-                        <span className={styles['clickable']} style={{color : "var(--primary-1)"}} onClick={()=>openModal("Email")}>Change Email</span>
+                        <span className={styles['clickable']} style={{color : "var(--primary-1)"}} onClick={()=>{props.modal("Change Email");
+                    props.title("Email");
+                    }}>Change Email</span>
                     </div>
                 </div>
                 
@@ -47,7 +51,9 @@ const Card1 = (props : any) =>{
                         <span>+966-505-5515-86</span>
                     </div>
                     <div className={styles['switch-container']}>
-                        <span className={styles['clickable']} style={{color : "var(--primary-1)"}} onClick={()=>openModal("Mobile Number")}>Change Mobile Number</span>
+                        <span className={styles['clickable']} style={{color : "var(--primary-1)"}} onClick={()=>{props.modal("Change Mobile Number");
+                    props.title("Mobile Number");
+                    }}>Change Mobile Number</span>
                     </div>
                 </div>
 

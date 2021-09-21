@@ -18,7 +18,7 @@ const Card6 = () =>{
 
             {itemList.map((obj) =>{
                 return(
-                    <div>
+                    <div key={`${obj}`}>
                         <strong>{obj.title}</strong>
                         <span>{obj.value}<span className="primary txt fz-11"> {obj.special_text}</span></span>
                     </div>

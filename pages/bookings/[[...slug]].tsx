@@ -1,11 +1,14 @@
 import React from 'react'
 import { useRouter } from 'next/router';
 import UserLayout from '../../components/User/Layout';
-import BookingRequests from '../../components/Bookings/BookingRequests';
-import ConfirmedBookings from '../../components/Bookings/ConfirmedBookings';
-import CompletedBookings from '../../components/Bookings/CompletedBookings';
-import CancellationsRejections from '../../components/Bookings/CancellationsRejections';
 import { Tabs } from 'antd';
+import AcceptedBookings from './accepted-bookings';
+import PastBookings from './past-booking';
+import RecheduleBookings from './reschedule';
+import RejectedBookings from './rejected';
+import CustomerLayout from '../../components/User/Customer-Layout';
+
+const { TabPane } = Tabs;
 
 const Index = () => {
     const router = useRouter(),
@@ -17,29 +20,26 @@ const Index = () => {
     };
     
     return (
-        <UserLayout>
+        <CustomerLayout>
             <div className="">
                 <h3 className="mb-24">Bookings</h3>
-                <Tabs className="wide-tabs" activeKey={selected_tab} onTabClick={ onTabClick }>
-                    <Tabs.TabPane tab="Booking Requests" key="booking-requests">
-                        <BookingRequests />
-                    </Tabs.TabPane>
-                    {/* <Tabs.TabPane tab="Reschedule Requests" key="reschedule-requests">
-                        <BookingRequests />
-                    </Tabs.TabPane> */}
-                    <Tabs.TabPane tab="Confirmed Bookings" key="confirmed-bookings">
-                        <ConfirmedBookings />
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab="Completed Bookings" key="completed-bookings">
-                        <CompletedBookings />
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab="Cancellations &amp; Rejections" key="cancellations-rejections">
-                        <CancellationsRejections />
-                    </Tabs.TabPane>
+                <Tabs defaultActiveKey="1">
+                    <TabPane tab="Accepted" key="1">
+                        <AcceptedBookings />
+                    </TabPane>
+                    <TabPane tab="Past Bookings" key="2">
+                        <PastBookings />
+                    </TabPane>
+                    <TabPane tab="Rechedule" key="3">
+                        <RecheduleBookings />
+                    </TabPane>
+                    <TabPane tab="Rejected &amp; Cancelled" key="4">
+                        <RejectedBookings />
+                    </TabPane>
                 </Tabs>
             </div>    
-        </UserLayout>
+        </CustomerLayout>
     )
 }
 
-export default Index
+export default Index;

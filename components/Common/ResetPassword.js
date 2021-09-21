@@ -13,15 +13,15 @@ const ResetPassword = () => {
       const [oldPassword, setOldPassword] = useState("")
       const [newPassword, setNewPassword] = useState("");
       const [retypePassword, setRetypePassword] = useState("");
-      const [errorMsg , setErrorMsg] = useState("");
+      // const [errorMsg , setErrorMsg] = useState("");
 
 
       useEffect(()=>{
         if(newPassword === retypePassword && (newPassword.length > 0 && retypePassword.length > 0)){
           console.log("Correct Password!!");
-          setErrorMsg("");
+          // setErrorMsg("");
         }else if(newPassword.length == retypePassword.length && (newPassword.length > 0 && retypePassword.length > 0)){
-          setErrorMsg("Invalid Password");
+          // setErrorMsg("Invalid Password");
 
         }
       })

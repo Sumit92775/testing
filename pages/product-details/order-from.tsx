@@ -12,7 +12,7 @@ const OrderFrom = () =>{
                         <span>Jeddah Nazlah Dist</span>
                     </div>
                     <div className="of-right-container center-content mr-5">
-                        <Button className="center-content"><Image height="20px" width="20px" style={{objectFit :"cover", marginInlineEnd : "10px"}} src="/clear-cart.png"></Image>Clear Cart</Button>
+                        <Button className="center-content"><Image height="20px" width="20px" style={{objectFit :"cover", marginInlineEnd : "10px"}} src="/clear-cart.png" alt=""></Image>Clear Cart</Button>
                     </div>
                 </div>
         </div>

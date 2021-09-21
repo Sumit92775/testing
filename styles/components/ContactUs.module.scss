@@ -1,20 +1,13 @@
 .container{
-    // height: 100px;
-    // color: white;
     width: 100%;
     height: 100vh;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
     overflow-x: hidden;
 
-
     section{
-        // height: 100vh;
-        // scroll-behavior: smooth;
         scroll-snap-align: start;
     }
-
-    
 
 }
 
@@ -23,9 +16,9 @@
 }
 
 .about-us-text-container{
-    position: absolute;
     top: 40%;
     margin-inline-start: 30px;
+    position: absolute;
 
     .about-us-text{
         color: white;
@@ -34,33 +27,23 @@
 
 .contact-us-container{
     height: fit-content;
-    height: 650px;
-    // margin-block-start: 30px;
-    // background-image: linear-gradient(30deg, #e1d424, #62decdf7);
-    // display: grid;
-    // grid-template-columns: repeat(auto-fit,minmax(400px, 1fr));
+    // height: 650px;
+    width: 100%;
 }
-
 
 
 .left-container{
-    height: 100%;
+    // height: 100%;
     background: url("https://umhs-adolescenthealth.org/wp-content/uploads/2016/12/google-map-background.jpg");
     box-shadow: var(--shadow-3);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 50px;
 }
 
 .right-container{
-        height: 93%;
-    width: 29%;
-    position: absolute;
-    /* -webkit-padding-before: 10px; */
-    /* padding-block-start: 10px; */
-    /* -webkit-padding-after: 20px; */
-    /* padding-block-end: 20px; */
-    /* -webkit-padding-start: 20%; */
-    /* padding-inline-start: 20%; */
-    /* -webkit-padding-end: 15%; */
-    /* padding-inline-end: 15%; */
+    width: 50%;
     backdrop-filter: blur(3px) saturate(100%);
     -webkit-backdrop-filter: blur(50px) saturate(180%);
     border-radius: 12px;
@@ -72,27 +55,10 @@
     align-items: center;
     color: white;
     padding: 3%;
-    margin-top: 26px;
-    right: 91px;
-
-    label{
-        // color: white !important;
-    }
-
+    // margin-top: 26px;
+    // right: 91px;
 }
 
-
-
-.right-info-container{
-    width: 100%;
-}
-
-.main-form{
-
-height: fit-content;
-    // transform: skewX(15deg);
-
-}
 
 .nt-container{
     display: grid;
@@ -102,13 +68,11 @@ height: fit-content;
 }
 
 .mi-container{
-    height: fit-content;
     min-height: 70px;
     margin-block-end: 20px;
 }
 
 .banner2{
-    // height: fit-content;
     min-height: 100%;
     background-color: yellowgreen;
     display: grid;
@@ -148,64 +112,8 @@ height: fit-content;
     
 }
 
-.have-a-product{
-    position: relative;
-    background-color: #f8d04b;
-    min-height: 288px;
-    border-radius: 17px;
-    display: flex;
-    // align-items: center;
-    flex-direction: column;
-    display: grid;
-    grid-template-columns: 80% auto;
-    // grid-column-gap: 10%;
-    
-    h1{
-        color: var(--dark-neutral-1);
-        font-size: 56px;
-    }
-    span{
-        color: var(--dark-neutral-1);
-        font-size: 28px;
-    }
-
-    img{
-        height: 100%;
-        border-radius: 0px 17px 17px 0px;
-        position: absolute;
-        right: 0px;
-        // padding: 0px;
-    }
-
-    .hap-text-container{
-        display: flex;
-        flex-direction: column;
-        padding-block-start: 24px;
-        padding-inline-start: 110px;
-
-        Button{
-            width: fit-content;
-            border-radius: 4px;
-            outline: none;
-            border: none;
-            height: 51px;
-            background-color: var(--dark-neutral-1);
-            span{
-                color: white !important;
-                font-size: 20px;
-            }
-            margin-block-end: 20px;
-        }
-    }
-
-}
 
 @media only screen and (max-width: 1516px) {
-    .have-a-product{
-        img{
-            display: none;
-        }
-    }
 
     .right-container{
         // left: 5%;
@@ -219,21 +127,12 @@ height: fit-content;
         }
         Form{
             height: 80%;
-            // .msg{
-                // height: 10px;
-            // }
-
-                height: 20px;
 
                 Select{
                     .ant-select-selector{
                         height: 20px;
                     }
                 }
-
-            Input{
-                // height: 20px !important;
-            }
 
             Select{
                 height: 20px !important;

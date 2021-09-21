@@ -10,7 +10,7 @@ const localizer = momentLocalizer(moment)
 const Schedular = () => {
     
     return (
-        <UserLayout>
+        <UserLayout base_url="/">
             <Calendar
                 localizer={localizer}
                 events={events}

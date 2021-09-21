@@ -1,8 +1,8 @@
 import React from 'react';
 import {Form, Select, Input, Slider, Divider, Button, Checkbox, Image} from 'antd';
-import { PaymentInputsWrapper, usePaymentInputs } from 'react-payment-inputs';
-import images from 'react-payment-inputs/images';
-import { css } from 'styled-components';
+// import { PaymentInputsWrapper, usePaymentInputs } from 'react-payment-inputs';
+// import images from 'react-payment-inputs/images';
+// import { css } from 'styled-components';
 import styles from '../styles/components/Payments-Wallet-Deposit.module.scss'
 const UserBnkDetails = (props : any) =>{
     
@@ -11,13 +11,13 @@ const UserBnkDetails = (props : any) =>{
     }
 
 
-    const {
-        wrapperProps,
-        getCardImageProps,
-        getCardNumberProps,
-        getExpiryDateProps,
-        getCVCProps
-      } = usePaymentInputs();
+    // const {
+    //     wrapperProps,
+    //     getCardImageProps,
+    //     getCardNumberProps,
+    //     getExpiryDateProps,
+    //     getCVCProps
+    //   } = usePaymentInputs();
 
     
     
@@ -40,10 +40,10 @@ const UserBnkDetails = (props : any) =>{
             }
              <Form>
                 <Form.Item label="Card Number" className="mt-30">
-                    <PaymentInputsWrapper {...wrapperProps} styles={{inputWrapper : {base : css`height : fit-content;border-radius : 6px;border: var(--border-2) !important;`},fieldWrapper: { base: css`height: 33px;`},input: { base: css`height: ${props.productDetails === true ? "43px" : "33px"};border: none;border : none !important;box-shadow : none !important;width : 80%`, cardNumber : css`width : 90%`}}}>
+                    {/* <PaymentInputsWrapper {...wrapperProps} styles={{inputWrapper : {base : css`height : fit-content;border-radius : 6px;border: var(--border-2) !important;`},fieldWrapper: { base: css`height: 33px;`},input: { base: css`height: ${props.productDetails === true ? "43px" : "33px"};border: none;border : none !important;box-shadow : none !important;width : 80%`, cardNumber : css`width : 90%`}}}>
                         <input {...getCardNumberProps()} />
                         <svg {...getCardImageProps({ images })} fontSize="23px"/>
-                    </PaymentInputsWrapper>
+                    </PaymentInputsWrapper> */}
                 </Form.Item>
 
                 <Form.Item label="Card Holder" className="mt-43">
@@ -55,15 +55,15 @@ const UserBnkDetails = (props : any) =>{
                 <Form.Item className="mt-27">
                     <div className={styles['expiry-cvv-container']}>
                         <Form.Item label="Expiry">
-                            <PaymentInputsWrapper {...wrapperProps} styles={{inputWrapper : {base : css`height : fit-content !important;border-radius : 6px;border: var(--border-2) !important;`},fieldWrapper: { base: css`height: 33px !important;`},input: { base: css`height: ${props.productDetails === true ? "43px" : "33px"} !important;border: none;border : none !important;box-shadow : none !important;width : 80%`, cardNumber : css`width : 90%`}}}>
+                            {/* <PaymentInputsWrapper {...wrapperProps} styles={{inputWrapper : {base : css`height : fit-content !important;border-radius : 6px;border: var(--border-2) !important;`},fieldWrapper: { base: css`height: 33px !important;`},input: { base: css`height: ${props.productDetails === true ? "43px" : "33px"} !important;border: none;border : none !important;box-shadow : none !important;width : 80%`, cardNumber : css`width : 90%`}}}>
                                 <input {...getExpiryDateProps()} />
-                            </PaymentInputsWrapper>
+                            </PaymentInputsWrapper> */}
                         </Form.Item>
 
                         <Form.Item label="CVV">
-                            <PaymentInputsWrapper {...wrapperProps} styles={{inputWrapper : {base : css`height : fit-content;border-radius : 6px;border: var(--border-2) !important;`},fieldWrapper: { base: css`height: 33px;`},input: { base: css`height: ${props.productDetails === true ? "43px" : "33px"};border: none;border : none !important;box-shadow : none !important;width : 80%`, cardNumber : css`width : 90%;`}}}>
+                            {/* <PaymentInputsWrapper {...wrapperProps} styles={{inputWrapper : {base : css`height : fit-content;border-radius : 6px;border: var(--border-2) !important;`},fieldWrapper: { base: css`height: 33px;`},input: { base: css`height: ${props.productDetails === true ? "43px" : "33px"};border: none;border : none !important;box-shadow : none !important;width : 80%`, cardNumber : css`width : 90%;`}}}>
                                 <input {...getCVCProps()} />
-                            </PaymentInputsWrapper>
+                            </PaymentInputsWrapper> */}
                         </Form.Item>
                     </div>
 

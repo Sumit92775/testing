@@ -29,7 +29,9 @@ const CardTemplate = (props : any) =>{
         <Divider className="mt-12 mb-12"></Divider>
         <div className={styles['bottom-btn-container']}>
         <div>
-            <Button className="primary small mr-33" type="link" onClick={()=>openModal(props.title)}><span className="icon-wrap"><EditIcon /></span>Edit Details</Button>
+            <Button className="primary small mr-33" type="link" onClick={()=>{openModal(props.title);
+            props.modalTitle("General details");
+            }}><span className="icon-wrap"><EditIcon /></span>Edit Details</Button>
         </div>
     </div>
     </div>

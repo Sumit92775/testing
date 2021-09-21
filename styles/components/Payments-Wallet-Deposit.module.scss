@@ -6,6 +6,7 @@
     grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
     // position: relative;
     grid-column-gap: 40px;
+    // margin-block-end: 20px;
     
     .tac{
         margin-block-start: 12px;
@@ -53,7 +54,7 @@
             // background-color: cadetblue;
 
             Input{
-                height: 30px !important;
+                height: 43px !important;
                 width: 100% !important;
             }
 

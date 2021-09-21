@@ -22,7 +22,14 @@ const Footer = () => {
                 <span className="mr-20">CR # 1010459300</span>
                 <span>TAX # 3102339727</span>
             </span>
-            <span><a href="/terms-and-conditions" target="_blank">Terms of Services,</a> <a href="/privacy-policy" target="_blank">Privacy Policy</a></span>
+            <span>
+                <Link href="/terms-and-conditions" passHref={true}>
+                    Terms of Services,
+                </Link>
+                <Link href="/privacy-policy" passHref={true}>
+                    Privacy Policy,
+                </Link>
+            </span>
             <span></span>
             <div className="footer-actions">
                 <span className="language">
@@ -36,10 +43,10 @@ const Footer = () => {
                     English */}
                 </span>
                 <span className="social-media">
-                    <a href="#" target="_blank"><FacebookIcon /></a>
-                    <a href="#" target="_blank"><TwitterIcon /></a>
-                    <a href="#" target="_blank"><YouTubeIcon /></a>
-                    <a href="#" target="_blank"><LinkedInIcon /></a>
+                    <FacebookIcon />
+                    <TwitterIcon />
+                    <YouTubeIcon />
+                    <LinkedInIcon />
                 </span>
             </div>
         </div>

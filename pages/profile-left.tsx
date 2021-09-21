@@ -25,7 +25,7 @@ const ProfileLeft = () =>{
                 <div className={styles['mclb-2']}>
                     <div className={cx(styles['menu'],"mclb-2-setting-list-menus")}>
                         
-                    <Menu mode="inline" defaultSelectedKeys={router.pathname}>
+                    <Menu mode="inline" defaultSelectedKeys={[router.pathname]}>
                         <Menu.Item key="/profile" onClick={handleClick} icon={<UserOutlined style={{ fontSize: '16px', color: 'var(--light-neutral-2)' }} />}><h6 className="txt weight400 fz-16">Profile</h6></Menu.Item>
                         <Menu.Item key="/settings" onClick={handleClick} icon={<SettingFilled style={{ fontSize: '16px', color: 'var(--light-neutral-2)' }}/>}><h6 className="txt weight400 fz-16">Account Settings</h6></Menu.Item>
                         <Menu.Item key="/notifications" onClick={handleClick} icon={<BellFilled style={{ fontSize: '16px', color: 'var(--light-neutral-2)' }}/>}><h6 className="txt weight400 fz-16">Notification</h6></Menu.Item>

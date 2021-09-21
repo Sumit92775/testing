@@ -17,7 +17,7 @@ const CustomerLayout = ({children}) => {
             icon: 'stars'
         },
         {
-            path: '/payments',
+            path: '/payments/wallet',
             label: 'My Wallets',
             icon: 'monetization_on'
         },
