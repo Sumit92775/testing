@@ -37,9 +37,9 @@ const Payments = () => {
                 <Tabs.TabPane tab="Payment Methods" key="payment-methods">
                     < PaymentMethods/>
                 </Tabs.TabPane>
-                {/* <Tabs.TabPane tab="Payout Details" key="payout-details">
-                    <PaymentWalletDeposit/>
-                </Tabs.TabPane> */}
+                <Tabs.TabPane tab="Payout Details" key="payout-details">
+                    <PaymentWalletPayout/>
+                </Tabs.TabPane>
             </Tabs>
         </div>    
     </CustomerLayout>

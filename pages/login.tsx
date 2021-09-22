@@ -29,6 +29,7 @@ export default function Search(props:any) {
             dispatch(authenticate(true));
             router.push(`${ process.env.base_url }home`);
         }
+        router.push(`${ process.env.base_url }bookings`);
     }
 
     return (

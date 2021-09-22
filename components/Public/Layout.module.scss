@@ -2,6 +2,7 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;
+    min-width: 800px;
 }
 .main-content {
     // grid-column-start: 1;

@@ -4,7 +4,6 @@ import { Avatar, Button, Menu } from 'antd';
 import styles from './Header.module.scss';
 import Image from 'next/image';
 import Link from 'next/link'
-
 const { SubMenu } = Menu;
 
 const Header = () => {
@@ -26,13 +25,13 @@ const Header = () => {
                 <span>Arabic</span>
             </div>
             <div className="header-actions">
-                {/* <Link href="/signup" passHref={true}>
+                <Link href="/login" passHref={true}>
                     <Button className="ant-btn default medium mr-14">{ t('Sign In') }</Button>
                 </Link>
-                <Link href="/popup" passHref={true}>
+                <Link href="/signup" passHref={true}>
                     <Button className="ant-btn primary medium">{ t('Sign Up') }</Button>
-                </Link> */}
-                <div>
+                </Link>
+                {/* <div>
                     <Menu mode="horizontal" className="user-actions transparent-bg">
                         <SubMenu key="SubMenu" icon={<Avatar className="mr-5" size={22} icon={<UserOutlined />} />} title="Halais">
                             <Menu.Item key="setting-1">
@@ -62,7 +61,7 @@ const Header = () => {
                             </Menu.Item>
                         </SubMenu>
                     </Menu>
-                </div>
+                </div> */}
 
             </div>
         </div>

@@ -4,8 +4,8 @@
     display: grid;
     margin-block-start: 8px;
     grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
-    // position: relative;
     grid-column-gap: 40px;
+    grid-row-gap: 40px;
     
     .anpa-container-content{
         height: fit-content;

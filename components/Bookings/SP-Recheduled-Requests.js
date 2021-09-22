@@ -165,7 +165,7 @@ const SpRecheduledRequests = () => {
                 }} dataSource={dataSource} columns={columns} />
 
             <Modal width="500px" 
-                title={ <><strong>Reject booking from ehsaan?</strong><p>ID: SP15912501</p></> }
+                title={ <><p><h3 className="txt primary"><strong>Reason</strong></h3></p><strong>Reject booking from ehsaan?</strong><p>ID: SP15912501</p></> }
                 visible={isVisible} 
                 footer={
                     <div style={{ paddingBlock: '18px' }}>

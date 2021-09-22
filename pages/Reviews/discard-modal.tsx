@@ -6,7 +6,7 @@ const DiscardModal = (props:any) =>{
   
     return(
         <div className="container flex">
-            {/* <div className="left-container" style={{width : "fit-content"}}>
+            <div className="left-container" style={{width : "fit-content"}}>
                 <Avatar size={60}></Avatar>
             </div>
             <div className="flex vertical right-container ml-15" style={{display : "flex", flexDirection : "column"}}>
@@ -14,7 +14,7 @@ const DiscardModal = (props:any) =>{
                 <span className="mb-10">{props.modalContent[0].service}</span>
                 <span>{props?.comment}</span>
                 <span>{props?.time}</span>
-            </div> */}
+            </div>
         </div>
     )
 }

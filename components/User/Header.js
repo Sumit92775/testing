@@ -5,11 +5,9 @@ import { UserOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Link from "next/link";
-
 const { SubMenu } = Menu;
 
 const Header = (props) => {
-
     return (
         <header className="user-header">
             <Input className="header-search" size="small" placeholder="Search" prefix={<SearchOutlined />} />
@@ -58,4 +56,5 @@ const Header = (props) => {
     )
 }
 
-export default Header
+export default Header;
+
