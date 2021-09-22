@@ -13,3 +13,10 @@
 
 }
 
+.res-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    grid-column-gap: 30px;
+    grid-row-gap: 30px;
+    margin-block-start: 30px;
+}

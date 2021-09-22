@@ -5,7 +5,6 @@ import styles from '../styles/components/Profile-Left.module.scss';
 import { BellFilled, SafetyCertificateFilled, SettingFilled } from '@ant-design/icons';
 import {UserOutlined} from '@ant-design/icons'
 import cx from 'classnames';
-
 const ProfileLeft = () =>{
 
     const router = useRouter();

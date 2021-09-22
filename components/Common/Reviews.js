@@ -252,8 +252,8 @@ const Reviews = () => {
 
                     } footer={
                         <div className="pt-20 pb-20">
-                            <Button className="mr-20" >{modalName === "Review" ? "Review" : "Cancel"}</Button>
-                            <Button className="ant-btn primary mr-7">{modalName === "Discard" ? "Discard" : "Discard"}</Button>
+                            <Button className="mr-20" onClick={handleCancel}>{modalName === "Review" ? "Review" : "Cancel"}</Button>
+                            <Button className="ant-btn primary mr-7" >{modalName === "Discard" ? "Discard" : "Discard"}</Button>
                         </div>
                         } visible={modal} onOk={handleOk} onCancel={handleCancel}>
                            
@@ -261,7 +261,7 @@ const Reviews = () => {
                            < ReviewModal modalContent = {{image : image, username : username, service : service, time : time}}/>
                            : 
                            <>
-                           {/* < DiscardModal modalContent = {{image : image, username : username, service : service, time : time, comment : comment}}/> */}
+                           < DiscardModal modalContent = {{image : image, username : username, service : service, time : time, comment : comment}}/>
                            </>
                            }
                         </Modal>

@@ -7,6 +7,7 @@ import Modal from 'antd/lib/modal/Modal';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import CustomerLayout from '../components/User/Customer-Layout';
+import styles from '../styles/components/GiftCards.module.scss'
 
 const { TabPane } = Tabs;
 
@@ -61,9 +62,27 @@ export default function GiftCards() {
             date: 'Nov 11, 2020 - Dec 31, 2020',
             value: '50',
         },
+        {
+            cardName: 'Gift Card 1',
+            cardNumber: '22AW-L8CT-20',
+            description: 'A short Description about the gift card goes here for getting an initial idea.',
+            validFor: '10 Days After Purchase',
+            price: '25',
+            date: 'Nov 11, 2020 - Dec 31, 2020',
+            value: '50',
+        },
     ];
     
     const ExpiredCardList = [
+        {
+            cardName: 'Gift Card 1',
+            cardNumber: '22AW-L8CT-20',
+            description: 'A short Description about the gift card goes here for getting an initial idea.',
+            expiry: '14 Nov, 2020',
+            price: '25',
+            remainingBalance: '50',
+            storeName: 'halais',
+        },
         {
             cardName: 'Gift Card 1',
             cardNumber: '22AW-L8CT-20',
@@ -135,7 +154,7 @@ export default function GiftCards() {
                 <Tabs defaultActiveKey="1">
                     <TabPane tab="Active" key="1">
                         <h5>Your Active Gift Cards</h5>
-                        <div className="grid-view grid-2 colgap-30 rowgap-30 mt-30">
+                        <div className={styles['res-grid']}>
                             {count.map((a, i) => {
                                 return <GiftCard key={i} card={a} />
                             })}
@@ -144,7 +163,7 @@ export default function GiftCards() {
 
                     <TabPane tab="Expired" key="2">
                         <h5>Your Expired Gift Cards</h5>
-                        <div className="grid-view grid-2 colgap-30 rowgap-30 mt-30">
+                        <div className={styles['res-grid']}>
                             {ExpiredCardList.map((a, i) => {
                                 return <ExpiredGiftCards key={i} card={a} />
                             })}
@@ -153,13 +172,12 @@ export default function GiftCards() {
 
                     <TabPane tab="Shop" key="3">
                         <h5>Your Shop Gift Cards</h5>
-                        <div className="grid-view grid-2 colgap-30 rowgap-30 mt-30">
+                        <div className={styles['res-grid']}>
                             {ShopGiftCardList.map((a, i) => {
                                 return <ShopCard key={i} card={a} />
                             })}
                         </div>
                     </TabPane>
-                    
                 </Tabs>
             </div>
         </CustomerLayout>

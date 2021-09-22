@@ -8,9 +8,6 @@ import * as moment from 'moment';
 
 const ReviewRight = (props) =>{
 
-    // console.log(props.modalContent("image","image","image","image","image"));
-
-
     const tags = [
         'Completed Bookings (3500)',
         'Reviews Received  (890)'
@@ -89,6 +86,18 @@ const ReviewRight = (props) =>{
                     actions={[
                         <span key={'date_time'}>{ moment(review.date_time).format(`${process.env.date_format} ${process.env.time_format}`) }</span>,
                         (review?.booking_id && <span>Booking ID <span className="txt italic">{  review.booking_id }</span></span>),
+                        props.type === "pending_reviews" ? 
+                        <div className={styles['reviewed-requests-container']} style={{display : "flex", float : "right"}}>
+                                <Button onClick={() =>{props.modal("Review");
+                            props.modalContent("image", review.user_name, date=>{ moment(review.date_time).format(`${process.env.date_format} ${process.env.time_format}`) }, review.service,"");
+                            }}>Review</Button>
+                                <Button className="txt primary ml-60" onClick={() =>{props.modal("Discard");
+                            props.modalContent("image", review.user_name, review.service, review.time, review.comment);
+                            }}>Cancel</Button>
+                        </div>
+                        : 
+                        <>
+                        </>
                     ]}
                 >
                     <List.Item.Meta
@@ -106,23 +115,7 @@ const ReviewRight = (props) =>{
                             <div>
 
                                 { props.type === "pending_reviews" ? review.service : review.comment }
-                                {props.type === "pending_reviews" ? 
-                                
-                                <div style={{display : "flex", justifyContent : "flex-end", position : "absolute", right : "0px"}}>
-                                        <Button onClick={() =>{props.modal("Review");
-                                    props.modalContent("image", review.user_name, date=>{ moment(review.date_time).format(`${process.env.date_format} ${process.env.time_format}`) }, review.service,"");
-                                    }}>Review</Button>
-                                        <Button className="txt primary ml-60" onClick={() =>{props.modal("Discard");
-                                    props.modalContent("image", review.user_name, date=>{ moment(review.date_time).format(`${process.env.date_format} ${process.env.time_format}`) }, review.service, review.comment);
-                                    }}>Cancel</Button>
                                 </div>
-                                
-                                : 
-                                <>
-                                </>
-                            }
-                                </div>
-
                         }
                     ></List.Item.Meta>
                 </List.Item>
