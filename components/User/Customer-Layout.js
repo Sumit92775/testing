@@ -27,7 +27,7 @@ const CustomerLayout = ({children}) => {
             icon: 'card_giftcard'
         },
         {
-            path: '/settings',
+            path: '/profile',
             label: 'Settings',
             icon: 'settings'
         },

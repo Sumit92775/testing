@@ -1,19 +1,52 @@
-import React, { useState } from 'react'
-import { Button, Divider, Tabs } from 'antd';
+import React, { useEffect, useState } from 'react'
+import { Button, Checkbox, Divider, message, Pagination} from 'antd';
 import styles from '../styles/components/notifications.module.scss';
-import Layout from '../components/User/Layout'
-import SettingCard from '../components/Common/SettingCard'
 import Modal from 'antd/lib/modal/Modal';
-import ResetPassword from '../components/Common/ResetPassword';
 import NotificationCard from '../components/Common/notification-card';
-import GeneralSettingsModal from '../pages/settings-modals/Edit-General-Settings_Modal';
-import BookingAndPaymentsModal from './settings-modals/Booking-Payments-Modal';
-import NotificationAndSecurity from './settings-modals/Notification-And-Security.Modal';
-import Link from 'next/link';
 import ProfileLeft from './profile-left';
 import CustomerLayout from '../components/User/Customer-Layout';
+import DashboardMiniTable from '../components/Common/DashboardMiniTable';
+import {getNotifications, setNotificationRead} from '../services/notification';
+
 
 const Notifications = () => {
+
+    const [selectedModalName, setSelectedModalName] = useState("");
+    const [selectedModal, setSelectedModal] = useState(false);
+    const [notificationArray, setNotificationArray] = useState([]);
+    const [paginationPage, setPaginationPage] = useState(1);
+    const [newNotifications, setNewNotifications] = useState(0);
+
+    useEffect(() =>{
+        console.log("UseEffect Run 1 !!");
+        message.config({
+            duration:  5, top :60
+        })
+        // void async function(){
+            try{
+                // console.log("UseEffect Run 2 !!");
+
+                getNotifications(paginationPage).then( res =>{
+                    if(res.status == true){
+                        setNotificationRead().then(res =>{
+                            message.success(res.message)
+                        }).catch(error =>{
+                            message.error(error);
+                        })
+                        setNotificationArray(res.notifications);
+                        setNewNotifications(res.newNotifications);
+                    }else{
+                        message.error(res.message);
+                    }
+                }).catch(error =>{
+                    message.error(error);
+                })
+               
+            }catch(error:any){
+                message.error(error);
+            }
+        // }
+    },[])
 
     let notificationCard = [
         {title : "Notification",modalName : "notification_and_security", content : 
@@ -28,10 +61,6 @@ const Notifications = () => {
     }
 ];
 
-const [selectedModalName, setSelectedModalName] = useState("");
-const [selectedModal, setSelectedModal] = useState(false);
-const [viewDetail, setViewDetail] = useState(false);
-const [del, setDel] = useState(false);
 
 const handleOk = (evt : any) => {
     console.log('ok clicked', evt)
@@ -42,24 +71,13 @@ const handleCancel = () => {
 };
 
 const openModal = (type : any) => {
-
     console.log(type);
     setSelectedModal(true);
-
-    switch(type){
-        case "general_settings" : setSelectedModalName("General Settings");
-        break;
-        
-        case "notification_and_security" : setSelectedModalName("Notification And Security");
-        break;
-        
-        case "booking_and_payments" : setSelectedModalName("Booking And Payments");
-        break;
-        
-        case "subscription_tier" : setSelectedModalName("Subscription Tiers");
-        break;
-    }
+    setSelectedModalName(type);
 };
+
+
+
 
 
     return(
@@ -70,17 +88,26 @@ const openModal = (type : any) => {
                 </div>
                 <div className={styles['main-container-right']}>
             <div className={styles['wallet-deposit-container']}>
-                
+                <div className="card card2 pl-32 pr-32" style={{height : "fit-content", position : "relative", boxShadow : "none"}}>
+                    <div className={styles['card-header-container']}>
+                        <div className="flex" style={{justifyContent : "space-between"}}>
+                            <h5 className="mt-10 mb-10 pl-27 pr-27 fz-18 auto-width">{"Notifications"}</h5>
+                            {/* <span className="txt pull-right dark2 flex center-content" onClick={() =>props.modal("Edit Preferences")}><EditIcon/><u>Notification Preferences</u></span> */}
+                        </div>
+                        <Divider className="mt-5 mb-32"></Divider>
                        {
-                           notificationCard.map((cardDetails) =>{
+                           notificationArray.map((cardDetails) =>{
                                return(
                                    <div className="mb-40" key={`${cardDetails}`}>
-                                       <NotificationCard modal={openModal} modalName={cardDetails.modalName} cardDetails={cardDetails}></NotificationCard>
+                                       <NotificationCard modal={openModal}  cardDetails={cardDetails}></NotificationCard>
                                    </div>
                                )
                            })
                        }
 
+                    </div>
+                </div>
+                <Pagination className="txt float pull right" defaultCurrent={1} total={notificationArray.length} />
 
                 <Modal style={{borderRadius :"15px", overflow : "hidden",width : "fit-content"}} title={
                         <div style={{width : "100%", 
@@ -92,24 +119,23 @@ const openModal = (type : any) => {
                         </div>
                 } footer={
                     <div className="pt-20 pb-20 pr-0">
-                        <Button className="mr-20" >Cancel</Button>
+                        <Button className="mr-20" onClick={handleCancel}>Cancel</Button>
                         <Button className="ant-btn primary mr-21">Save Chages</Button>
                     </div>
                     } visible={selectedModal} onOk={handleOk} onCancel={handleCancel}>
-                        {selectedModalName === "General Settings" ?
-                        <GeneralSettingsModal></GeneralSettingsModal>
-                        :
-                        selectedModalName === "Notification And Security" ? 
-                         <NotificationAndSecurity></NotificationAndSecurity>:
-                        
-                        selectedModalName === "Booking And Payments" ? 
-                        <BookingAndPaymentsModal></BookingAndPaymentsModal> :
-                        <ResetPassword></ResetPassword> 
-
-                        }
+                        <div>
+                            <strong className="mr-20">Set Notifications Preference:</strong>
+                            <Checkbox>Email</Checkbox>
+                            <Checkbox>Sms</Checkbox>
+                        </div>
                 </Modal>
 
-            </div>     
+           
+           
+           
+           
+            </div> 
+
             </div>
             </div>    
         </CustomerLayout>

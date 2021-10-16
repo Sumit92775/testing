@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import styles from './Reviews.module.scss';
 import cx from 'classnames';
-import { Rate, Form, Select, Avatar, List, Button } from 'antd';
-import Tag from './Tag';
-import * as moment from 'moment';
+import { Rate, Form, Select, Button } from 'antd';
 import ReviewRight from './ReviewRight';
 import Modal from 'antd/lib/modal/Modal';
-// import CreateGiftCard from '../Gift Card/Create-Gift-Card';
 import ReviewModal from '../../pages/Reviews/review-modal';
 import DiscardModal from '../../pages/Reviews/discard-modal';
 import astyles from './Tag.module.scss';
@@ -16,10 +13,8 @@ const Reviews = () => {
    
     const [review, setReview] = useState(false);
     const [discard, setDiscard] = useState(false);
-    const [rorp, setRorp] = useState("");
-    const [receivedReviewClicked, setReceivedReviewClicked] = useState(false);
+    const [receivedReviewClicked, setReceivedReviewClicked] = useState(true);
     const [selectedTab, setSelectedTab] = useState(1);
-
     const [modal, setModal] = useState(false);
     const [modalName, setModalName] = useState("");
     const [image, setImage] = useState("");
@@ -161,6 +156,7 @@ const Reviews = () => {
         if(id == 1){
             setReceivedReviewClicked(true);
         }else if(id == 2){
+            // setReceivedReviewClicked()
             setReceivedReviewClicked(false);
         }
         

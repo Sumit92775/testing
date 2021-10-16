@@ -9,6 +9,7 @@ import PaymentMethod from './product-details/payment-method';
 // import BookingAndPaymentsModal from './Booking-Payments-Modal';
 import { Button, Modal } from 'antd';
 import EditPreferences from './product-details/edit-preferences-modal';
+import cx from 'classnames';
 
 const ProductDetails = () =>{
    
@@ -43,7 +44,9 @@ const openModal = (type : any) => {
             <div className={styles['container']}>
                 <div className={styles['left-container']}>
                     <ShoppingCard modal={openModal}></ShoppingCard>
-                    <DefaultAddress></DefaultAddress>
+                    <div>
+                        <DefaultAddress></DefaultAddress>
+                    </div>
                     <div className="mt-50">
                         <PaymentMethod></PaymentMethod>
                     </div>
@@ -53,30 +56,30 @@ const openModal = (type : any) => {
                     <PaymentSummary></PaymentSummary>
                 </div>
             </div>
-            <Modal style={{borderRadius :"15px", overflow : "hidden",width : "fit-content"}} title={
-                            <div style={{width : "100%", 
-                            height: "100%",
-                            display: "grid",
-                            gridTemplateColumns: "1fr",
-                            alignItems: "center"}}>
-                                <h4 className="txt primary">{selectedModalName}</h4>
+            {/* <div className={cx('ant-modal-wrap', 'modal-width')}> */}
+                <Modal style={{borderRadius :"15px", overflow : "hidden",width : "fit-content"}} title={
+                                <div style={{width : "100%", 
+                                height: "100%",
+                                display: "grid",
+                                gridTemplateColumns: "1fr",
+                                alignItems: "center"}}>
+                                    <h4 className="txt primary">{selectedModalName}</h4>
+                                </div>
+                        } footer={
+                            <div className="pt-20 pb-20 pr-0">
+                                <Button className="mr-20" >Cancel</Button>
+                                <Button className="ant-btn primary mr-21">Save Chages</Button>
                             </div>
-                    } footer={
-                        <div className="pt-20 pb-20 pr-0">
-                            <Button className="mr-20" >Cancel</Button>
-                            <Button className="ant-btn primary mr-21">Save Chages</Button>
-                        </div>
-                        } visible={selectedModal} onOk={handleOk} onCancel={handleCancel}>
-                           
-                           {selectedModalName === "Edit Preferences" ? 
-                           <EditPreferences></EditPreferences> 
-                           : 
-                           <>
-                           </>
-                        //    <EditPreferences></EditPreferences>
-                        //    no
-                           }
-                    </Modal>
+                            } visible={selectedModal} onOk={handleOk} onCancel={handleCancel}>
+                            
+                            {selectedModalName === "Edit Preferences" ? 
+                            <EditPreferences></EditPreferences> 
+                            : 
+                            <>
+                            </>
+                            }
+                </Modal>
+            {/* </div> */}
         </CustomerLayout>
 
 

@@ -1,16 +1,23 @@
 import Header from "../components/Public/Header"
 import FooterMenus from "../components/FooterMenus"
 import Footer from "../components/Footer";
-import { Form, Input, Button, Checkbox, Divider } from 'antd';
+import { Form, Input, Button, Checkbox, Divider, message } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { authenticate } from '../actions/user';
+import cx from 'classnames';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { login } from "../services/auth";
+import Cookies from 'universal-cookie';
+import useTranslation from "next-translate/useTranslation";
 
 export default function Search(props:any) {
     const userid = 'customer@saloonplus.com',
     pass = '12345678';
-
+    
+    const { t } = useTranslation('common');
+    const cookies = new Cookies();
     const [form] = Form.useForm(),
     dispatch = useDispatch(),
     router = useRouter();
@@ -25,11 +32,34 @@ export default function Search(props:any) {
         }
     },
     onFinish = (values: any) => {
-        if(values.userName == userid && values.password == pass) {
-            dispatch(authenticate(true));
-            router.push(`${ process.env.base_url }home`);
-        }
-        router.push(`${ process.env.base_url }bookings`);
+        login({
+            userType: 2,
+            userName: values.userName,
+            password: values.password
+        })
+        .then(res => {
+            console.log(res)
+            if(res.status) {
+                localStorage.setItem('accessToken', res.accessToken);
+                cookies.set('accessToken', res.accessToken);
+                localStorage.setItem('user', res.UserData);
+                dispatch(authenticate(true));
+                router.push(`${ process.env.base_url }bookings`);
+            } else {
+                message.config({duration: 5, top: 60})
+                message.error( t(res.message) );
+            }
+        })
+        .catch(error => {
+            console.log(error)
+        })
+
+      
+        // if(values.userName == userid && values.password == pass) {
+        //     dispatch(authenticate(true));
+        //     router.push(`${ process.env.base_url }home`);
+        // }
+        // router.push(`${ process.env.base_url }bookings`);
     }
 
     return (
@@ -39,7 +69,7 @@ export default function Search(props:any) {
             </header>
             <main>
             <div className="content-wrapper table mb-56">
-                    <h4 className="center-text mt-67 mb-67">Sign In To Sell Via Saloon Plus</h4>
+                    <h4 className="center-text mt-67 mb-67">Register to manage your bookings via SaloonPlus</h4>
                     <Form
                         className="grid-view grid-1 rowgap-24"
                         form={form}
@@ -51,7 +81,9 @@ export default function Search(props:any) {
                             <Input placeholder="ex:mystore@gmail.com" />
                         </Form.Item>
                         <Form.Item name={['password']} label="Password" rules={[{ required: true, min: 6 }]}>
-                            <Input type="password" placeholder="Password" />
+                            <div className={cx('pwd-eye-cont', '_input')}>
+                                <Input.Password className="input medium input" placeholder="input password" iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} />
+                            </div>
                         </Form.Item>
 
                         <Form.Item>
@@ -61,10 +93,9 @@ export default function Search(props:any) {
                             <Button className="primary pull-right" htmlType="submit">Sign In</Button>
                         </Form.Item>
 
-
                         <div className="center">
                             <Divider>
-                                <Link href="/login" passHref={true}>
+                                <Link href="/forgot-password" passHref={true}>
                                     <Button className="ant-btn ant-btn-link">Forgot password</Button>
                                 </Link>
                             </Divider>
@@ -78,5 +109,4 @@ export default function Search(props:any) {
             </footer>
         </div>
     )
-
 }

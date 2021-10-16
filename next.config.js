@@ -8,7 +8,7 @@ const config = {
   },
   env: {
     base_url: '/',
-    api_url: '//194.163.134.197:3000',
+    api_url: 'http://194.163.134.197:3004/api_v1',
     // api_url: 'https://reqres.in',
     date_format: 'DD MMM, YYYY',
     time_format: 'hh:mm A',

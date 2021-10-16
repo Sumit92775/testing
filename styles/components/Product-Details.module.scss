@@ -71,18 +71,7 @@
     flex-wrap: nowrap;
     overflow-x: auto;
     padding-inline-start: 10px;
-    // margin-inline-end: 20px;
-
-    div{
-        // display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-column-gap: 30px;
-        // text-align: center;
-        span{
-            width: fit-content;
-        }
-    }
-
+    gap: 10px;
 }
 
 .form-container{

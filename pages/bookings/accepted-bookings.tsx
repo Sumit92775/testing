@@ -199,7 +199,7 @@ const AcceptedBookings = () => {
                         <Button className="danger">Reject Booking</Button>
                     </div>
                 } visible={modal} onCancel={handleCancel}>
-                    {modalName === "Rechedule" ? 
+                    {modalName === "Reschedule" ? 
                      <RangePicker style={{width : "250px", height : "43px"}}/>
                     :
                     <Input.TextArea rows={4} />

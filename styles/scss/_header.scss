@@ -9,13 +9,18 @@ header {
     // display: grid;
     // grid-template-columns: 1fr 1fr;
     // z-index: 9999;
+    
+    .cursor{
+        cursor: pointer;
+    }
+
     .header-search {
         border: none;
         background-color: var(--light-neutral-4);
         padding-left: 24px;
         padding-right: 24px;
         border-radius: 16px;
-        width: 488px;
+        width: 480px;
         background: #F8F8F8;
         border-radius: 16px;
         .ant-input-prefix {
@@ -46,7 +51,7 @@ header {
         z-index: 9999;
         .heder-actions {
             display: grid;
-            grid-template-columns: 1fr auto auto auto auto;
+            grid-template-columns: 1fr auto auto auto auto auto;
             grid-column-gap: 30px;
             line-height: 32px;
             color: var(--dark-neutral-3);

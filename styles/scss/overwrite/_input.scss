@@ -176,3 +176,28 @@
         background-color: var(--light-neutral-4) !important
     }
 }
+
+
+.pwd-eye-cont{
+
+    span{
+        // height: 54px;
+        padding-inline-start: 10px;
+        padding-inline-end: 5px;
+        padding-block: 0px;
+        border-radius: 6px;
+
+        input{
+            border: none !important;
+            box-shadow: none !important;
+            outline: none !important;
+            height: 54px;
+        }
+
+        input :hover{
+            border: none !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+    }
+}

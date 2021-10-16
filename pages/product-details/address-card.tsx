@@ -1,6 +1,9 @@
 import { Button, Modal, Form } from 'antd';
 import React, { useState } from 'react';
 import AddAddress from './add-address-modal';
+import AddressByMap from './address-by-map';
+import cx from 'classnames';
+import styles from './Styles.module.scss'
 
 const DefaultAddress = (props : any) =>{
 
@@ -36,50 +39,30 @@ const DefaultAddress = (props : any) =>{
     
 
     return(
-        <div className="mt-54 mr-20 mb-10" style={{display : "flex", alignItems : "center"}}>
-            <div className="card card2 pt-17 pl-35 pr-15" style={{width : "390px !important"}}>
-                <h5 className="mb-22">Default address</h5>
-                {/* <div className={styles['df-address-container']}> */}
-    
-                    <div className="">
-                        <div className="flex center-content" style={{justifyContent : "space-between"}}>
-                            <span>Name</span>
-                            <strong>Jonathan</strong>
-                        </div>
-     
+        <div className="mt-54 mb-10 grid-view grid-1" style={{width : "300px"}}>
+            <div className="card card2 pl-10 pt-10 pr-10 pb-10">
+                <div className="grid-view grid-1 rowgap-5">
+                    <div className="grid-view auto-width grid-1 mb-5">
+                        <h5>Default Address</h5>
                     </div>
-                    <div className="">
-                        <div className="flex center-content" style={{justifyContent : "space-between"}}>
-                            <span>Email</span>
-                            <strong>Jonathan@gmail.com</strong>
-                        </div>
+                    <div className="grid-view auto-width grid-2">
+                        <span className="txt dark1 weight400">Name </span>
+                        <span className="txt weight700 float right ">Jonathan</span>
                     </div>
-
-
-                    <div className="">
-                        <div className="flex center-content" style={{justifyContent : "space-between"}}>
-                            <span>Mobile</span>
-                            <strong>00966 4 8490159</strong>
-                        </div>
+                    <div className="grid-view auto-width grid-2">
+                        <span>Email</span>
+                        <span className="txt weight700 float right">Jonathan@gmail.com</span>
                     </div>
-                    <div className="">
-                        <div className="flex" style={{justifyContent : "space-between"}}>
-                            <span>Address</span>
-                            <strong>Awali, ah, Al Madinah Al Munawar</strong>
-                        </div>
-                    </div>
-                    {/* <div className="grid-view grid-2 mb-7">
-                        <span><strong>Jonathan@gmail.com</strong></span>
-                    </div> */}
-                    {/* <div className="grid-view grid-2 mb-7">
+                    <div className="grid-view auto-width grid-2">
                         <span>Mobile</span>
-                        <span ><strong>00966 4 8490159</strong></span>
+                        <span className="txt weight700 float right">00966 4 8490159</span>
                     </div>
-                    <div className="grid-view grid-2 mb-7">
-                        <span>Address</span>
-                        <span><strong>Awali, ah, Al Madinah Al Munawar</strong></span>
-                    </div> */}
-                {/* </div> */}
+                    <div className="grid-view auto-width grid-2">
+                        <span>Address </span>
+                        <span className="txt weight700 float right">Awali,ah,Al Madinah Al Munawar</span>
+                    </div>
+
+                </div>
             </div>
             {props.type === "list" ? 
            <>
@@ -88,28 +71,30 @@ const DefaultAddress = (props : any) =>{
             <Button style={{height : "60px", width : "fit-content"}} className="full-width mr-0 center-content ml-30" onClick={openModal}><span className="material-icons mr-5">add_circle_outline</span>Add Another Address</Button>
            
             }
-            <Modal width="900px !important" style={{borderRadius :"15px", overflow : "hidden", width : "990px !important"}} title={
-                            <div style={{width : "100%", 
-                            height: "100%",
-                            display: "grid",
-                            gridTemplateColumns: "1fr",
-                            alignItems: "center"}}>
-                                <h4 className="txt primary">Change {chooseModalName}</h4>
-                            </div>
-                    } footer={
-                        <div className="pt-20 pb-20 pr-0">
-                            <Button className="mr-20" >Cancel</Button>
-                            <Button className="ant-btn primary mr-21">Save Chages</Button>
-                        </div>} 
-                    visible={chooseModal} onOk={handleOk} onCancel={handleCancel}>
-                        {
-                            chooseModalName === "mark-on-map" ? 
-                            <AddAddress></AddAddress> 
-                            : 
-                            <AddAddress></AddAddress>
+            <div className={ cx('ant-modal-body',styles['modal']) }>
+                <Modal style={{borderRadius :"15px", overflow : "hidden"}} title={
+                                <div style={{width : "100%", 
+                                height: "100%",
+                                display: "grid",
+                                gridTemplateColumns: "1fr",
+                                alignItems: "center"}}>
+                                    <h4 className="txt primary">Change {chooseModalName}</h4>
+                                </div>
+                        } footer={
+                            <div className="pt-20 pb-20 pr-0">
+                                <Button className="mr-20" >Cancel</Button>
+                                <Button className="ant-btn primary mr-21">Save Chages</Button>
+                            </div>} 
+                        visible={chooseModal} onOk={handleOk} onCancel={handleCancel}>
+                            {
+                                chooseModalName === "mark-on-map" ? 
+                                <AddAddress></AddAddress>
+                                : 
+                                <AddressByMap></AddressByMap> 
 
-                        }
-                    </Modal>
+                            }
+                        </Modal>
+            </div>
         </div>
 
    )

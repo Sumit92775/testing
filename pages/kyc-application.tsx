@@ -1,14 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Divider, Tabs } from 'antd';
 import styles from '../styles/components/Kyc-Application.module.scss';
-import Layout from '../components/User/Layout'
-import SettingCard from '../components/Common/SettingCard'
-import Card1 from './profile/card1';
-import Card2 from './profile/card2';
-import Card3 from './profile/card3';
-import Card4 from './profile/card4';
-import Card5 from './profile/card5';
-import Card6 from './profile/card6';
 // import ResetPassword from '../components/Admin/kyc/ResetPassword';
 import Modal from 'antd/lib/modal/Modal';
 import Link from 'next/link';

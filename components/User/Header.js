@@ -1,8 +1,9 @@
-import { Input,Layout } from "antd";
+import { Badge, Input,Layout } from "antd";
 import { SearchOutlined } from '@ant-design/icons';
 import { Avatar, Switch, Dropdown, Menu } from 'antd';
-import { UserOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { UserOutlined, CheckOutlined, CloseOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import { ShoppingCart } from "@material-ui/icons"
 import SettingsIcon from '@material-ui/icons/Settings';
 import Link from "next/link";
 const { SubMenu } = Menu;
@@ -16,10 +17,18 @@ const Header = (props) => {
                 <div>
                     <Avatar className="mr-8" size={22} icon={<UserOutlined />} />
                     <span>Arabic</span>
-                </div>
-                <span><NotificationsIcon /></span>
-                <span><SettingsIcon /></span>
-                <div>
+                    </div>
+                <Badge className="mt-5" count={5}>
+                    <span className="cursor"><NotificationsIcon /></span>
+                </Badge>
+                <Badge className="mt-5" count={5}>
+                    {/* <Avatar shape="square" size="large" />     */}
+                    <Link href="/product-details" passHref={true}>
+                        {/* <span><NotificationsIcon /></span> */}
+                        <span className="cursor"><ShoppingCart/></span>
+                    </Link>
+                </Badge>
+                <span><SettingsIcon /></span>   
                     <Menu mode="horizontal" className="user-actions transparent-bg">
                         <SubMenu key="SubMenu" icon={<Avatar className="mr-5" size={22} icon={<UserOutlined />} />} title="Halais">
                             <Menu.Item key="setting-1">
@@ -49,7 +58,6 @@ const Header = (props) => {
                             </Menu.Item>
                         </SubMenu>
                     </Menu>
-                </div>
 
             </div>
         </header>
