@@ -5,31 +5,37 @@ import { sendEmailOTP, sendPhoneOTP, validateEmail, verifyEmailOTP, verifyOTP } 
 import useTranslation from 'next-translate/useTranslation';
 const ChangeEmail = (props:any) =>{
 
-    const [newEmail, setNewEmail] = useState("");
-    const [otp, setOtp] = useState("");
-    const [errorMsg , setErrorMsg] = useState("");
     const [newEmailSetted, setNewEmailSetted] = useState(false);
-    const [hidden, setResendPassword] = useState("var(--dark-neutral-2)");
     const [btnEnabled, setBtnEnabled] = useState(true);
     const [btnEnabled1, setBtnEnabled1] = useState(true);
+    
     const [nEmail, setNEmail] = useState("");
+    const [msg, setMsg] = useState("");
  
+    const [otp1, setOtp1] = useState("");
+    const [otp2, setOtp2] = useState("");
+    const [otp3, setOtp3] = useState("");
+    const [otp4, setOtp4] = useState("");
 
     const { t } = useTranslation('validator');
 
     const sendOTP = async () =>{
+
+        console.log(nEmail);
+        
+
         let isSuccessfull = await sendEmailOTP({
             "email" : nEmail
         });
-        message.info("Otp send");
-        message.info(isSuccessfull.message);
+        // message.info("Otp send");
+        // message.info(isSuccessfull.message);
         message.config({duration: 5, top: 60})
         // message.error(isSuccessfull.message);
         
 
         if(isSuccessfull.status == true){
             setBtnEnabled1(false);
-            message.info(isSuccessfull.message);
+            // message.info(isSuccessfull.message);
         }else{
             // alert(isSuccessfull.message);
             message.info(isSuccessfull.message);
@@ -42,22 +48,27 @@ const ChangeEmail = (props:any) =>{
                 validateEmail({email: value})
                 .then(res => {
                     if(res.status) {
-                        setNEmail(value);
                         callback();
+                        setNEmail(value);
                         setBtnEnabled(false);
-                        message.success(res.message);
+                        setMsg(`Email Available`);
                     } else {
-                        callback('');
-                        // setBtnEnabled(true);
+                        callback(false);
+                        setBtnEnabled(true);
+                        setMsg("");
+                        setNEmail("");
                         message.error(t('value already taken', { value: value }));
                     }
                 })
             } else {
                 setBtnEnabled(true);
+                setMsg("");
+                // setNEmail("");
                 callback(t('email', {field: 'Store Email'}))
             }
         } else {
             callback();
+            setMsg("");
         }
     }
 
@@ -74,6 +85,11 @@ const ChangeEmail = (props:any) =>{
 
     const reVerifyOTP = () => {
         const formData = form.getFieldsValue();
+        setOtp1(formData.otp1);
+        setOtp2(formData.otp2);
+        setOtp3(formData.otp3);
+        setOtp4(formData.otp4);
+
         verifyEmailOTP({
             email: nEmail,
             OTP: `${formData.otp1}${formData.otp2}${formData.otp3}${formData.otp4}`
@@ -84,12 +100,27 @@ const ChangeEmail = (props:any) =>{
             } else {
                 message.config({duration: 5, top: 60});
                 message.success( 'OTP Verified!' );
-                props.setEmail(nEmail);
+                props?.setEmail(nEmail);
+                setMsg("");
+                setNEmail("");
+                setOtp1("");
+                setOtp2("");
+                setOtp3("");
+                setOtp4("");
+                form.setFieldsValue({
+                    opt1: "",
+                    opt2: "",
+                    otp3: "",
+                    otp4: ""
+                })        
                 setNewEmailSetted(false);
-                props.cancelModal;
+                props.cancelModal();
             }
         })
-        .catch(error => console.error(error))
+        .catch(error => {
+            console.error(error);
+         
+        })
     }
 
     const onKeyPress = (e: any) => {
@@ -107,16 +138,36 @@ const ChangeEmail = (props:any) =>{
 
             <div className={styles['container']}>
                 <Form>
-                    <Form.Item name={['email']} hasFeedback label="Store Email" validateTrigger={['onBlur']} rules={[
-                        { required: true, message: t('required', {field: 'Store Email'}) },
+                    <Form.Item initialValue={nEmail}  name={['email']} hasFeedback label="Store Email" validateTrigger={['onBlur']} rules={[
                         { validator: checkEmail },
                         ]}>
                         <Input placeholder="ex:halais" />
                     </Form.Item>
+                    {
+                        msg.length > 0 ? 
+                        <Form.Item>
+                            <span className="txt success float right">
+                                {msg}
+                            </span>
+                        </Form.Item>
+                        : 
+                        <>
+                        </>
+                    }
                     <Form.Item>
                         <Button className="primary txt mt-20" disabled={btnEnabled} onClick={()=>{setNewEmailSetted(true);
                         sendOTP();
                         }}>Submit</Button>
+                    </Form.Item>
+
+                    <Form.Item className="pull right">
+                        <Button className="txt primary" onClick={() =>{
+                            props.cancelModal();
+                            setNEmail("");
+                            form.setFieldsValue({nEmail: ""});
+                            setMsg("");
+                            // form.getFieldsValue().email = "";
+                            }}>Cancel</Button> 
                     </Form.Item>
                 </Form>
             </div>
@@ -131,17 +182,17 @@ const ChangeEmail = (props:any) =>{
                     form={form}
                     layout="vertical">
                     <div className="verification-code">
-                        <Form.Item name={['otp1']}>
-                            <Input maxLength={1} onKeyPress={ onKeyPress } />
+                        <Form.Item initialValue={otp1} name={['otp1']}>
+                            <Input value={otp1} maxLength={1} onKeyPress={ onKeyPress } />
                         </Form.Item>
-                        <Form.Item name={['otp2']}>
-                            <Input maxLength={1} onKeyPress={ onKeyPress } />
+                        <Form.Item initialValue={otp2} name={['otp2']}>
+                            <Input value={otp2} maxLength={1} onKeyPress={ onKeyPress } />
                         </Form.Item>
-                        <Form.Item name={['otp3']}>
-                            <Input maxLength={1} onKeyPress={ onKeyPress } />
+                        <Form.Item initialValue={otp3} name={['otp3']}>
+                            <Input value={otp3} maxLength={1} onKeyPress={ onKeyPress } />
                         </Form.Item>
-                        <Form.Item name={['otp4']}>
-                            <Input maxLength={1} onKeyPress={ onKeyPress } />
+                        <Form.Item initialValue={otp4} name={['otp4']}>
+                            <Input value={otp4} maxLength={1} onKeyPress={ onKeyPress } />
                         </Form.Item>
                     </div>
                     <Button className="primary mb-3" onClick={reVerifyOTP}>Verify Code</Button>

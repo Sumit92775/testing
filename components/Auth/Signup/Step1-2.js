@@ -52,6 +52,12 @@ const Step1_2 = ({ formData }) => {
         .then(res => {
             message.config({duration: 5, top: 60});
             message.success( 'OTP Sent!' );
+            form.setFields({
+                otp1: ""
+            })
+            form.setFields({
+                otp2: ""
+            })
         })
         .catch(error => console.error(error))
     },

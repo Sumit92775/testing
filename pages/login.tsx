@@ -41,10 +41,12 @@ export default function Search(props:any) {
             console.log(res)
             if(res.status) {
                 localStorage.setItem('accessToken', res.accessToken);
+
                 cookies.set('accessToken', res.accessToken);
+                console.log("Cookies Token: ",cookies.get('accessToken'));
                 localStorage.setItem('user', res.UserData);
                 dispatch(authenticate(true));
-                router.push(`${ process.env.base_url }bookings`);
+                router.push(`${ process.env.base_url }home`);
             } else {
                 message.config({duration: 5, top: 60})
                 message.error( t(res.message) );
@@ -69,7 +71,7 @@ export default function Search(props:any) {
             </header>
             <main>
             <div className="content-wrapper table mb-56">
-                    <h4 className="center-text mt-67 mb-67">Register to manage your bookings via SaloonPlus</h4>
+                    <h4 className="center-text mt-67 mb-67">Sign in to SaloonPlus</h4>
                     <Form
                         className="grid-view grid-1 rowgap-24"
                         form={form}
@@ -88,7 +90,7 @@ export default function Search(props:any) {
 
                         <Form.Item>
                             <Form.Item name="remember" valuePropName="checked" noStyle>
-                                <Checkbox className="mt-10"><span className="primary-txt">Remember Me</span></Checkbox>
+                                {/* <Checkbox className="mt-10"><span className="primary-txt">Remember Me</span></Checkbox> */}
                             </Form.Item>
                             <Button className="primary pull-right" htmlType="submit">Sign In</Button>
                         </Form.Item>

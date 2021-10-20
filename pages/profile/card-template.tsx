@@ -8,8 +8,6 @@ import EditGeneralDetails from './edit-general-details';
 
 const CardTemplate = (props : any) =>{
 
-    // console.log("Profile Details: ",props?.itemList);
-
     const [chooseModal, setchooseModal] = useState(false);
 
     const handleOk = (evt : any) => {
@@ -38,7 +36,7 @@ const CardTemplate = (props : any) =>{
         let data = await editUserProfile({
             "firstName": firstName,
             "lastName": lastName,
-            "gender": "1",
+            "gender": gender,
             "dateOfBirth": dob,
        })
 
@@ -70,6 +68,12 @@ const CardTemplate = (props : any) =>{
             <div className="pt-10 pl-27 pr-37">
                 <div className={astyles['anpa-container-content']}>
                 <div className={astyles['main-content-container']}>
+                            
+                            <div>
+                                <strong>{"Username"}</strong>
+                                <span>{props.itemList?.userName}</span>
+                            </div>
+    
                             <div>
                                 <strong>{"First Name"}</strong>
                                 <span>{props.itemList?.firstName}</span>
@@ -79,12 +83,6 @@ const CardTemplate = (props : any) =>{
                                 <strong>{"Last Name"}</strong>
                                 <span>{props.itemList?.lastName}</span>
                             </div>
-                            
-                            <div>
-                                <strong>{"Username"}</strong>
-                                <span>{props.itemList?.userName}</span>
-                            </div>
-    
                             
                             <div>
                                 <strong>{"Date of Birth"}</strong>
@@ -134,5 +132,4 @@ const CardTemplate = (props : any) =>{
 
 }
 export default CardTemplate;
-
 

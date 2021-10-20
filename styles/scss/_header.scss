@@ -20,6 +20,8 @@ header {
         padding-left: 24px;
         padding-right: 24px;
         border-radius: 16px;
+        margin-block-start: 5px;
+        margin-block-end: 5px;
         width: 480px;
         background: #F8F8F8;
         border-radius: 16px;
@@ -137,3 +139,9 @@ header {
         }
     }
 }
+
+
+// .ant-menu{
+//     // background-color: red;
+//     width: 1200px;
+// }

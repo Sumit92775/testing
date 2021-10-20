@@ -2,6 +2,7 @@ import React  from "react";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
+let lastId = 0;
 
 const options = {
     method: 'POST',
@@ -11,9 +12,6 @@ const options = {
     },
     body: ''
 }
-
-
-const url = 'http://194.163.134.197:3004/api_v1';
 
 const access = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjExLCJ1c2VyTmFtZSI6IlN1bWl0aCIsImVtYWlsIjoiaGVsbG9AZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiI4MDc2ODM3MzIxIiwidXNlclR5cGUiOjIsImlhdCI6MTYzNDM2MzQyNH0.II6rLYaNLFYQDIQbNjQ4DY6NqETVVdWZct_ZByWuGQk'
 
@@ -187,4 +185,8 @@ export const changePassword = (payload: object) =>{
       console.log(error);
     });
 
+}
+
+export const newId = (prefix: string = '') => {
+  return `${prefix}${++lastId}`;
 }

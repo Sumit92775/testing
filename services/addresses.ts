@@ -7,8 +7,6 @@ const access = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjExLCJ1c2VyTmF
 export const getAccessToken = (req:any) => {
   
   console.log("Request: ",req);
-  
-
   return req ? req.headers.cookie.split('; ').map((a:any) => {
       let arr = a.split('=');
       return {key: arr[0], val: arr[1]}
@@ -197,6 +195,31 @@ export const editAdditionDetails = (payload: any) =>{
   return fetch(`http://saloonplus.com:3004/api_v1/profile/user/editUserAddSettings`, config)
   .then(response => response.json()).catch(error =>{
     console.log("Error in gettinMyDetails: ",error);
+  });
+
+}
+
+export const deleteUserAddress = (addressId: any) =>{
+  
+  var data = '';
+  var config = {
+    method: 'delete',
+    url: 'saloonplus.com:3004/api_v1/profile/user/deleteAddress?addressId=2',
+    headers: { 
+      'Authorization': 'authToken', 
+      'Content-Type': 'application/json', 
+      accesstoken: cookies.get("accessToken")
+    },
+    body : data
+  };
+
+  return fetch(`http://saloonplus.com:3004/api_v1/profile/user/deleteAddress?addressId=${addressId}`, config)
+  .then(response => {
+    response.json();
+  console.log("Response: ",response);
+  
+  }).catch(error =>{
+    console.log("Error in deleting address: ",error);
   });
 
 }

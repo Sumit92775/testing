@@ -4,7 +4,8 @@ import { Button, Checkbox, Divider, message, Modal } from "antd";
 import styles from './Styles.module.scss';
 import cx from 'classnames';
 import AddAddress from "../product-details/add-address-modal";
-import { addAddressUser, markAsDefault } from "../../services/addresses";
+import { addAddressUser, deleteUserAddress, getAddresses, markAsDefault } from "../../services/addresses";
+import AddressByMap from "../product-details/address-by-map";
 
 
 const Card7AddAddress = (props : any) =>{
@@ -24,6 +25,7 @@ const Card7AddAddress = (props : any) =>{
         if(addressArray.length > 0){
             setIsAddressPresent(true);
             setPresentAddress(addressArray);
+            // setDefaultIdSetted(false);
         }else{
             setIsAddressPresent(false);
             setPresentAddress([]);
@@ -39,9 +41,9 @@ const Card7AddAddress = (props : any) =>{
             formatAddress+=address.houseNumber+", "
         }
        
-        if(address.streetAddress){
-            formatAddress+=address.houseNumber+", "
-        }
+        // if(address.streetAddress){
+        //     formatAddress+=address.houseNumber+", "
+        // }
        
         if(address.add1){
             formatAddress+=address.add1+", "
@@ -67,53 +69,51 @@ const Card7AddAddress = (props : any) =>{
         return formatAddress;
     }
 
-    const addAddress = (newAddress: any) =>{
+    const addAddress = async (newAddress: any) =>{
         
         // console.log(newAddress);
         
-        addAddressUser(
-            {
-                "name":newAddress.name,
-                "email":newAddress.email,
-                "phoneNumber":newAddress.mobileNumber,
-                "latitude":"newAddress.lat",
-                "longitude":"newAddress.long",
-                "storeId":0,
-                "houseNumber":newAddress.houseNumber,
-                "streetAddress":"newAddress.streetNumber",
-                "add1":newAddress.add1,
-                "add2":newAddress.add2,
-                "city":newAddress.city,
-                "state":"newAddress.state",
-                "country":newAddress.country,
-                "zipCode":newAddress.pincode,
-                "googleAddress":"",
-                "isDefault":0
-            }
-            )
-
-            let array = new Array();
-            array = presentaddress;
-            array.push( {
-                "name":newAddress.name,
-                "email":newAddress.email,
-                "phoneNumber":newAddress.mobileNumber,
-                "latitude":"newAddress.lat",
-                "longitude":"newAddress.long",
-                "storeId":0,
-                "houseNumber":newAddress.houseNumber,
-                "streetAddress":"newAddress.streetNumber",
-                "add1":newAddress.add1,
-                "add2":newAddress.add2,
-                "city":newAddress.city,
-                "state":"newAddress.state",
-                "country":newAddress.country,
-                "zipCode":newAddress.pincode,
-                "googleAddress":"",
-                "isDefault":0,
+       addAddressUser(
+                {
+                    "name":newAddress.name,
+                    "email":newAddress.email,
+                    "phoneNumber":newAddress.mobileNumber,
+                    "latitude":"newAddress.lat",
+                    "longitude":"newAddress.long",
+                    "storeId":0,
+                    "houseNumber":newAddress.houseNumber,
+                    "streetAddress":"newAddress.streetNumber",
+                    "add1":newAddress.add1,
+                    "add2":newAddress.add2,
+                    "city":newAddress.city,
+                    "state":newAddress.state,
+                    "country":newAddress.country,
+                    "zipCode":newAddress.pincode,
+                    "googleAddress":"",
+                    "isDefault":0
+                }
+            ).then((response: any) =>{
+                console.log(response);
+                let array = new Array();
+                
+                getAddresses().then(res =>{
+                    console.log("Response: 1",res); 
+                    if(res.addresses){
+                        array = res.addresses;
+                        setPresentAddress(array);
+                        handleCancel;
+                    }
+                }).catch(error =>{
+                    console.log(error);
+                })
+        
+            }).catch(error =>{
+                console.log(error);
             })
-            setPresentAddress(array);
-            handleCancel;
+
+      
+                // let status = response.status;
+
     }
 
     
@@ -123,7 +123,7 @@ const [chooseModalName, setchooseModalName] = useState("");
 const [chooseModalTitle, setchooseModalTitle] = useState("");
 const [footer, setFooter] = useState(false);
 const [defaultAddressChoosed, setDefaultAddressChoosed] = useState(false)
-const [defaultIdSetted, setDefaultIdSetted] = useState(0);
+const [defaultIdSetted, setDefaultIdSetted] = useState(false);
 
 
 const handleOk = (evt : any) => {
@@ -156,15 +156,38 @@ const openModal = (type : any) => {
     console.log(chooseModalName);
 };
 
+ const handleDeleteUserAddress = async (id: any) =>{
+    try{
+            let res = await deleteUserAddress(id);
+            let addressesArray = presentaddress;
+            let addressesArrayAfterDeletion = [];
+            addressesArrayAfterDeletion = addressesArray.filter((addresses: any) => addresses.id !== id);
+            setPresentAddress(addressesArrayAfterDeletion);
+
+        // }
+    }catch(error: any){
+        message.error(error);
+    }
+    
+ }
+
     const handelMarkAsDefault = async (id: any) =>{
         let res = await markAsDefault({
             "addressId": id
         });
 
-        // let selectedValue = defaultAddressChoosed;
-        setDefaultAddressChoosed(true);
-        setDefaultIdSetted(id);
-        message.info(res.message);
+        try{
+            let res1 =  await getAddresses();
+            let addressAfterSettingDefaultAddress = res1.addresses;
+            setPresentAddress(addressAfterSettingDefaultAddress);
+            setDefaultAddressChoosed(true);
+            setDefaultIdSetted(id);
+            message.info(res.message);
+        }catch(error: any){
+            message.error(error);
+        }
+
+
 
     }
 
@@ -175,13 +198,13 @@ const openModal = (type : any) => {
             <div className={cx(styles['scrollable-flex-design'],'mb-20')}>
                 {presentaddress.map((address: any) =>{
                     return(
-                        <div key={`${address.id}`} className={styles['address-div']}>
+                        <div key={`${address.id}`} className={styles['address-div']} style={{height :"100%", width : "300px !important"}}>
                             {/* <div className="grid-view grid-1 pl-20 pr-20 pt-20 pb-20 rowgap-20 colgap-5" style={{height : "200px"}}> */}
-                                <div className="card card2 pl-10 pt-10 pr-10 pb-10" style={{height :"100%"}}>
+                                <div className="card card2 pl-10 pt-10 pr-10 pb-10" style={{height : "236px", minWidth: "350px", maxWidth: "350px", width: "100%"}}>
                                     <div className="grid-view grid-1 rowgap-5">
                                         <div className="grid-view auto-width grid-1 mb-5">
                                             <h5>{address.name}
-                                                <span className="txt pull right">
+                                                <span className="txt pull right" onClick={() => handleDeleteUserAddress(address.id)}>
                                                     <Delete />
                                                 </span>
                                                 {/* <Button className="primary small pull right" type="link" onClick={()=>{openModal("Add Address");props.title("Add Address")}}><span className="icon-wrap"><EditIcon /></span></Button> */}
@@ -191,51 +214,41 @@ const openModal = (type : any) => {
                                             </h5>
                                         </div>
 
-                                        {/* <span className="txt weight700 float left ">{address.name}</span> */}
-                                        
                                         {address.email ? 
                                 
-                                            <span className="txt weight700 float left">Jonathan@gmail.com</span>
+                                            <span className="txt weight700 float left">{address.email}</span>
                                         
                                         : 
                                         <>
                                         </>
                                         }
-                                        
-                                        {/* <div className="grid-view auto-width grid-2"> */}
-                                            {/* <span>Mobile</span> */}
-                                            <span className="txt weight700 float left">00966 4 8490159</span>
-                                        {/* </div> */}
-                                        {/* <div className={cx(styles['overflow'], "grid-view auto-width grid-1")}> */}
-                                            {/* <span>Address </span> */}
-                                            <span className={cx(styles['text-overflow'], "txt weight700 float left")} >{makeFormatAddress(address)}</span>
-                                        {/* </div> */}
 
-                                        <span className="danger small pull right flex center-content" style={{position : "absolute", bottom: "10px", left: "80px"}}>
-                                            {address.isDefault == 0 ? 
+                                        <span className="txt weight700 float left">{address.phoneNumber}</span>
+
+                                        <span className={cx(styles['text-overflow'], "txt weight700 float left")} >{makeFormatAddress(address)}</span>
+
+                                        <span className="danger small pull right flex center-content" style={{position : "absolute", bottom: "10px", left: "100px"}}>
+                                            {(address.isDefault == 0) ? 
                                             <Checkbox onChange={(event) =>{setChecked(event.target.checked);
                                             handelMarkAsDefault(address.id);
                                             }}><span className="txt primary">Mark as default</span></Checkbox>
                                             : 
-                                            <span className="txt primary">Default Address</span>
+                                            <span className="txt"><strong>Default Address</strong></span>
                                             }
                                         </span>
 
                                     </div>    
                                 </div>
-                            {/* </div> */}
                         </div>
                     )
                 })}
 
             <div>
-                {/* <div className="grid-view grid-1 pl-20 pr-20 pt-20 pb-20 rowgap-20 colgap-5" style={{height: "210px"}}> */}
-                    <div className="card card2 pl-10 pt-10 pr-10 pb-10 flex center" style={{height: "100%", width: "300px",display: "flex", alignItems :"center", justifyContent : "space-evenly"}}>
-                    {/* <div className={'card card2 pl-10 pt-10 pr-10 pb-10 flex')}> */}
-                        <Button onClick={()=>{openModal("Add Address")}}>
-                            Add Address
-                        </Button>   
-                    {/* </div> */}
+               
+                <div className="card card2 pl-10 pt-10 pr-10 pb-10 flex center" style={{minHeight: "250px", height: "100%", width: "300px",display: "flex", alignItems :"center", justifyContent : "space-evenly"}}>
+                    <Button onClick={()=>{openModal("Add Address")}}>
+                        Add Address
+                    </Button>   
                 </div>
             </div>
             </div>
@@ -249,128 +262,23 @@ const openModal = (type : any) => {
                                 <h4 className="txt primary">{chooseModalName}</h4>
                             </div>
                     } footer={
-                        <div className="pt-20 pb-20 pr-0">
-                            <Button className="mr-20" onClick={handleCancel}>Cancel</Button>
-                            {/* <Button className="ant-btn primary mr-21" onClick={() =>handleCancel}>Save Chages</Button> */}
-                        </div>
+                        // <div className="pt-20 pb-20 pr-0">
+                        //     <Button className="mr-20" onClick={handleCancel}>Cancel</Button>
+                        //     <Button className="ant-btn primary mr-21" onClick={() =>handleCancel}>Save Chages</Button>
+                        // </div>
+                        ""
                         }
                     visible={chooseModal} onOk={handleOk} onCancel={handleCancel}>
                         {
                             chooseModalName === "Add Address" ? 
-                            <AddAddress addAddress={addAddress} closeModal={handleCancel}></AddAddress>
+                            <AddressByMap addAddress={addAddress} closeModal={handleCancel}></AddressByMap>
                             : 
                             <>
                             </>
                             // <EditGeneralDetails></EditGeneralDetails>
 
                         }
-                    </Modal>
-
-
-            {/* <div>
-                <div className=" grid-view grid-3 pl-20 pr-20 pt-20 pb-20 rowgap-20 colgap-5">
-                    <div className="card card2 pl-10 pt-10 pr-10 pb-10">
-                        <div className="grid-view grid-1 rowgap-5">
-                            <div className="grid-view auto-width grid-1 mb-5">
-                                <h5>Default Address</h5>
-                            </div>
-                            <div className="grid-view auto-width grid-2">
-                                <span className="txt dark1 weight400">Name </span>
-                                <span className="txt weight700 float right ">Jonathan</span>
-                            </div>
-                            <div className="grid-view auto-width grid-2">
-                                <span>Email</span>
-                                <span className="txt weight700 float right">Jonathan@gmail.com</span>
-                            </div>
-                            <div className="grid-view auto-width grid-2">
-                                <span>Mobile</span>
-                                <span className="txt weight700 float right">00966 4 8490159</span>
-                            </div>
-                            <div className="grid-view auto-width grid-2">
-                                <span>Address </span>
-                                <span className="txt weight700 float right">Awali,ah,Al Madinah Al Munawar</span>
-                            </div>
-
-                        </div>    
-                    </div>
-                </div>
-            </div> */}
-
-            {/* <div className="grid-view grid-3 pl-20 pr-20 pt-20 pb-20 rowgap-20 colgap-5">
-                <div className="card card2 pl-10 pt-10 pr-10 pb-10">
-                    <div className="grid-view grid-1 rowgap-5">
-                        <div className="grid-view auto-width grid-2">
-                            <span className="txt dark1 weight400">Name </span>
-                            <span className="txt weight700 float right ">Jonathan</span>
-                        </div>
-                        <div className="grid-view auto-width grid-2">
-                            <span>Email</span>
-                            <span className="txt weight700 float right">Jonathan@gmail.com</span>
-                        </div>
-                        <div className="grid-view auto-width grid-2">
-                            <span>Mobile</span>
-                            <span className="txt weight700 float right">00966 4 8490159</span>
-                        </div>
-                        <div className="grid-view auto-width grid-2">
-                            <span>Address </span>
-                            <span className="txt weight700 float right">Awali,ah,Al Madinah Al Munawar</span>
-                        </div>
-
-                    </div>
-                </div>
-                <div className="card card2 pl-10 pt-10 pr-10 pb-10">
-                    <div className="grid-view grid-1 rowgap-5">
-                        <div className="grid-view auto-width grid-2">
-                            <span className="txt dark1 weight400">Name </span>
-                            <span className="txt weight700 float right ">Jonathan</span>
-                        </div>
-                        <div className="grid-view auto-width grid-2">
-                            <span>Email</span>
-                            <span className="txt weight700 float right">Jonathan@gmail.com</span>
-                        </div>
-                        <div className="grid-view auto-width grid-2">
-                            <span>Mobile</span>
-                            <span className="txt weight700 float right">00966 4 8490159</span>
-                        </div>
-                        <div className="grid-view auto-width grid-2">
-                            <span>Address </span>
-                            <span className="txt weight700 float right">Awali,ah,Al Madinah Al Munawar</span>
-                        </div>
-
-                    </div>
-                </div>
-                <div className="card card2 pl-10 pt-10 pr-10 pb-10">
-                    <div className="grid-view grid-1 rowgap-5">
-                        <div className="grid-view auto-width grid-2">
-                            <span className="txt dark1 weight400">Name </span>
-                            <span className="txt weight700 float right ">Jonathan</span>
-                        </div>
-                        <div className="grid-view auto-width grid-2">
-                            <span>Email</span>
-                            <span className="txt weight700 float right">Jonathan@gmail.com</span>
-                        </div>
-                        <div className="grid-view auto-width grid-2">
-                            <span>Mobile</span>
-                            <span className="txt weight700 float right">00966 4 8490159</span>
-                        </div>
-                        <div className="grid-view auto-width grid-2">
-                            <span>Address </span>
-                            <span className="txt weight700 float right">Awali,ah,Al Madinah Al Munawar</span>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-           */}
-
-            {/* <Divider className="mt-12 mb-12 mb-0"></Divider> */}
-            {/* <div>
-                <div className="ml-32 mt-5 mb-15">
-                    <Button className="primary small mr-33" type="link" onClick={()=>{openModal("Add Address");
-                    props.title("Add Address")
-                    }}><span className="icon-wrap"><EditIcon /></span>Change Address/Add Address</Button>
-                </div>
-            </div> */}
+            </Modal>
         </div>
     )
 }

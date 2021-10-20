@@ -34,7 +34,7 @@ const [mobileNumber, setMobileNumber] = useState("");
 
 useEffect(() =>{
     message.config({duration: 5, top: 60})
-    message.error("hello");
+    // message.error("hello");
 
     getMyDetails().then((res)=>{
         if(res.status == true){
@@ -52,7 +52,7 @@ useEffect(() =>{
     getAdditionDetails().then(res =>{
         if(res){
             setAdditionDetailsObject(res.addSettings);
-            message.success(res.message)
+            // message.success(res.message)
         }else{
             message.error(res.message);
         }
@@ -138,16 +138,12 @@ const openModal = (type : any) => {
                         </div>
                     <Divider className="mt-0 mb-0"></Divider>
                 <div className="pl-38 pr-38 pb-43">
+                   
                     <CardTemplate setUserDetailsArray={setUserDetailsArray} userName={userName} email={email} mobileNumber={mobileNumber} itemList={userDetailsArray} modal={openModal} modalTitle={setchooseModalName}></CardTemplate>
-
-                    
-                    
-
+                        
                     <div className={cx(styles['card-no-shadow'], "card card2 mt-40 p-0")}>
-                        {/* <div> */}
                             <h5 className="mt-10 mb-10 pl-20 pr-27 fz-18">{"Email & Mobile Number"}</h5>
                             <Divider className="mt-5 mb-0"></Divider>
-                        {/* </div> */}
                         <div className="grid-view grid-1 pl-30 pr-30 pt-20 pb-20">
                             <Form>
                                 <Form.Item className="mb-10" label="Email">
@@ -165,7 +161,7 @@ const openModal = (type : any) => {
                             </Form>    
                         </div>
                     </div>
-
+                
                     <AdditionalDetails details={additionDetailsObject} setAdditionDetailsObject={setAdditionDetailsObject}/>
 
                     <Card7AddAddress modal={openModal} title={setchooseModalTitle} addressArray={props.data}/>
@@ -180,20 +176,23 @@ const openModal = (type : any) => {
                                 <h4 className="txt primary">{chooseModalName}</h4>
                             </div>
                     } footer={
-                        chooseModalName === "Change Email" ? 
-                        <div className="pt-20 pb-20 pr-0">
-                            <Button className="mr-20" onClick={handleCancel}>Cancel</Button> 
-                        </div>
-                            : 
-                        <div className="pt-20 pb-20 pr-0">
-                            <Button className="mr-20" onClick={handleCancel}>Cancel</Button> 
-                            {(chooseModalName === "Change Email" || chooseModalName === "Change Mobile Number") == true ? 
-                            <>
-                            </> 
-                            : 
-                            <Button className="ant-btn primary mr-21" onClick={() =>checkPassword()}>Save Chages</Button>
-                            }
-                        </div>
+                        // chooseModalName === "Change Email" ? 
+                        // <div className="pt-20 pb-20 pr-0">
+                        //     <Button className="mr-20" onClick={handleCancel}>Cancel</Button>
+                        // </div>
+                        //     : 
+                        // <div className="pt-20 pb-20 pr-0">
+                        //     {(chooseModalName === "Change Email" || chooseModalName === "Change Mobile Number") == true ? 
+                        //     <>
+                        //     </>
+                        //     : 
+                        //     <div>
+                        //         <Button className="mr-20" onClick={handleCancel}>Cancel</Button> 
+                        //         <Button className="ant-btn primary mr-21" onClick={() =>checkPassword()}>Save Chages</Button>
+                        //     </div>
+                        //     }
+                        // </div>
+                        ""
                         }
                     visible={chooseModal} onOk={handleOk} onCancel={handleCancel}>
                         {

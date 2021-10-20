@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react'
 import { Button, Checkbox, Divider, message, Pagination} from 'antd';
 import styles from '../styles/components/notifications.module.scss';
@@ -5,7 +6,6 @@ import Modal from 'antd/lib/modal/Modal';
 import NotificationCard from '../components/Common/notification-card';
 import ProfileLeft from './profile-left';
 import CustomerLayout from '../components/User/Customer-Layout';
-import DashboardMiniTable from '../components/Common/DashboardMiniTable';
 import {getNotifications, setNotificationRead} from '../services/notification';
 
 
@@ -16,27 +16,28 @@ const Notifications = () => {
     const [notificationArray, setNotificationArray] = useState([]);
     const [paginationPage, setPaginationPage] = useState(1);
     const [newNotifications, setNewNotifications] = useState(0);
+    const [notificationAvailable, setNotificationAvailable] = useState(true);
 
     useEffect(() =>{
         console.log("UseEffect Run 1 !!");
         message.config({
             duration:  5, top :60
         })
-        // void async function(){
             try{
-                // console.log("UseEffect Run 2 !!");
-
                 getNotifications(paginationPage).then( res =>{
-                    if(res.status == true){
+                    if(res.notifications){
                         setNotificationRead().then(res =>{
                             message.success(res.message)
                         }).catch(error =>{
                             message.error(error);
                         })
+                        console.log(res.notifications);
+                        
                         setNotificationArray(res.notifications);
                         setNewNotifications(res.newNotifications);
+                        setNotificationAvailable(true);
                     }else{
-                        message.error(res.message);
+                        setNotificationAvailable(false);
                     }
                 }).catch(error =>{
                     message.error(error);
@@ -76,10 +77,6 @@ const openModal = (type : any) => {
     setSelectedModalName(type);
 };
 
-
-
-
-
     return(
         <CustomerLayout>
             <div className={styles['main-container']}>
@@ -95,15 +92,24 @@ const openModal = (type : any) => {
                             {/* <span className="txt pull-right dark2 flex center-content" onClick={() =>props.modal("Edit Preferences")}><EditIcon/><u>Notification Preferences</u></span> */}
                         </div>
                         <Divider className="mt-5 mb-32"></Divider>
-                       {
-                           notificationArray.map((cardDetails) =>{
-                               return(
-                                   <div className="mb-40" key={`${cardDetails}`}>
-                                       <NotificationCard modal={openModal}  cardDetails={cardDetails}></NotificationCard>
-                                   </div>
-                               )
-                           })
-                       }
+                        {notificationAvailable === false ? 
+                        <span className="pull center">No Notifications</span> 
+                        : 
+                        <div>
+                            {
+                            notificationArray.map((cardDetails) =>{
+                                return(
+                                    <div className="mb-40" key={`${cardDetails}`}>
+                                        <NotificationCard modal={openModal}  cardDetails={cardDetails}></NotificationCard>
+                                    </div>
+                                )
+                            })
+                        }
+
+                        </div>
+
+                    }
+                      
 
                     </div>
                 </div>

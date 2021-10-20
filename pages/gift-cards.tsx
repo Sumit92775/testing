@@ -26,7 +26,7 @@ export default function GiftCards() {
             balance: '25',
         },
         {
-            cardName: 'Gift Card 1',
+            cardName: 'Gift Card 2',
             cardNumber: '22AW-L8CT-20',
             description: 'A short Description about the gift card goes here for getting an initial idea.',
             expiry: '14 Nov, 2020',
@@ -38,7 +38,7 @@ export default function GiftCards() {
             balance: '25',
         },
         {
-            cardName: 'Gift Card 1',
+            cardName: 'Gift Card 3',
             cardNumber: '22AW-L8CT-20',
             description: 'A short Description about the gift card goes here for getting an initial idea.',
             expiry: '14 Nov, 2020',
@@ -63,7 +63,7 @@ export default function GiftCards() {
             value: '50',
         },
         {
-            cardName: 'Gift Card 1',
+            cardName: 'Gift Card 2',
             cardNumber: '22AW-L8CT-20',
             description: 'A short Description about the gift card goes here for getting an initial idea.',
             validFor: '10 Days After Purchase',
@@ -84,7 +84,7 @@ export default function GiftCards() {
             storeName: 'halais',
         },
         {
-            cardName: 'Gift Card 1',
+            cardName: 'Gift Card 2',
             cardNumber: '22AW-L8CT-20',
             description: 'A short Description about the gift card goes here for getting an initial idea.',
             expiry: '14 Nov, 2020',
@@ -107,7 +107,6 @@ export default function GiftCards() {
     const openModal = (type :any) => {
 
         console.log(type);
-
         if(type === "create-gift-card"){
             setCreateGiftCard(true);
         }

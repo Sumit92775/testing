@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { GoogleMap, LoadScript, Marker, StandaloneSearchBox } from '@react-google-maps/api';
 import Geocode from 'react-geocode';
-import { Button, Input, Form, Checkbox } from 'antd';
+import { Button, Input, Form, Checkbox, message } from 'antd';
 import styles from './Styles.module.scss'
 import { LocationCityRounded, MyLocation, TrainRounded } from '@material-ui/icons';
 import confirm from 'antd/lib/modal/confirm';
+import useTranslation from 'next-translate/useTranslation';
+import { validateEmail } from '../../services/auth';
 Geocode.setApiKey("AIzaSyBKowFDX0jDn687et4wgSmFpXiK-bj5Gj4");
 Geocode.setLanguage("en");
 Geocode.setRegion("es");
@@ -58,6 +60,7 @@ function AddressByMap(props : any) {
       lng: longitude
     };
     
+    const { t } = useTranslation('validator');
     
     const getLatLong = (address : any) =>{
         // Get latitude & longitude from address.
@@ -66,8 +69,8 @@ function AddressByMap(props : any) {
           const { lat, lng } = response.results[0].geometry.location;
           setLatitude(lat);
           setLongitude(lng);
-          props.lat(lat);
-          props.long(lng)
+          // props.lat(lat);
+          // props.long(lng)
           getAddressByLatLong(lat, lng);
         },
         (error) => {
@@ -131,7 +134,7 @@ function AddressByMap(props : any) {
           if(typeArray[i] === "street_number"){
             console.log(dataObj.long_name);
             setStreetNo(dataObj.long_name);
-            props.streetNumber(dataObj.long_name);
+            // props.streetNumber(dataObj.long_name);
             break;
           }
 
@@ -170,7 +173,7 @@ function AddressByMap(props : any) {
             }
             if(typeArray[i] === "administrative_area_level_1"){
               setCity(dataObj.long_name);
-              props.city(dataObj.long_name);
+              // props.city(dataObj.long_name);
               console.log("administrative_area_level_1 : ",dataObj.long_name);
               break;
             }
@@ -185,21 +188,21 @@ function AddressByMap(props : any) {
           
           if(typeArray[i] === "premise"){
             setHouseNo(dataObj.long_name);
-            props.houseNumber(dataObj.long_name);
+            // props.houseNumber(dataObj.long_name);
             console.log("House No.",dataObj.long_name);
             break;
           } 
           
           if(typeArray[i] === "country"){
             setCountry(dataObj.long_name);
-            props.country(dataObj.long_name);
+            // props.country(dataObj.long_name);
             console.log("Country",dataObj.long_name);
             break;
             
           } 
           if(typeArray[i] === "postal_code"){
             setPinCode(dataObj.long_name);
-            props.pincode(dataObj.long_name);
+            // props.pincode(dataObj.long_name);
             console.log("postal_code",dataObj.long_name);
             break;
           }
@@ -275,7 +278,6 @@ function AddressByMap(props : any) {
 
       console.log("Address Line 1: ",data);
       setAddressOne(data)
-      props.add1(data);
 
     }
 
@@ -307,9 +309,8 @@ function AddressByMap(props : any) {
       console.log("Address Line 22: ",data);
       setAddressTwo(data);
 
-
       // let location = houseNo+subLocality1+subLocality2+subLocality3+data;
-      props.add2(data)
+      // props.add2(data)
 
     }
     
@@ -323,8 +324,8 @@ function AddressByMap(props : any) {
     const handelCurrentLocation = () =>{
       navigator.geolocation.getCurrentPosition(function(position){
         
-        props.lat(position.coords.latitude);
-        props.long(position.coords.longitude);
+        // props.lat(position.coords.latitude);
+        // props.long(position.coords.longitude);
         setLatitude(position.coords.latitude);
         setLongitude(position.coords.longitude);
         console.log("Step : 1");
@@ -347,56 +348,88 @@ function AddressByMap(props : any) {
     }
 
 
+    /////////////////////////
+ 
+    const [name, setName] = useState("")
+    const [mobileNumber, setMobileNumber] = useState("")
+    const [email, setEmail] = useState("");
+    const [address, setAddress] = useState("");
+    const [houseNumber, setHouseNumber] = useState("");
+    const [streetNumber, setStreetNumber] = useState("");
+    const [add1, setAdd1] = useState("");
+    const [add2, setAdd2] = useState("");
+    // const [pincode, setPincode] = useState("");
+
+
+    const checkEmail = (rule: any, value: any, callback: any) => {
+      if(value) {
+          if((/^(?=[^@]*[A-Za-z])[^\W|_/\s][\w\-\.]+@([\w\-]+\.)+[\w\-]{2,20}$/).test(value)) {
+              validateEmail({email: value})
+              .then(res => {
+                  if(res.status) {
+                      setEmail(value);
+                      callback();
+                      // setBtnEnabled(false);
+                      message.success(res.message);
+                  } else {
+                      callback('');
+                      // setBtnEnabled(true);
+                      message.error(t('value already taken', { value: value }));
+                  }
+              })
+          } else {
+              // setBtnEnabled(true);
+              callback(t('email', {field: 'Store Email'}))
+          }
+      } else {
+          callback();
+      }
+  }
+
   return (
       <div className="grid-view grid-1" style={{flexDirection : "column"}}>
-        {changeAddress === true ? 
-        <>
-        <span className="txt primary" onClick={() => setChangeAddress(!changeAddress)}>{"< Back"}</span>
-        <Input className="mb-20" onChange={(event) =>handleUserGivenLocationAddress(event)}></Input>
-        <Button className="txt primary" onClick={() =>handleUserGivenLocationConfirm(userGivenAddress)}>Confirm And Proceed</Button>
-        </>
-        :
+
         <div>
-            <div className="mb-20" style={{position : "relative"}}>
-              <LoadScript
-              googleMapsApiKey="AIzaSyBKowFDX0jDn687et4wgSmFpXiK-bj5Gj4"
-              >
-              <GoogleMap
-                  mapContainerStyle={containerStyle}
-                  center={center}
-                  zoom={5}
-                  onLoad={map => {
-                    const bounds = new window.google.maps.LatLngBounds();
-                    map.fitBounds(bounds);
-                  }}
-                  options={{
-                    // styles: waterStyle,
-                    fullscreenControl: false,
-                    disableDefaultUI :  true,
-                  }}>
-                  <Marker
-                  draggable={true}
-                  onDragEnd={(event) => {handleDrag(event);
-                  }}
-                  position={center}
-                  onLoad={handelCurrentLocation}
-                  animation={1}
-                  />
-
-              </GoogleMap>
-              </LoadScript>
-              <div  className={styles['myLocationIcon']}><MyLocation></MyLocation></div>
-            </div>
-
-            {confirmAndProceed === true ? 
-            <>
+           
+  
+        {confirmAndProceed === true ? 
+          <>
             <div>
               <span className="txt primary" onClick={() => setconfirmAndProceed(!confirmAndProceed)}>{"< Back"}</span>
               <Form>
-                <div className="grid-view grid-1 rowgap-10 colgap-20">
-                  <Form.Item label={<label className="txt dark3">House No.<span>(Optional)</span></label>}>
-                    <Input value={streetNo} onChange={(event : any) => setStreetNo(event.target.value)}></Input>
+                <div className="grid-view grid-1 rowgap-20 colgap-20 mt-10">
+                  
+                  <Form.Item>
+                  
+                  <div className="grid-view grid-2 colgap-30 rowgap-20">
+                    
+                    <Form.Item className="mb-10" label="Name" required={true}>
+                      <Input value={name} type="text" onChange={(event : any) => setName(event.target.value)}></Input>
+                    </Form.Item>
+
+                    <Form.Item className="mb-10" name={['email']} hasFeedback label="Email" validateTrigger={['onBlur']} rules={[
+                        { required: false, message: t('required', {field: 'Email'}) },
+                        { validator: checkEmail },
+                        ]}>
+                        <Input placeholder="ex:halais" />
+                    </Form.Item>
+
+                  </div>
                   </Form.Item>
+                  <Form.Item>
+                    <div className="grid-view grid-2 colgap-30 mb-10">
+                      
+                      <Form.Item label="Mobile Number" required={true}>
+                        <Input value={mobileNumber} onChange={(event : any) => setMobileNumber(event.target.value)}></Input>
+                      </Form.Item>
+                      
+                      <Form.Item label={<label className="txt dark3">House No.<span>(Optional)</span></label>}>
+                        <Input value={streetNo} onChange={(event : any) => setStreetNo(event.target.value)}></Input>
+                      </Form.Item>
+
+                    </div>
+                  </Form.Item>
+                  
                   <Form.Item label="Address Line: 1" required={true}>
                     <Input value={addressone}></Input>
                   </Form.Item>
@@ -418,33 +451,261 @@ function AddressByMap(props : any) {
                       <Form.Item label="Country" required={true}>
                         <Input value={country}></Input>
                       </Form.Item>
-                      <Form.Item label={<div></div>}>
-                        <Checkbox className="pl-10">Mark this address as default</Checkbox>
-                      </Form.Item>
                     </div>
                   </Form.Item>
+                  <Form.Item>
+                    <div className="pt-20 pb-20 pr-0 pull right">
+                          <Button className="mr-25 float right" onClick={() =>{props.closeModal;
+                          setconfirmAndProceed(false);
+                          setName("");
+                          setMobileNumber("");
+                          setEmail("");
+                          }}>Cancel</Button>
+                          <Button className="ant-btn primary mr-21 float right" onClick={() => {
+                            
+                            if(name.length > 1 && mobileNumber.length  == 10){
+                              props.addAddress({
+                                      name : name,
+                                      mobileNumber : mobileNumber,
+                                      email : email,
+                                      add1 : addressone,
+                                      add2 : addresstwo,
+                                      city : city,
+                                      country : country,
+                                      houseNumber : houseNo,
+                                      state : subLocality1,
+                                      lat : latitude,
+                                      long : longitude,
+                                      pincode : pinCode,
+                                      streetNumber : streetNo,
+                                      isDefault : 0,
+                                  });
+                                  props.closeModal();
+                                  setName("");
+                                  setMobileNumber("");
+                                  setEmail("");
+                                  setconfirmAndProceed(false);
+                            }else{
+                              message.error("Name and Mobile Number Not Be Empty")
+                            }
+                              }
+                                }>Save Chages</Button>
+                      </div>
+                  </Form.Item>
+
                 </div>
               </Form>
             </div>
-            </>
-            : 
+          </>
+        : 
+        <div>
+            <div className="mb-20" style={{position : "relative"}}>
+            <LoadScript
+            googleMapsApiKey="AIzaSyBKowFDX0jDn687et4wgSmFpXiK-bj5Gj4"
+            >
+            <GoogleMap
+                mapContainerStyle={containerStyle}
+                center={center}
+                zoom={5}
+                onLoad={map => {
+                  const bounds = new window.google.maps.LatLngBounds();
+                  map.fitBounds(bounds);
+                }}
+                options={{
+                  // styles: waterStyle,
+                  fullscreenControl: false,
+                  disableDefaultUI :  true,
+                }}>
+                <Marker
+                draggable={true}
+                onDragEnd={(event) => {handleDrag(event);
+                }}
+                position={center}
+                onLoad={handelCurrentLocation}
+                animation={1}
+                />
+
+            </GoogleMap>
+            </LoadScript>
+            <div  className={styles['myLocationIcon']}><MyLocation></MyLocation></div>
+            </div>
             <div>
               <div className={styles['address-container']}>
-                  <Input suffix={<h6 className="txt primary cursor" onClick={() =>setChangeAddress(!changeAddress)}>Change Address</h6>} value={formattedAddress} contentEditable={false}></Input>
+                  <Input value={formattedAddress} contentEditable={false}></Input>
               </div>
-                  <Button className="text primary ml-24 mr-24" 
+                  <Button className="text primary ml-24 mr-22 mt-10 float pull right" 
                     onClick={() =>{setconfirmAndProceed(!confirmAndProceed);
                       setAddressLine1();
                       setAddressLine2();
                       }}
                   >Confirm and Proceed</Button>
+                  <Button className="mr-0 mt-10 float pull right" onClick={props.closeModal}>Cancel</Button>
             </div>
-
-            }
+        </div>
+          
+        }
 
         </div>
-        }
+      
       </div>
+      // <div className="grid-view grid-1" style={{flexDirection : "column"}}>
+      //   {changeAddress === true ? 
+      //   <>
+      //   <span className="txt primary" onClick={() => setChangeAddress(!changeAddress)}>{"< Back"}</span>
+      //   <Input className="mb-20" onChange={(event) =>handleUserGivenLocationAddress(event)}></Input>
+      //   <Button className="txt primary" onClick={() =>handleUserGivenLocationConfirm(userGivenAddress)}>Confirm And Proceed</Button>
+      //   </>
+      //   :
+      //   <div>
+      //       <div className="mb-20" style={{position : "relative"}}>
+      //         <LoadScript
+      //         googleMapsApiKey="AIzaSyBKowFDX0jDn687et4wgSmFpXiK-bj5Gj4"
+      //         >
+      //         <GoogleMap
+      //             mapContainerStyle={containerStyle}
+      //             center={center}
+      //             zoom={5}
+      //             onLoad={map => {
+      //               const bounds = new window.google.maps.LatLngBounds();
+      //               map.fitBounds(bounds);
+      //             }}
+      //             options={{
+      //               // styles: waterStyle,
+      //               fullscreenControl: false,
+      //               disableDefaultUI :  true,
+      //             }}>
+      //             <Marker
+      //             draggable={true}
+      //             onDragEnd={(event) => {handleDrag(event);
+      //             }}
+      //             position={center}
+      //             onLoad={handelCurrentLocation}
+      //             animation={1}
+      //             />
+
+      //         </GoogleMap>
+      //         </LoadScript>
+      //         <div  className={styles['myLocationIcon']}><MyLocation></MyLocation></div>
+      //       </div>
+
+      //       {confirmAndProceed === true ? 
+      //       <>
+      //       <div>
+      //         <span className="txt primary" onClick={() => setconfirmAndProceed(!confirmAndProceed)}>{"< Back"}</span>
+      //         <Form>
+      //           <div className="grid-view grid-1 rowgap-20 colgap-20 mt-10">
+                  
+      //             <Form.Item>
+                  
+      //             <div className="grid-view grid-2 colgap-30 rowgap-20 mb-20">
+                    
+      //               <Form.Item className="mb-10" label="Name" required={true}>
+      //                 <Input value={name} onChange={(event : any) => setName(event.target.value)}></Input>
+      //               </Form.Item>
+                  
+      //               {/* <Form.Item label="Email">
+      //                 <Input value={email} onChange={(event : any) => setEmail(event.target.value)}></Input>
+      //               </Form.Item> */}
+
+      //               <Form.Item className="mb-10" name={['email']} hasFeedback label="Email" validateTrigger={['onBlur']} rules={[
+      //                   { required: false, message: t('required', {field: 'Email'}) },
+      //                   { validator: checkEmail },
+      //                   ]}>
+      //                   <Input placeholder="ex:halais" />
+      //               </Form.Item>
+
+      //             </div>
+      //             </Form.Item>
+      //             <Form.Item>
+      //               <div className="grid-view grid-2 colgap-30 mb-10">
+                      
+      //                 <Form.Item label="Mobile Number" required={true}>
+      //                   <Input value={mobileNumber} onChange={(event : any) => setMobileNumber(event.target.value)}></Input>
+      //                 </Form.Item>
+                      
+      //                 <Form.Item label={<label className="txt dark3">House No.<span>(Optional)</span></label>}>
+      //                   <Input value={streetNo} onChange={(event : any) => setStreetNo(event.target.value)}></Input>
+      //                 </Form.Item>
+
+      //               </div>
+      //             </Form.Item>
+                  
+      //             <Form.Item label="Address Line: 1" required={true}>
+      //               <Input value={addressone}></Input>
+      //             </Form.Item>
+      //             <Form.Item label="Address Line: 2">
+      //               <Input value={addresstwo}></Input>
+      //             </Form.Item>
+      //             <Form.Item>
+      //               <div className="grid-view grid-2 colgap-20">
+      //                 <Form.Item label="City" required={true}>
+      //                   <Input value={city} onChange={(event : any) => setCity(event.target.value)} contentEditable="true"></Input>
+      //                 </Form.Item>
+      //                 <Form.Item label="Pincode" required={true}>
+      //                   <Input value={pinCode} onChange={(event : any) => setPinCode(event.target.value)}></Input>
+      //                 </Form.Item>
+      //               </div>
+      //             </Form.Item>
+      //             <Form.Item>
+      //               <div className="grid-view grid-2 colgap-20">
+      //                 <Form.Item label="Country" required={true}>
+      //                   <Input value={country}></Input>
+      //                 </Form.Item>
+      //               </div>
+      //             </Form.Item>
+      //             <Form.Item>
+      //                <div className="pt-20 pb-20 pr-0 pull right">
+      //                     <Button className="mr-25 float right" onClick={props.closeModal}>Cancel</Button>
+      //                     <Button className="ant-btn primary mr-21 float right" onClick={() => {
+                            
+      //                       if(name.length > 1 && mobileNumber.length  == 10){
+      //                         props.addAddress({
+      //                                 name : name,
+      //                                 mobileNumber : mobileNumber,
+      //                                 email : email,
+      //                                 add1 : addressone,
+      //                                 add2 : addresstwo,
+      //                                 city : city,
+      //                                 country : country,
+      //                                 houseNumber : houseNo,
+      //                                 state : subLocality1,
+      //                                 lat : latitude,
+      //                                 long : longitude,
+      //                                 pincode : pinCode,
+      //                                 streetNumber : streetNo,
+      //                                 isDefault : 0,
+      //                             });
+      //                             props.closeModal();
+      //                             setconfirmAndProceed(false);
+      //                       }
+      //                         }
+      //                           }>Save Chages</Button>
+      //                 </div>
+      //             </Form.Item>
+
+      //           </div>
+      //         </Form>
+      //       </div>
+      //       </>
+      //       : 
+      //       <div>
+      //         <div className={styles['address-container']}>
+      //             <Input value={formattedAddress} contentEditable={false}></Input>
+      //         </div>
+      //             <Button className="text primary ml-24 mr-22 mt-10 float pull right" 
+      //               onClick={() =>{setconfirmAndProceed(!confirmAndProceed);
+      //                 setAddressLine1();
+      //                 setAddressLine2();
+      //                 }}
+      //             >Confirm and Proceed</Button>
+      //             <Button className="mr-0 mt-10 float pull right" onClick={props.closeModal}>Cancel</Button>
+      //       </div>
+
+      //       }
+
+      //   </div>
+      //   }
+      // </div>
   )
 }
 export default AddressByMap;

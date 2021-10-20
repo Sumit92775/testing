@@ -2,13 +2,17 @@ import Image from 'next/image';
 import ProductCard from '../components/Common/ProductCard';
 
 import 'react-alice-carousel/lib/alice-carousel.css';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import PublicLayout from '../components/Public/Layout';
 import Tag from '../components/Common/Tag';
 import Icon from '@material-ui/core/Icon';
 import { useSelector, useDispatch } from 'react-redux';
 import { addProvider } from '../actions/sponsoredProviders'
 import styles from '../styles/pages/Index.module.scss';
+import { useEffect, useState } from 'react';
+import { getStoreByLocation } from '../services/home';
+import { getNotifications } from '../services/notification';
+import { getCartStatus } from '../services/header';
 
 const responsive = {
   0: { items: 1 },
@@ -19,6 +23,75 @@ const responsive = {
 export default function Home() {
   const dispatch = useDispatch();
   let items = useSelector((state:{sponsoredProviders: any}) => state.sponsoredProviders);
+
+  const [notificationCount, setNotificationCount] = useState(0);
+  const [cartItemCount, setCartItemCount] = useState(0);
+
+
+  useEffect( () =>{
+
+    try{
+
+        getNotifications(1).then(res =>{
+            if(res.status === 404){
+              setNotificationCount(0);
+            }else{
+              setNotificationCount(res?.newNotifications);
+              
+            }
+        }).catch(error =>{
+            console.log(error);
+        })
+
+      getStoreByLocation().then(res =>{
+        console.log("Response: ",res);
+        setOurTopProvider(res.data);
+      })
+      // console.log(res);
+      message.config({
+        duration: 5,
+        top: 80
+      })
+
+      getCartStatus().then(res =>{
+        if(res.status === 404){
+          setCartItemCount(0);
+          console.log("ResponseCart: ",res);
+        }else{
+          console.log("Cart Count: ",res.data[0].cartCount);
+          setCartItemCount(res.data[0].cartCount)
+        }
+      })
+
+    }catch(error: any){
+      console.log(error);
+      message.error(error);
+    }
+
+ },[])
+
+const [ourTopProvider, setOurTopProvider] = useState([]);
+
+ const handleApiFetch = async () =>{
+
+  try{
+    let res = await getStoreByLocation();
+    console.log(res);
+    message.config({
+      duration: 5,
+      top: 80
+    })
+
+    if(res.status){
+      setOurTopProvider(res.data);
+    }else{
+      message.error("Server Error");
+    }
+  }catch(error: any){
+    console.log(error);
+    message.error(error);
+  }
+}
 
   let products = [
     {
@@ -117,10 +190,10 @@ export default function Home() {
         <Image layout="fill" src="/slider 1.jpg" alt="" />
       </section>
       <section className={ styles['providers-section'] }>
-        <h2>Our Top Providers</h2>
+        <h2 onClick={handleApiFetch}>Our Top Providers</h2>
         <h4 className="regular mb-56">Browse few of the top performers of the week</h4>
         <div className="products-wrapper">
-          { products.map((product, i) => {
+          { ourTopProvider.map((product, i) => {
               return <ProductCard product={product} key={i} />
             })
           }
@@ -143,7 +216,9 @@ export default function Home() {
           { items }
         </div>
         <div className="mt-55 mb-25 center">
-          <Button className="primary" onClick={loadMore}>Load More</Button>
+          <Button className="primary" onClick={() => {loadMore;
+          handleApiFetch;
+          }}>Load More</Button>
         </div>
       </section>
       

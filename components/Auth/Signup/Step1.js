@@ -178,19 +178,19 @@ const Step1 = ({ onNext }) => {
         <>
             <div>
                 <div className="content-wrapper table mb-56">
-                    <h4 className="center-text mt-67 mb-67">Register To Sell Via Saloon Plus</h4>
+                    {/* <h4 className="center-text mt-67 mb-67">Register To Sell Via Saloon Plus</h4> */}
                     <Form
-                        className="grid-view grid-2 colgap-42 rowgap-24"
+                        className="grid-view grid-2 colgap-42 rowgap-24 mt-100"
                         form={form}
                         onFinish={onFinish}
                         layout="vertical">
-                        <Form.Item name={['userName']} hasFeedback className="span-2" label="Store Name" validateTrigger={['onBlur']} rules={[
+                        <Form.Item name={['userName']} hasFeedback className="span-2" label="Username" validateTrigger={['onBlur']} rules={[
                             { required: true, message: t('required', {field: 'Store Name'}) },
                             { validator: checkUserName },
                             ]}>
                             <Input placeholder="ex:halais" />
                         </Form.Item>
-                        <Form.Item name={['email']} hasFeedback label="Store Email" validateTrigger={['onBlur']} rules={[
+                        <Form.Item name={['email']} hasFeedback label="Email" validateTrigger={['onBlur']} rules={[
                             { required: true, message: t('required', {field: 'Store Email'}) },
                             { validator: checkEmail },
                             ]}>
@@ -198,7 +198,7 @@ const Step1 = ({ onNext }) => {
                         </Form.Item>
                         <div>
                             <div className="phone-number grid-view">
-                                <Form.Item className="full no-control" name={['countryCode']} label="Store Mobile Number" rules={[{ required: true }]}>
+                                <Form.Item className="full no-control" name={['countryCode']} label="Mobile Number" rules={[{ required: true }]}>
                                     
                                 </Form.Item>
                                 <Form.Item name={['countryCode']}  validateTrigger={['onSelect']} rules={[

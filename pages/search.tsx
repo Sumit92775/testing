@@ -129,7 +129,7 @@ const Search = () => {
     }
 
     return (
-        <PublicLayout>
+        <PublicLayout >
             <div className="search-page">
                 <div>
                     <SearchFilters />

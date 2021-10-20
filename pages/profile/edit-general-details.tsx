@@ -42,38 +42,39 @@ const EditGeneralDetails = (props: any) => {
     return(
         <div>
             <Form>
-                <Form.Item label="First Name">
-                    <Input value={props.firstName} onChange={(event) =>props.setFirstName(event.target.value)}></Input>
-                </Form.Item>
-                
-                <Form.Item className="mt-10" label="Last Name">
-                    <Input value={props.lastName} onChange={(event) =>props.setLastName(event.target.value)}></Input>
-                </Form.Item>
-                
-                <Form.Item className="mt-10" label="Username">
-                    <Input value={"Ehsaan"}></Input>
-                </Form.Item>
-                
-                <Form.Item className="mt-10" label="Email">
-                    <Input value={"Email"}></Input>
-                </Form.Item>
-
-                <Form.Item className="mt-10" label="Date of Birth">
-                    <DatePicker onChange={onChange} />
-                    {/* <Input value={props.dob} onChange={(event) => props.setDob(event.target.value)}></Input> */}
-                </Form.Item>
-
-                <Form.Item className="mt-10" label="Gender">
-                    <Select defaultValue="Male" style={{ width: 120 }} onChange={(event) =>handleChange(event)}>
+                <Form.Item>
+                    <div className="grid-view grid-2 colgap-30">
+                        <Form.Item label="First Name">
+                            <Input value={props.firstName} onChange={(event) =>props.setFirstName(event.target.value)}></Input>
+                        </Form.Item>
                         
-                        {genders.map((gender) =>{
-                            return(
-                                <Option key={gender.id} value={gender.value}>{gender.value}</Option>
-                            )
-                        })}
-                    </Select>
+                        <Form.Item className="mt-10" label="Last Name">
+                            <Input value={props.lastName} onChange={(event) =>props.setLastName(event.target.value)}></Input>
+                        </Form.Item>
+                    </div>
+                </Form.Item>
+                
+                <Form.Item>
+                    <div className="grid-view grid-2 colgap-30">
+                        <Form.Item className="mt-10" label="Date of Birth">
+                            <DatePicker onChange={onChange} />
+                            {/* <Input value={props.dob} onChange={(event) => props.setDob(event.target.value)}></Input> */}
+                        </Form.Item>
+
+                        <Form.Item className="mt-10" label="Gender">
+                            <Select defaultValue="Male" onChange={(event) =>handleChange(event)}>
+                                
+                                {genders.map((gender) =>{
+                                    return(
+                                        <Option key={gender.id} value={gender.value}>{gender.value}</Option>
+                                    )
+                                })}
+                            </Select>
+                        </Form.Item>
+                    </div>
                 </Form.Item>
 
+               
             </Form>
         </div>
     )

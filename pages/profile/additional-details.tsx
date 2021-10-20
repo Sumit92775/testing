@@ -6,6 +6,7 @@ import astyles from './Styles.module.scss'
 import { editAdditionDetails, editUserProfile } from '../../services/addresses';
 import EditGeneralDetails from './edit-general-details';
 import { Option } from 'rc-select';
+import cx from 'classnames';
 
 const AdditionalDetails = (props : any) =>{
 
@@ -70,7 +71,7 @@ const AdditionalDetails = (props : any) =>{
     };
 
     return(
-        <div className="card card2 p-0 mt-40" style={{height : "fit-content", position : "relative", boxShadow : "none"}}>
+        <div className={cx(styles['card-no-shadow'], "card card2 p-0 mt-40")} style={{height : "fit-content", position : "relative", boxShadow : "none"}}>
             <div className={styles['card-header-container']}>
                 <h5 className="mt-10 mb-10 pl-20 pr-27 fz-18">{"Additional Preferences"}</h5>
                 <Divider className="mt-5 mb-0"></Divider>

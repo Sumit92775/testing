@@ -76,7 +76,7 @@ import Footer from "../components/Footer";
 import { Steps } from 'antd';
 import Step1 from '../components/Auth/Signup/Step1';
 import Step1_2 from '../components/Auth/Signup/Step1-2';
-import Step2 from '../components/Auth/Signup/Step2';
+// import Step2 from '../components/Auth/Signup/Step2';
 import Step3 from '../components/Auth/Signup/Step3';
 import Success from '../components/Auth/Signup/Success';
 import { useSelector, useDispatch } from 'react-redux';
@@ -104,19 +104,19 @@ export default function Search() {
                 step = 1;
                 break;
     
-            case 3:
-                form = <Step2 title="Service Provider Subscription Tiers"></Step2>;
-                step = 1;
-                break;
+            // case 3:
+            //     form = <Step2 title="Service Provider Subscription Tiers"></Step2>;
+            //     step = 1;
+            //     break;
     
             // case 4:
             //     form = <Step3></Step3>;
             //     step = 2;
             //     break;
     
-            case 4:
+            case 3:
                 form = <Success></Success>;
-                step = 3;
+                step = 2;
                 break;
         
             default:
@@ -133,7 +133,7 @@ export default function Search() {
                 <main>
                     <div>
                         <Steps className="content-wrapper" style={{visibility: step == 3 ? 'hidden' : 'visible'}} current={ step }>
-                            <Step title="Login" icon={<span className="material-icons">person</span>} />
+                            <Step title="Register" icon={<span className="material-icons">person</span>} />
                             <Step title="Verification" icon={<span className="material-icons">table_chart</span>} />
                             <Step title="Done" icon={<span className="material-icons">check_circle</span>} />
                         </Steps>
