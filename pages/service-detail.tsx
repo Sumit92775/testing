@@ -3,18 +3,27 @@ import PublicLayout from '../components/Public/Layout';
 import ServiceCard from '../components/Cards/ServiceCard';
 import ServiceDetails from '../components/Cards/ServiceDetails';
 import Reviews from '../components/Common/Reviews';
-import { Tree, InputNumber, Select, Form, Button, Input, Tabs } from 'antd';
+import { Tree, InputNumber, Select, Form, Button, Input, Tabs, message } from 'antd';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { StarOutlined } from '@material-ui/icons';
+import { editCartItem, getItemInCart, getServicesListByStoreId, getStoreByStoreId } from '../services/items';
+import Link from "next/link"
 
 const ServiceDetail = () => {
     const router = useRouter(),
-    { slug } = router.query;;
+    { slug } = router.query;
     const [ map, toggleMap ] = useState(<div className="full mtn-25"></div>);
-    const [ selected_tab, changeSelectedTab ] = useState('restaurants'),
+    const [ selected_tab, changeSelectedTab ] = useState('restaurants');
     
-    onTabClick = (key:string, event: any) => {
+    const [serviceDetails, setServiceDetails] = useState([]);
+    const [serviceList, setServiceList] = useState([]);
+    const [cartItemList, setCartItemList] = useState([]);
+    const [orderValuesFromCart, setOrderValuesFromCart] = useState([]);
+
+    const [keyValueArray, setKeyValueArray] = useState([]);
+
+    const onTabClick = (key:string, event: any) => {
         changeSelectedTab(key);
     };
 
@@ -96,9 +105,189 @@ const ServiceDetail = () => {
         },
     ];
     
-    const services = listing.map((item, i) => <ServiceCard key={i} item={item} /> ),
-    user_types = ['Low to High', 'High to Low'],
-    location = ['Location 1', 'Location 2'];
+    useEffect(() =>{
+        try{
+            getStoreByStoreId().then(res =>{
+            if(res.status){
+                console.log("Service Details Response: ",res);
+                setServiceDetails(res.data[0]);
+            }else{
+                message.error(res)
+            }
+
+            getServicesListByStoreId().then(res =>{
+                if(res.status){
+                    console.log("Service List Store By Store Id: ",res);
+                    setServiceList(res.data);
+                }else{
+                    console.log("Error in Service List Store By Store Id: ",res);
+                }
+            })
+
+            getItemInCart().then(res =>{
+                if(res.status){
+                    setCartItemList(res.data);
+                    console.log("Cart List: ",res.data);
+                    var itemInCartArray = res.data;
+                    getServicesListByStoreId().then(res =>{
+                        if(res.status){
+                            console.log("Inside: ",itemInCartArray);
+                            // let cartItemsArray = itemInCartArray;
+                            let cartItems1Array = itemInCartArray;
+                            let serviceItemArray = res.data;
+                            let serviceItemArray1 = res.data;
+
+                            console.log("ServiceItemArray: ",serviceItemArray);
+                            
+                            for(let i = 0 ; i < serviceItemArray.length ; i++){
+                                for(let j = 0 ; j < cartItems1Array.length ; j++){
+                                    if(serviceItemArray[i].id === cartItems1Array[j].serviceId){
+                                        serviceItemArray1[i].alreadyAdded = "true";
+                                        console.log("Array: ",serviceItemArray1[i]);
+                                        
+                                    }else{
+                                        // serviceItemArray1[i].alreadyAdded = "check";
+                                    }
+                                    console.log(serviceItemArray[i].id+" "+cartItems1Array[j].serviceId);
+                                }
+                            }
+
+                       
+
+                            console.log("Service Array After Sorting: ",serviceItemArray1);
+                            
+                            console.log("Service List Store By Store Id1: ",res);
+                            setServiceList(serviceItemArray1);
+                        }else{
+                            console.log("Error in Service List Store By Store Id1: ",res);
+                        }  
+                    })
+
+                    let cartItemArray = res.data;
+                    for(let i = 0 ; i < res.data.length ; i++){
+                        if(res.data[i].id == 1){
+
+                        }else{
+
+                        }
+                    }
+                }else{
+                    console.log(res.status);
+                }
+            })
+
+        })
+        }catch(error){
+            console.log("Error in getting store by store id: ",error);   
+        }
+            
+    },[]);
+
+    const resetUI = () =>{
+        getItemInCart().then(res =>{
+            if(res.status){
+                setCartItemList(res.data);
+                console.log("Cart List: ",res.data);
+                var itemInCartArray = res.data;
+                getServicesListByStoreId().then(res =>{
+                    if(res.status){
+                        console.log("Inside: ",itemInCartArray);
+                        // let cartItemsArray = itemInCartArray;
+                        let cartItems1Array = itemInCartArray;
+                        let serviceItemArray = res.data;
+                        let serviceItemArray1 = res.data;
+
+                        console.log("ServiceItemArray: ",serviceItemArray);
+                        
+                        for(let i = 0 ; i < serviceItemArray.length ; i++){
+                            for(let j = 0 ; j < cartItems1Array.length ; j++){
+                                if(serviceItemArray[i].id === cartItems1Array[j].serviceId){
+                                    serviceItemArray1[i].alreadyAdded = "true";
+                                    console.log("Array: ",serviceItemArray1[i]);
+                                    
+                                }else{
+                                    // serviceItemArray1[i].alreadyAdded = "check";
+                                }
+                                console.log(serviceItemArray[i].id+" "+cartItems1Array[j].serviceId);
+                            }
+                        }
+
+                        console.log("Service Array After Sorting: ",serviceItemArray1);
+                        
+                        console.log("Service List Store By Store Id1: ",res);
+                        setServiceList(serviceItemArray1);
+                    }else{
+                        console.log("Error in Service List Store By Store Id1: ",res);
+                    }  
+                })
+            }else{
+               console.log(res.status);
+               setCartItemList([]);
+               getServicesListByStoreId().then(res =>{
+                if(res.status){
+                    console.log("Reset UI: ",res);
+                    setServiceList(res.data);
+                }else{
+                    console.log("Error in Service List Store By Store Id1: ",res);
+                }  
+            })
+            }
+        }).catch(error =>{
+            console.log("Error in resetUI",error);
+        })
+    }
+
+    const handelEditQuantity = (qty: any, index: any) =>{
+        console.log("Quantity Edited: ",qty);
+        console.log("Key Value Array: ",keyValueArray);
+        try{
+
+            getItemInCart().then(res =>{
+                if(res.status){
+                    let cartItemArray = res.data;
+                    for (const key in cartItemArray) {
+                        if(cartItemArray[key].id === index){
+                           
+                            let keyValueObjectsArray = cartItemArray[key].CartProperties;
+                            let keyArray = [];
+                            let valueArray = [];
+
+                            for(let i = 0 ; i < keyValueObjectsArray.length ; i++){
+                                keyArray.push(keyValueObjectsArray[i].key)
+                                valueArray.push(keyValueObjectsArray[i].value)
+                            }
+                            // console.log("Key: ",keyArray);
+                            // console.log("Value: ",valueArray);
+                        
+                            // console.log("ID: ",index);
+                            
+
+                            editCartItem({
+                                qty: qty,
+                                id: index,
+                                keys: keyArray,
+                                value: valueArray
+                            }).then(res =>{
+                                console.log(res);
+                            })
+                        }
+                    }
+                }else{
+                    console.log(res.status);
+                }
+            }).catch(error =>{
+                console.log(error);
+            })
+
+          
+        }catch(error){
+
+        }
+    }
+
+    const services = serviceList ? serviceList.map((item, i) => <ServiceCard key={i} item={item} resetUI={resetUI} setKeyValueArray={setKeyValueArray}/>  ) : [];
+    const user_types = ['Low to High', 'High to Low'];
+    const location = ['Location 1', 'Location 2'];
 
     return (
         <PublicLayout>
@@ -107,7 +296,7 @@ const ServiceDetail = () => {
             </section>
             <div className="search-page">
                 <div>
-                    <ServiceDetails />
+                    <ServiceDetails  serviceDetails={serviceDetails}/>
                 </div>
                 <div className="search-results service-page">
                     <h3><StarOutlined /> Services</h3>
@@ -153,33 +342,39 @@ const ServiceDetail = () => {
                                     <div className="cart-items">
                                         <strong className="title">Order Value</strong>
                                         <ul>
-                                            <li>
-                                                Arabic Coffee
-                                                <strong className="pull-right">$49</strong>
-                                                <br />
-                                                <InputNumber min={1} max={10} defaultValue={3} />
-                                            </li>
-                                            <li>
-                                                Arabic Coffee
-                                                <strong className="pull-right">$49</strong>
-                                                <br />
-                                                <InputNumber min={1} max={10} defaultValue={3} />
-                                            </li>
-                                            <li>
-                                                Arabic Coffee
-                                                <strong className="pull-right">$49</strong>
-                                                <br />
-                                                <InputNumber min={1} max={10} defaultValue={3} />
-                                            </li>
+                                            {cartItemList ? 
+                                            <div>
+                                                {cartItemList.map((cartItem: any, i: any) =>{
+    
+                                               return( 
+                                               <li key={`${cartItem.id}`}>
+                                                    {cartItem?.Service?.primaryServiceName}
+                                                    <strong className="pull-right">${cartItem?.Service?.price}</strong>
+                                                    <br />
+                                                    <InputNumber min={1} max={10} contentEditable={false} defaultValue={cartItem?.qty} onChange={(event) => {
+                                                        handelEditQuantity(event, cartItem.id);
+                                                        }} />
+                                                </li>
+                                                )
+    
+                                                })}
+                                            </div>
+                                            : 
+                                            <span>Cart is empty.</span>
+                                            }
                                         </ul>
                                     </div>
-                                    <Button className="medium full-width primary mt-10">Continue To Cart</Button>
+                                    <Button className="medium full-width primary mt-10">
+                                        <Link href="/product-details" passHref={true}>
+                                            Continue To Cart
+                                        </Link>
+                                    </Button>
 
                                 </div>
                             </div>
                             <Reviews />
                         </Tabs.TabPane>
-                        <Tabs.TabPane tab="Beauty Shops" key="beautyShops">
+                        {/* <Tabs.TabPane tab="Beauty Shops" key="beautyShops">
                             { services }
                         </Tabs.TabPane>
                         <Tabs.TabPane tab="Clinics" key="clinics">
@@ -202,7 +397,7 @@ const ServiceDetail = () => {
                         </Tabs.TabPane>
                         <Tabs.TabPane tab="Gift Shop " key="giftShop">
                             { services }
-                        </Tabs.TabPane>
+                        </Tabs.TabPane> */}
                     </Tabs>
                 </div>
             </div>

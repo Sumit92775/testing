@@ -10,8 +10,7 @@ const GiftCard = (props) => {
     let onSwitch = event => props.card.visibleToStore = event;
     
     const [shareGiftCard, setShareGiftCard] = useState(false);
-    // const [chooseModalName, setchooseModalName] = useState("");
-
+  
     const handleOk = (evt) => {
         console.log('ok clicked', evt)
     };

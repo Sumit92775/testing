@@ -1,8 +1,61 @@
 import { Button, Divider, Input } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { myOrders } from '../../services/items';
 import styles from '../../styles/components/Product-Details.module.scss'
 
-const PaymentSummary = () =>{
+const PaymentSummary = (props: any) =>{
+
+    const [price, setPrice] = useState(0);
+    const [serviceArray, setServiceArray] = useState([]);
+
+    var data = JSON.stringify({
+        "storeId": 3,
+        "currencyId": 1,
+        "patmentType": 1,
+        "orderPriceWithoutPlatformChargesOrTaxes": 129,
+        "PlatformCharges": 129,
+        "taxes": 20,
+        "totalOrderPrice": 250,
+        "BookingTime": "2021-10-20 19:24:19",
+        "giftCardID": [
+          "GiftCard-Number1",
+          "GiftCard-Number2"
+        ],
+        "Services": [
+          {
+            "serviceId": 17,
+            "price": 50,
+            "cartId": 1
+          },
+          {
+            "serviceId": 6,
+            "price": 50,
+            "cartId": 2
+          },
+          {
+            "serviceId": 4,
+            "price": 150,
+            "cartId": 4
+          }
+        ]
+      });
+
+      
+      
+      useEffect(() =>{
+          try{
+            console.log("PaymentSummary: ",props.finalOrderlist);
+            // myOrders().then(res =>{
+
+            // })
+
+        }catch(error){
+
+        }
+    },[]);
+
+    
+
     return(
         <div className="card card2 pt-20 pl-15 pr-15">
             <h5>Payment Summary</h5>

@@ -8,7 +8,7 @@
     .left-container{
         width: fit-content;
     }
-    
+
     .right-container{
         display: flex;
         flex-direction: column;
@@ -17,8 +17,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            
-            
+
             h5, h6{
                 width: fit-content;
             }
@@ -42,10 +41,10 @@
             align-items: center;
             width: 100px;
             height: 37px;
+            padding: 10px;
             margin-block-start: 7px;
             margin-block-end: 7px;
         
-            
             .cb{
                 border-inline-start: 1px solid var(--primary-2);
                 border-inline-end: 1px solid var(--primary-2);

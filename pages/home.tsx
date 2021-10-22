@@ -29,9 +29,7 @@ export default function Home() {
 
 
   useEffect( () =>{
-
     try{
-
         getNotifications(1).then(res =>{
             if(res.status === 404){
               setNotificationCount(0);
@@ -63,6 +61,17 @@ export default function Home() {
         }
       })
 
+
+      getStoreByLocation().then(res =>{
+        console.log(res);
+        if(res.status){
+          setOurTopProvider(res.data);
+        }else{
+          message.error("Server Error");
+        }
+
+      })
+
     }catch(error: any){
       console.log(error);
       message.error(error);
@@ -73,7 +82,6 @@ export default function Home() {
 const [ourTopProvider, setOurTopProvider] = useState([]);
 
  const handleApiFetch = async () =>{
-
   try{
     let res = await getStoreByLocation();
     console.log(res);
@@ -190,12 +198,17 @@ const [ourTopProvider, setOurTopProvider] = useState([]);
         <Image layout="fill" src="/slider 1.jpg" alt="" />
       </section>
       <section className={ styles['providers-section'] }>
-        <h2 onClick={handleApiFetch}>Our Top Providers</h2>
+        <h2 onClick={() => {handleApiFetch;}}>Our Top Providers</h2>
         <h4 className="regular mb-56">Browse few of the top performers of the week</h4>
         <div className="products-wrapper">
-          { ourTopProvider.map((product, i) => {
-              return <ProductCard product={product} key={i} />
-            })
+          {
+            ourTopProvider? 
+            ourTopProvider.map((product, i) => {
+               return <ProductCard product={product} key={i} />
+             })
+            : 
+            <>
+            </>
           }
         </div>
       </section>

@@ -24,7 +24,7 @@ export const getNotifications = (page: any) =>{
     message.error(error);
     // console.log("Error in Notifications Fetching: ",error);
   });
-
+  
 }
 
 export const setNotificationRead = () =>{

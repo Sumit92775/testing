@@ -14,7 +14,7 @@ export const getCartStatus = () =>{
 
       return fetch(`http://saloonplus.com:6001/api_v1/cart/getCartStatus`, config)
       .then(response => {
-        if(response.status === 404){
+        if(response.status === 404 || response.status === 500){
           // console.log("Response Header: ", response);
           return response;
         }

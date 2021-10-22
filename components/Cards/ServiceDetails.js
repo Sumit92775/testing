@@ -6,7 +6,10 @@ import YouTubeIcon from '@material-ui/icons/YouTube';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import Link from 'next/link';
 
-const ServiceDetails = () => {
+const ServiceDetails = (props) => {
+
+    console.log(props.serviceDetails);
+
     const BusinessType = [
         {
             title: 'Business',
@@ -119,7 +122,7 @@ const ServiceDetails = () => {
             <ul className="service-info p-12">
                 <li>
                     <span className="material-icons">monetization_on</span>
-                    Minimum Service Charge <strong>$49</strong>
+                    Minimum Service Charge <strong>{props?.serviceDetails?.StoreAddSetting?.minimumOrderPrice}</strong>
                 </li>
                 <li>
                     <span className="material-icons">date_range</span>
@@ -127,12 +130,12 @@ const ServiceDetails = () => {
                 </li>
                 <li>
                     <span className="material-icons">dinner_dining</span>
-                    Serves <strong>Men, Women, Kids (3-14)</strong>
+                    Serves <strong>{props?.serviceDetails.StoreAddSetting?.DemorgraphicType?.name}</strong>
                 </li>
-                <li>
+                {/* <li>
                     <span className="material-icons">wc</span>
                     Gender <strong>Male</strong>
-                </li>
+                </li> */}
             </ul>
             <Divider className="mt-10 mb-10" />
             <h5 className="pl-12">Store Policies</h5>
@@ -166,7 +169,7 @@ const ServiceDetails = () => {
             
             <Divider className="mt-10 mb-10" />
             <h5 className="pl-12">About Me</h5>
-            <p className="p-12">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
+            <p className="p-12">{props?.serviceDetails?.description}</p>
             
             <Divider className="mt-10 mb-10" />
             <h5 className="pl-12">Social Media</h5>
