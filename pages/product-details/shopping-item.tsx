@@ -8,16 +8,8 @@ import { deleteFromCart, editCartItem, getItemInCart } from '../../services/item
 const ShoppingItem = (props : any) =>{
 
 
-    console.log("Props Shopping Item: ", props.setTotalServices);
-    
-
-    const [itemObject, setItemObject] = useState({});
-    const [services, setServices] = useState([]);
-
     useEffect(() =>{
         console.log("Props Cart: ",props.itemObject);
-        setItemObject(props.itemObject);
-        setServices(props.setTotalServices);
     },[]);
 
     const handleDelete = (itemId: any) =>{
@@ -26,7 +18,6 @@ const ShoppingItem = (props : any) =>{
             deleteFromCart(itemId).then(res =>{
                 if(res.status){
                     props?.resetUI();
-
                 }else{
 
                 }
@@ -47,17 +38,22 @@ const ShoppingItem = (props : any) =>{
             getItemInCart().then(res =>{
                 if(res.status){
                     let cartItemArray = res.data;
+
                     for (const key in cartItemArray) {
                         if(cartItemArray[key].id === index){
                            
-                            let keyValueObjectsArray = cartItemArray[key].CartProperties;
+                            let keyValueObjectsArray = cartItemArray[key];
                             let keyArray = [];
                             let valueArray = [];
 
-                            for(let i = 0 ; i < keyValueObjectsArray.length ; i++){
-                                keyArray.push(keyValueObjectsArray[i].key)
-                                valueArray.push(keyValueObjectsArray[i].value)
+                            for(let i = 0 ; i < keyValueObjectsArray.CartProperties.length ; i++){
+                                keyArray.push(keyValueObjectsArray.CartProperties[i].key)
+                                valueArray.push(keyValueObjectsArray.CartProperties[i].value)
                             }
+                            let oldServiceArray = props.serviceArray;
+                            // console.log("KeyArray :",keyArray);
+                            // console.log("valueArray :",valueArray);
+                            
 
                             editCartItem({
                                 qty: qty,
@@ -65,37 +61,18 @@ const ShoppingItem = (props : any) =>{
                                 keys: keyArray,
                                 value: valueArray
                             }).then(res =>{
-                                console.log(res);
-                                for (const key in props.setTotalServices) {
-                                    if(props.setTotalServices[key].cartId === index){
-                                        // let repeatOrder = {};
-                                        let repeatOrder = props.setTotalServices[key]; 
-                                        let finalServices = new Array();
-                                        console.log("Repeat Order1: ",repeatOrder);
-                                        
-                                        finalServices = services;
-                                        let serviceId = repeatOrder.serviceId;
-                                        let price = repeatOrder.price;
-                                        let cartId = repeatOrder.cartId;
-                                        finalServices.push({
-                                            "serviceId": serviceId,
-                                            "price": price,
-                                            "cartId": cartId
-                                        });
-
-                                        // setServices(finalServices);
-                                        // props.setFinalOrderList();
-                                        props.setFinalOrderList(finalServices);
-                                        break;
-                                    }
-                                }
-
-
-                                // console.log("RepeatOrder: ",repeatOrder);
+                                props.setUpdatedService(index, qty)
+                                console.log("Response Response: ",res);
+                                let oldServiceArray = props.serviceArray;
+                                // props.setUpdatedService(index, qty)
                                 
                             })
                         }
                     }
+
+                    // ------------------------------------------
+                    
+
                 }else{
                     console.log(res.status);
                 }
@@ -105,7 +82,8 @@ const ShoppingItem = (props : any) =>{
 
           
         }catch(error){
-
+            console.log(error);
+            
         }
     }
 
@@ -122,10 +100,9 @@ const ShoppingItem = (props : any) =>{
                 <span className={styles['align']}>by <strong>{props?.itemObject?.Service?.Store?.storeName}</strong></span>
                 <div className={styles['q-container']}>
                     
-                <InputNumber min={1} max={10} contentEditable={false} defaultValue={props?.itemObject?.qty} />
-                {/* <InputNumber min={1} max={10} contentEditable={false} defaultValue={props?.itemObject?.qty} onChange={(event) => {
-                    handelEditQuantity(event, props?.itemObject?.id);}} /> */}
-
+                {/* <InputNumber min={1} max={10} contentEditable={false} defaultValue={props?.itemObject?.qty} /> */}
+                <InputNumber min={1} max={10} contentEditable={false} defaultValue={props?.itemObject?.qty} onChange={(event) => {
+                    handelEditQuantity(event, props?.itemObject?.id);}} />
                 </div>
                 <div className={styles['sss-container']}>
                     {props?.itemObject?.CartProperties.map((obj: any) =>{

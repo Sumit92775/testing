@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { StarOutlined } from '@material-ui/icons';
 import { editCartItem, getItemInCart, getServicesListByStoreId, getStoreByStoreId } from '../services/items';
-import Link from "next/link"
+import Link from "next/link";
 
 const ServiceDetail = () => {
     const router = useRouter(),
@@ -22,6 +22,8 @@ const ServiceDetail = () => {
     const [orderValuesFromCart, setOrderValuesFromCart] = useState([]);
 
     const [keyValueArray, setKeyValueArray] = useState([]);
+
+    const [serviceDetail, setServiceDetail] = useState([]);
 
     const onTabClick = (key:string, event: any) => {
         changeSelectedTab(key);
@@ -241,7 +243,6 @@ const ServiceDetail = () => {
         console.log("Quantity Edited: ",qty);
         console.log("Key Value Array: ",keyValueArray);
         try{
-
             getItemInCart().then(res =>{
                 if(res.status){
                     let cartItemArray = res.data;
@@ -285,7 +286,7 @@ const ServiceDetail = () => {
         }
     }
 
-    const services = serviceList ? serviceList.map((item, i) => <ServiceCard key={i} item={item} resetUI={resetUI} setKeyValueArray={setKeyValueArray}/>  ) : [];
+    const services = serviceList ? serviceList.map((item, i) => <ServiceCard key={i} item={item} resetUI={resetUI} setKeyValueArray={setKeyValueArray} setServiceDetail={setServiceDetail}/>  ) : [];
     const user_types = ['Low to High', 'High to Low'];
     const location = ['Location 1', 'Location 2'];
 

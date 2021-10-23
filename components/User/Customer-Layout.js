@@ -76,7 +76,6 @@ const CustomerLayout = ({children}) => {
         <div className={styles['main-layout']}>
             <LeftSidebar menu_items={menuItems}></LeftSidebar>
             <Header></Header>
-            {/* <HomeHeader type={type} notificationCount={notificationCount} cartItemCount={cartItemCount}></HomeHeader> */}
             <main className={styles['main-content']}>
                 {children}
             </main>

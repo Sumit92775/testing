@@ -29,23 +29,26 @@ const Header = () => {
         if(cookies.get('accessToken')){
             try{
                 getNotifications(1).then(res =>{
-                    if(res.status === 404){
+                    if(res.status === 404 || res.status === 403){
                       setNotificationCount(0);
                     }else{
                       setNotificationCount(res?.newNotifications);
-                      
                     }
                 }).catch(error =>{
                     console.log(error);
                 })
               getCartStatus().then(res =>{
-                if(res.status === 404 || res.status === 403 || res.status === 404){
-                  setCartItemCount(0);
-                  console.log("ResponseCart: ",res);
+                if(res.status == false || res.status == 404 || res.status == 403){
+                    setCartItemCount(0);
+                    console.log("ResponseCart: ",res);
                 }else{
-                  console.log("Cart Count: ",res.data[0].cartCount);
-                  setCartItemCount(res.data[0].cartCount)
-                }
+                    if(res.data){
+                        console.log("Cart Count: ",res.data[0]);
+                        setCartItemCount(res.data[0].cartCount)
+                    }else{
+
+                    }
+                  }
               })
         
             }catch(error){

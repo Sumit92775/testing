@@ -11,7 +11,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { ShoppingCart } from "@material-ui/icons"
 // import SettingsIcon from '@material-ui/icons/Settings';
 import { getNotifications } from '../../services/notification';
-
+import cx from 'classnames';
 import {SettingFilled} from '@ant-design/icons'
 import { getCartStatus } from '../../services/header';
 
@@ -22,8 +22,7 @@ const Header = () => {
 
     const [notificationCount, setNotificationCount] = useState(0);
     const [cartItemCount, setCartItemCount] = useState(0);
-  
-  
+    
     
     useEffect( () =>{
         if(cookies.get('accessToken')){
@@ -39,13 +38,16 @@ const Header = () => {
                     console.log(error);
                 })
               getCartStatus().then(res =>{
-                if(res.status === 404 || res.status === 403 || res.status === 404){
-                  setCartItemCount(0);
-                  console.log("ResponseCart: ",res);
+                if(res.status == false || res.status == 404 || res.status == 403){
+                    setCartItemCount(0);
+                    console.log("ResponseCart: ",res);
                 }else{
-                  console.log("Cart Count: ",res.data[0].cartCount);
-                  setCartItemCount(res.data[0].cartCount)
-                }
+                    if(res.data){
+                        console.log("Cart Count Header: ",res.data);
+                        setCartItemCount(res.data[0].cartCount);
+                    }
+                  }
+                console.log("RES: ",res);
               })
         
             }catch(error){
@@ -61,8 +63,8 @@ const Header = () => {
 
     return (
         <div className={styles.head}>
-            <div className="relative">
-                <Link className={styles.logo} href={ process.env.base_url } passHref={true}>
+            <div className="relative ml-10 mt-10 mb-10 mr-10">
+                <Link className={cx('ml-10 mr-10 mt-10 ml-10', styles.logo)} href={ process.env.base_url } passHref={true}>
                     <Image layout="fill" src="/full-logo.svg" alt="logo" />
                 </Link>
             </div>

@@ -1,6 +1,7 @@
 import { Layout, Menu } from "antd";
-import Image from 'next/image'
+import Image from 'next/image';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const { Sider } = Layout;
 
@@ -11,7 +12,9 @@ const LeftSidebar = (props) => {
     return (
         <div className="left-sidebar">
             <div className="logo">
-                <Image width={174} height={30} src="/full-logo.svg" alt="logo" />
+                <Link href={process.env.base_url} passHref={true}>
+                    <Image className="cursor" width={174} height={30} src="/full-logo.svg" alt="logo" />
+                </Link>
             </div>
             <Menu mode="inline" defaultSelectedKeys={router.pathname}>
                 {

@@ -52,13 +52,18 @@ export default function Home() {
       })
 
       getCartStatus().then(res =>{
-        if(res.status === 404){
+        if(res.status == false || res.status == 403 || res.status == 404){
           setCartItemCount(0);
           console.log("ResponseCart: ",res);
         }else{
-          console.log("Cart Count: ",res.data[0].cartCount);
-          setCartItemCount(res.data[0].cartCount)
+          if(res.data){
+            console.log("Cart Count Home: ",res.data);
+            setCartItemCount(res.data[0].cartCount)
+          }
         }
+
+        console.log("RES1: ",res.status);
+        
       })
 
 

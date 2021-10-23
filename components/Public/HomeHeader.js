@@ -47,13 +47,13 @@ const HomeHeader = (props) => {
           })
   
         getCartStatus().then(res =>{
-          if(res.status === 404){
-            setCartItemCount(0);
-            console.log("ResponseCart: ",res);
-          }else{
-            console.log("Cart Count: ",res.data[0].cartCount);
-            setCartItemCount(res.data[0].cartCount)
-          }
+            if(res.status == false || res.status == 403 || res.status == 404){
+                setCartItemCount(0);
+            }else{
+                if(res.data){
+                    setCartItemCount(res.data[0].cartCount)
+                }
+            }
         })
   
       }catch(error){

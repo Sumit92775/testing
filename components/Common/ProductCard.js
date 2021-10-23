@@ -14,7 +14,7 @@ const ProductCard = (data) => {
         <Link href="/service-detail" passHref={true}>
             <div className={styles['product-card']} onClick={() => dispatch(removeProvider(data.product.id))}>
                 <div className={styles['product-image']}>
-                    {/* <Image layout="fill" src="https://en.wikipedia.org/wiki/Image#/media/File:Image_created_with_a_mobile_phone.png" alt={""} /> */}
+                    <Image layout="fill" src="/product (2).png" alt={""} />
                 </div>
                 <div className={styles['product-details']}>
                     <h6 className="mb-3">{ data.product.storeName }</h6>

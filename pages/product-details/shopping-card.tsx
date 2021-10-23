@@ -7,11 +7,15 @@ const ShoppingCard = (props : any) =>{
     const [productDetailDataObj, setProductDetailDataObj ] = useState([]);
 
     useEffect(() =>{
-        console.log("Props: ",props?.setCartItemList);
-        
-        setProductDetailDataObj(props?.setCartItemList); 
+        console.log("Props: ",props.serviceArray);
+        setProductDetailDataObj(props.setCartItemList); 
     },[])
 
+    const setUpdatedService = (itemId: any, qty: any) =>{
+        // console.log("Shopping Card: ",updatedServices);
+        props.setFinalList(itemId, qty);
+        props.resetUI();
+    }
 
     return(
         <div>
@@ -21,7 +25,7 @@ const ShoppingCard = (props : any) =>{
                     {props?.setCartItemList.map((obj: any) =>{
                         return(
                             <div key={`${obj.id}`}>
-                                <ShoppingItem modal={props?.modal} itemObject={obj} resetUI={props?.resetUI} setCartItemList={props?.setCartItemList} setTotalServices={props?.setTotalServices} setFinalOrderList={props?.setFinalOrderList}></ShoppingItem>
+                                <ShoppingItem modal={props.modal} resetUI={props.resetUI} setUpdatedService={setUpdatedService} itemObject={obj}></ShoppingItem>
                                 {obj?.id === productDetailDataObj.length ? 
                                 <>
                                 </>
