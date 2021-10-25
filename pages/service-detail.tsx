@@ -19,7 +19,6 @@ const ServiceDetail = () => {
     const [serviceDetails, setServiceDetails] = useState([]);
     const [serviceList, setServiceList] = useState([]);
     const [cartItemList, setCartItemList] = useState([]);
-    const [orderValuesFromCart, setOrderValuesFromCart] = useState([]);
 
     const [keyValueArray, setKeyValueArray] = useState([]);
 
@@ -28,84 +27,6 @@ const ServiceDetail = () => {
     const onTabClick = (key:string, event: any) => {
         changeSelectedTab(key);
     };
-
-    let listing = [
-        {
-            // ['/Subscription-banner.png','/Subscription-banner.png','/Subscription-banner.png','/Subscription-banner.png'],
-            id: 1,
-            image: '/Subscription-banner.png',
-            title: 'Arabic Coffee',
-            subTitle: '250kcal',
-            description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ',
-            price: '49',
-            size: 1,
-            staff: 1,
-            type: 1,
-            availableSizes: [
-                {value: 1, label: '80g'},
-                {value: 2, label: '160g'}
-            ],
-            availableStaffs: [
-                {value: 1, label: 'Staff 1'},
-                {value: 2, label: 'Staff 2'},
-                {value: 3, label: 'Staff 3'}
-            ],
-            availableTypes: [
-                {value: 1, label: 'Dine In'},
-                {value: 2, label: 'Take Away'},
-            ]
-        },
-        {
-            // ['/Subscription-banner.png','/Subscription-banner.png','/Subscription-banner.png','/Subscription-banner.png'],
-            id: 2,
-            image: '/Subscription-banner.png',
-            title: 'Arabic Coffee',
-            subTitle: '250kcal',
-            description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ',
-            price: '49',
-            size: 1,
-            staff: 1,
-            type: 1,
-            availableSizes: [
-                {value: 1, label: '80g'},
-                {value: 2, label: '160g'}
-            ],
-            availableStaffs: [
-                {value: 1, label: 'Staff 1'},
-                {value: 2, label: 'Staff 2'},
-                {value: 3, label: 'Staff 3'}
-            ],
-            availableTypes: [
-                {value: 1, label: 'Dine In'},
-                {value: 2, label: 'Take Away'},
-            ]
-        },
-        {
-            // ['/Subscription-banner.png','/Subscription-banner.png','/Subscription-banner.png','/Subscription-banner.png'],
-            id: 3,
-            image: '/Subscription-banner.png',
-            title: 'Arabic Coffee',
-            subTitle: '250kcal',
-            description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ',
-            price: '49',
-            size: 1,
-            staff: 1,
-            type: 1,
-            availableSizes: [
-                {value: 1, label: '80g'},
-                {value: 2, label: '160g'}
-            ],
-            availableStaffs: [
-                {value: 1, label: 'Staff 1'},
-                {value: 2, label: 'Staff 2'},
-                {value: 3, label: 'Staff 3'}
-            ],
-            availableTypes: [
-                {value: 1, label: 'Dine In'},
-                {value: 2, label: 'Take Away'},
-            ]
-        },
-    ];
     
     useEffect(() =>{
         try{

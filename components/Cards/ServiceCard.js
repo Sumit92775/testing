@@ -6,17 +6,10 @@ import { newId } from '../../services/auth';
 import { addToCart, deleteFromCart, getItemInCart } from '../../services/items';
 
 const ServiceCard = ({item, resetUI, setKeyValueArray, setServiceDetail}) => {
-    const sponsored = "hello";
-    // [ selectedSize, changeSize ] = useState(item.size),
-    // [ selectedStaff, changeStaff ] = useState(item?.availableStaffs[0].value),
-    // [ selectedType, changeType ] = useState(item?.availableTypes[0].value);
 
     const [items, setItems] = useState({});
-    const [serviceValue, setServiceValue] = useState([])
-    const [servicePropertiesKeyArray, setservicePropertiesKeyArray] = useState([]);
-    const [servicePropertiesValueArray, setservicePropertiesValueArray] = useState([]);
-    const [constantValue, setConstantValue] = useState("");
-
+    const [serviceValue, setServiceValue] = useState([]);
+    const [modifiedServiceArray, setModifiedServiceArray] = useState([]);
     const [keyArray, setKeyArray] = useState([]);
 
     useEffect(() =>{
@@ -25,22 +18,34 @@ const ServiceCard = ({item, resetUI, setKeyValueArray, setServiceDetail}) => {
         let valueArray = [];
         let valueArray1 = [];
         let data = item?.ServiceProperties;
+        let KeyValueArray = [];
         for(let i = 0; i < data.length; i++){
             keyArray.push(data[i].key);
             valueArray1 = (data[i].value).split(",");
 
             console.log("arr: ",valueArray1);
-
             if(valueArray1.length > 1){
-
+                // valueArray[i] = "NA";
+                KeyValueArray.push({
+                    key: data[i].key,
+                    value: ''
+                })
             }else{
                 valueArray[i] = data[i].value;
+                KeyValueArray.push({
+                    key: data[i].key,
+                    value: data[i].value
+                })
             }
         }
+
+        console.log("KeyValueArray: ",KeyValueArray);
+
+        setModifiedServiceArray();
         setKeyArray(keyArray);
         console.log("KeyArray: ",keyArray);
         console.log("ValueArray",valueArray);
-        setServiceValue(valueArray);
+        setServiceValue(KeyValueArray);
 
     },[])
 
@@ -63,17 +68,23 @@ const ServiceCard = ({item, resetUI, setKeyValueArray, setServiceDetail}) => {
     const addItemInCart = (itemId) =>{
 
         console.log("KeysArray: ",keyArray);
-        console.log("serviceValue: ",serviceValue);
-        console.log("id: ",itemId);
+        console.log("idx: ",itemId);
+        
+        let newValueArray = [];
+        for(let i = 0 ; i < serviceValue.length ; i++){
+            newValueArray.push(serviceValue[i].value);
+        }
+
+        console.log("serviceValue: ",newValueArray);
+
         try{
             addToCart({
                 itemid: itemId,
-                serviceValue: serviceValue,
+                serviceValue: newValueArray,
                 keyArray: keyArray
             }).then(res =>{
                 if(res.status){
                     console.log(res);
-
                     setKeyValueArray(prev => [...prev, serviceValue])
                     resetUI();
                 }else{
@@ -138,6 +149,20 @@ const ServiceCard = ({item, resetUI, setKeyValueArray, setServiceDetail}) => {
     const handelValue = (e) =>{
         console.log("Value Selected: ",e);
         // setServiceValue(prev => [...prev, e]);
+    }
+
+    const handleValueSelected = (itemId, propertyKey, selectedValue) =>{
+        let serviceArray = serviceValue;
+        let newArray = serviceArray;
+        for (const key in serviceArray) {
+            if (serviceArray[key].key === propertyKey) {
+                newArray[key].value = selectedValue
+            }
+        }
+        
+        console.log("NewArray: ",newArray);
+        setServiceValue(newArray);
+        
     }
 
     return (
@@ -210,6 +235,7 @@ const ServiceCard = ({item, resetUI, setKeyValueArray, setServiceDetail}) => {
                 <div className={ cx('grid-view', styles['item-options'])}>
                     {item?.ServiceProperties.map((obj) =>{
                         return(
+                            
                             <div className="flex" key={obj}>
                                 {
                                     checkIsArray(obj?.value).status == true ? 
@@ -219,7 +245,7 @@ const ServiceCard = ({item, resetUI, setKeyValueArray, setServiceDetail}) => {
                                 <>
                                 <div className="flex">
                                     <span className="pull left mr-10"><strong>{obj.key}: </strong></span>
-                                    {/* {setServiceValue(prev => [...prev, obj?.value])} */}
+                                    {() => setServiceValue(prev => [...prev, obj?.value])}
                                     <span>{obj?.value}</span>
                                 </div>
                                 </>
@@ -239,7 +265,8 @@ const ServiceCard = ({item, resetUI, setKeyValueArray, setServiceDetail}) => {
                                 <div className="flex">
                                     <span className="pull left mr-10">{obj.key}: </span>
                                     <Select className="medium" onChange={(event) => {
-                                        setServiceValue(prev => [...prev, event]);
+                                        handleValueSelected(item.id, obj.key, event)
+                                        // setServiceValue(prev => [...prev, event]);
                                         }}>
                                         {checkIsArray(obj?.value).result.map(option => (
                                             <Select.Option key={option} value={option}>{option}</Select.Option>

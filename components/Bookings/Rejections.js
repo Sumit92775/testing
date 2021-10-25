@@ -351,7 +351,7 @@ const Rejections = () => {
     const handlePagination = (page) =>{
         try{
             bookings({
-                type: 4,
+                type: 5,
                 page: page
             }).then(res =>{
                 if(res.status){
@@ -359,45 +359,60 @@ const Rejections = () => {
                     let dataSource = [];
                     setTotalBookings(res.bookings);
                      
-                    for(let i = 0; i<res.bookings.length; i++) {
+                        for(let i = 0; i<res.bookings.length; i++) {
 
-                        let serviceType="";
-                        let cartProperties = res.bookings[i].Cart.CartProperties;
+                            let serviceType="";
+
+                            // Remove redundant object from array
+                            let cartProperties = res.bookings[i].Cart.CartProperties;
                             var duplicateRemover = new Set();
-                            
-                            var distinctArrObj = cartProperties.filter((obj) => {
-                            if (duplicateRemover.has(JSON.stringify(obj))) return false;
-                            duplicateRemover.add(JSON.stringify(obj));
-                            return true;
-                            });
-                            
-                        //   console.log("Filtered Cart Properties: ",distinctArrObj);
+                              var distinctArrObj = cartProperties.filter((obj) => {
+                                if (duplicateRemover.has(JSON.stringify(obj))) return false;
+                                duplicateRemover.add(JSON.stringify(obj));
+                                return true;
+                              });
+                              
+                            //   console.log("Filtered Cart Properties: ",distinctArrObj);
 
-                        for(let i = 0 ; i < distinctArrObj.length ; i++){
-                            serviceType+=distinctArrObj[i].value+" ";
+                            for(let i = 0 ; i < distinctArrObj.length ; i++){
+                                if(i == distinctArrObj.length-1){
+                                    serviceType+=distinctArrObj[i].value
+                                }else{
+                                    serviceType+=distinctArrObj[i].value+", ";
+                                }
+                            }
+
+                            // console.log("ServiceType: ", serviceType);
+                            
+                            setBookingAddress(res.bookings[i].Service.Store.Addresses);
+
+                            let address = "";
+                            address+=res.bookings[i].Service.Store.Addresses[i].add1+", ";
+                            address+=res.bookings[i].Service.Store.Addresses[i].add2+", "
+                            address+=res.bookings[i].Service.Store.Addresses[i].city+", "
+                            address+=res.bookings[i].Service.Store.Addresses[i].zipCode;
+
+                            dataSource.push({
+                                key: res.bookings[i].id,
+                                bookingId: res.bookings[i].bookingId,
+                                // spname: res.bookings[i].Service.Store.storeName,
+                                spname: {spname: res.bookings[i].Service.Store.storeName, address: address},
+                                // address: "Jeddah Nazlah Dist...",
+                                date: res.bookings[i].BookingTime,
+                                time: res.bookings[i].BookingTime,
+                                service: {service: res.bookings[i].Service.primaryServiceName, type: serviceType},
+                                // servicetype: 'In-Store',
+                                spfee: res.bookings[i].storePlatformFee,
+                                price: res.bookings[i].Service.price,
+                                status: res.bookings[i].BookingStatus,
+                                reasons:'This order is rejected',
+                            })
                         }
 
-                        // console.log("ServiceType: ", serviceType);
+                        setDataSource(dataSource);
+                        console.log("DatSource: ",dataSource);
                         
-
-                        dataSource.push({
-                            key: res.bookings[i].id,
-                            bookingId: res.bookings[i].bookingId,
-                            spname: res.bookings[i].Service.Store.storeName,
-                            address: "Jeddah Nazlah Dist...",
-                            date: res.bookings[i].BookingTime,
-                            time: res.bookings[i].BookingTime,
-                            service: {service: res.bookings[i].Service.primaryServiceName, type: serviceType},
-                            // servicetype: 'In-Store',
-                            spfee: res.bookings[i].storePlatformFee,
-                            price: res.bookings[i].Service.price,
-                            reasons: 'This order is rejected'
-                        })
-                    }
-
-                    setDataSource(dataSource);
-                    console.log("DatSource: ",dataSource);
-                        
+                    
                 }else{
                     message.error(res.status);
                 }
