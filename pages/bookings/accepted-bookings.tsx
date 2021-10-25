@@ -1,24 +1,51 @@
-import React, {useState} from 'react';
-import { Table, Button, Select, Menu, Switch, Form, Modal, Input, DatePicker, Rate } from 'antd';
+import React, {useEffect, useState} from 'react';
+import { Table, Button, Select, Menu, Switch, Form, Modal, Input, DatePicker, Rate, message, Tooltip } from 'antd';
 import moment from 'moment';
 const { RangePicker } = DatePicker;
-import {LocationCity} from '@material-ui/icons'
-
+import { LocationOnOutlined } from '@material-ui/icons';
+import styles from '../../components/Bookings/Style.module.scss';
 import cx from 'classnames';
+import { bookings } from '../../services/bookings';
+import MapView from '../../components/Bookings/MapView';
 
 const AcceptedBookings = () => {
     const [modal, setModal] = useState(false);
-    const [recheduleModal, setRecheduleModal] = useState(false);
+    const [recheduleModal, setRescheduleModal] = useState(false);
     const [modalName, setModalName] = useState("");
-    // const [cancelBookingModal, setRecheduleModal] = useState(false);
+    // const [cancelBookingModal, setRescheduleModal] = useState(false);
     
-    const status = ['Pending', 'Rescheduled'],
-    dataSource = [],
-    columns = [
+    const [totalBookings, setTotalBookings] = useState([]);
+    const [dataSource, setDataSource] = useState([]);
+    const [bookingAddress, setBookingAddress] = useState([]);
+
+    const status = ['Pending', 'Rescheduled'];
+    const columns = [
         {
             title: 'Booking ID',
             dataIndex: 'bookingId',
             key: 'bookingId',
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            render: function status(statusObj: any) {
+                return (
+                    <span className={ 
+                        statusObj.id == 2 ? 
+                        styles['btn-cancel'] 
+                        : 
+                        (statusObj.id == 7 || statusObj.id == 1) ? 
+                        styles['btn-rejection'] 
+                        : 
+                        (statusObj.id == 8 || statusObj.id == 12) ? 
+                        styles['btn-success'] 
+                        : 
+                        styles['btn-cancel']}
+                        >{statusObj.title}
+                    </span>
+                )
+            }
         },
         {
             title: 'SP Name',
@@ -26,21 +53,11 @@ const AcceptedBookings = () => {
             key: 'spname',
             render: function spname(spname : any) {
                 return (
-                    <>
-                        <strong>{ spname }</strong>
-                    </>
-                )
-            }
-        },
-        {
-            title: 'Address',
-            dataIndex: 'address',
-            key: 'address',
-            render: function address(address : any) {
-                return (
-                    <div className="flex center">
-                        <LocationCity/>
-                        <span className="ml-3">{ address }</span>
+                    <div className="flex">
+                        <Tooltip title={spname.address}>
+                            <LocationOnOutlined className="mt-3 mr-3" onClick={() => openModal("Change Address")}></LocationOnOutlined>
+                        </Tooltip>
+                        <span className="mt-3">{ spname.spname }</span>
                     </div>
                 )
             }
@@ -58,9 +75,22 @@ const AcceptedBookings = () => {
             dataIndex: 'time',
             key: 'time',
             render: function time(time : any) {
-                return <p>{time}</p>
+                return <p>{ moment(time).format(`${process.env.time_format}`)}</p>
             }
         },
+        // {
+        //     title: 'Address',
+        //     dataIndex: 'address',
+        //     key: 'address',
+        //     render: function address(address : any) {
+        //         return (
+        //             <div className="flex center">
+        //                 <LocationCity/>
+        //                 <span className="ml-3">{ address }</span>
+        //             </div>
+        //         )
+        //     }
+        // },
         {
             title: 'Service',
             dataIndex: 'service',
@@ -69,18 +99,8 @@ const AcceptedBookings = () => {
                 return(
                     <div>
                         <span>{service.service}</span><br/>
-                        <span className="fz-12">{service.by}</span>
+                        <span className="fz-12">{service.type}</span>
                     </div>
-                )
-            }
-        },
-        {
-            title: 'Service Type',
-            dataIndex: 'servicetype',
-            key: 'servicetype',
-            render: function servicetype(servicetype : any)  {
-                return(
-                   <span>{servicetype}</span>
                 )
             }
         },
@@ -109,6 +129,7 @@ const AcceptedBookings = () => {
             }
 
         },
+        
         {
             title: 'actions',
             dataIndex: 'actions',
@@ -117,7 +138,7 @@ const AcceptedBookings = () => {
                 return <>
                     <Menu className="table-action-btn" mode="horizontal">
                         <Menu.SubMenu key="SubMenu" title="">
-                            <Menu.Item key="Accept" className="txt dark1" onClick={() =>openModal("Rechedule")} icon={<span className="material-icons">done</span>}>Rechudule</Menu.Item>
+                            <Menu.Item key="Accept" className="txt dark1" onClick={() =>openModal("Reschedule")} icon={<span className="material-icons">done</span>}>Rechudule</Menu.Item>
                             <Menu.Item key="Reject" className="txt danger" onClick={ () => openModal("Reason") } icon={<span className="material-icons">cancel</span>}>Cancel Bookings</Menu.Item>
                         </Menu.SubMenu>
                     </Menu>
@@ -125,35 +146,152 @@ const AcceptedBookings = () => {
             }
         },
 
-    ]
+    ];
 
-    for(let i = 1; i<4; i++) {
-        dataSource.push({
-            key: i,
-            bookingId: 'SP15912501(R1)',
-            spname: 'Halais',
-            address: "Jeddah Nazlah Dist...",
-            date: new Date(),
-            time: "02:00 PM - 02:30 PM ",
-            service: {service : "Haircut By Machine", by: "By Chris J"},
-            servicetype: 'In-Store',
-            spfee: '$2',
-            price: '$5',
-        })
-    }
+    useEffect(() =>{
+        try{
+            bookings({
+                type: 1,
+                page: 1
+            }).then(res =>{
+                if(res.status){
+                    console.log("Bookings Response: ",res);
+                    let dataSource:any[] = [];
+                    setTotalBookings(res.bookings);
 
+                        for(let i = 0; i < res.bookings.length; i++) {
+                            let serviceType="";
+
+                            // Remove redundant object from array
+                            let cartProperties = res.bookings[i].Cart.CartProperties;
+                            var duplicateRemover = new Set();
+                              var distinctArrObj = cartProperties.filter((obj: any) => {
+                                if (duplicateRemover.has(JSON.stringify(obj))) return false;
+                                duplicateRemover.add(JSON.stringify(obj));
+                                return true;
+                              });
+                              
+                            //   console.log("Filtered Cart Properties: ",distinctArrObj);
+
+                            for(let i = 0 ; i < distinctArrObj.length ; i++){
+                                if(i == distinctArrObj.length-1){
+                                    serviceType+=distinctArrObj[i].value
+                                }else{
+                                    serviceType+=distinctArrObj[i].value+", ";
+                                }
+                            }
+
+                            // console.log("ServiceType: ", serviceType);
+                            
+                            setBookingAddress(res.bookings[i].Service.Store.Addresses);
+
+                            let address = "";
+                            for(let i = 0 ; i < res.bookings[i].Service.Store.Addresses.length ; i++){
+                                if(i == res.bookings[i].Service.Store.Addresses.length - 1 ){
+                                    address+=res.bookings[i].Service.Store.Addresses[i].add1+", ";
+                                    address+=res.bookings[i].Service.Store.Addresses[i].add2+", "
+                                    address+=res.bookings[i].Service.Store.Addresses[i].city+", "
+                                    address+=res.bookings[i].Service.Store.Addresses[i].zipCode;
+                                }else{
+                                    address+=res.bookings[i].Service.Store.Addresses[i]+", ";
+                                }
+                            }
+
+                            dataSource.push({
+                                key: res.bookings[i].id,
+                                bookingId: res.bookings[i].bookingId,
+                                // spname: res.bookings[i].Service.Store.storeName,
+                                spname: {spname: res.bookings[i].Service.Store.storeName, address: address},
+                                // address: "Jeddah Nazlah Dist...",
+                                date: res.bookings[i].BookingTime,
+                                time: res.bookings[i].BookingTime,
+                                service: {service: res.bookings[i].Service.primaryServiceName, type: serviceType},
+                                // servicetype: 'In-Store',
+                                spfee: res.bookings[i].storePlatformFee,
+                                price: res.bookings[i].Service.price,
+                                status: res.bookings[i].BookingStatus
+                            })
+                        }
+
+                        setDataSource(dataSource);
+                        console.log("DatSource: ",dataSource);
+
+                }else{
+                    message.error(res.status);
+                }
+            })
+        }catch(error: any){
+            console.log(error);
+        }
+    },[]);
+
+    const handlePagination = (page: Number) =>{
+        try{
+            bookings({
+                type: 1,
+                page: page
+            }).then(res =>{
+                if(res.status){
+                    console.log("Bookings Response: ",res);
+                    let dataSource:any[] = [];
+                    setTotalBookings(res.bookings);
+                     
+                    for(let i = 0; i<res.bookings.length; i++) {
+
+                        let serviceType="";
+                        let cartProperties = res.bookings[i].Cart.CartProperties;
+                            var duplicateRemover = new Set();
+                            
+                            var distinctArrObj = cartProperties.filter((obj: any) => {
+                            if (duplicateRemover.has(JSON.stringify(obj))) return false;
+                            duplicateRemover.add(JSON.stringify(obj));
+                            return true;
+                            });
+                            
+                        //   console.log("Filtered Cart Properties: ",distinctArrObj);
+
+                        for(let i = 0 ; i < distinctArrObj.length ; i++){
+                            serviceType+=distinctArrObj[i].value+" ";
+                        }
+
+                        // console.log("ServiceType: ", serviceType);
+                        
+
+                        dataSource.push({
+                            key: res.bookings[i].id,
+                            bookingId: res.bookings[i].bookingId,
+                            spname: res.bookings[i].Service.Store.storeName,
+                            address: "Jeddah Nazlah Dist...",
+                            date: res.bookings[i].BookingTime,
+                            time: res.bookings[i].BookingTime,
+                            service: {service: res.bookings[i].Service.primaryServiceName, type: serviceType},
+                            // servicetype: 'In-Store',
+                            spfee: res.bookings[i].storePlatformFee,
+                            price: res.bookings[i].Service.price,
+                        })
+                    }
+
+                    setDataSource(dataSource);
+                    console.log("DatSource: ",dataSource);
+                        
+                }else{
+                    message.error(res.status);
+                }
+            })
+        }catch(error: any){
+            console.log(error);
+        }
+    } 
      
     const openModal = (type :any) => {
         setModal(true);
         setModalName(type);
-
     };
 
 
     const handleCancel = () => {
         setModal(false);
     }
-
 
     return (
         <div>
@@ -182,25 +320,40 @@ const AcceptedBookings = () => {
                     onChange: (selectedRowKeys, selectedRows) => {
                         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
                     }
-                }} dataSource={dataSource} columns={columns} />
+                }} dataSource={dataSource}  pagination={{
+                    onChange: page => {
+                        console.log("Page: ",page);
+                        handlePagination(page);
+                    },
+                    pageSize: 10, total: totalBookings.length
+                }} columns={columns} />
 
             <Modal width="500px" 
-                title={ modalName === "Rechedule" ?<><h3 className="txt primary">Rechedule</h3></> : <><p className="mb-10"><strong className="txt primary fz-30">Reason</strong></p><strong>Reject booking from ehsaan?</strong><p>ID: SP15912501</p></> }
-                footer={modalName === "Rechedule" ? 
+                title={ modalName === "Reschedule" ?<><h3 className="txt primary">Reschedule</h3></> : modalName === "Change Address" ?<><h3 className="txt primary">Change Address</h3></> : <><p className="mb-10"><strong className="txt primary fz-30">Reason</strong></p><strong>Reject booking from ehsaan?</strong><p>ID: SP15912501</p></> }
+                footer={
+                modalName === "Reschedule" ? 
                 <>
                     <div style={{ paddingBlock: '18px' }}>
-                        <Button className="">Cancle</Button>
+                        <Button className="">Cancel</Button>
                         <Button className="txt primary">Confirm</Button>
                     </div>
                 </> 
                 :
+                modalName === "Change Address" ? 
+                <>
+                </> 
+                :
                     <div style={{ paddingBlock: '18px' }}>
-                        <Button className="primary ghost">Cancle</Button>
+                        <Button className="primary ghost">Cancel</Button>
                         <Button className="danger">Reject Booking</Button>
                     </div>
                 } visible={modal} onCancel={handleCancel}>
-                    {modalName === "Reschedule" ? 
+                    {
+                    modalName === "Reschedule" ? 
                      <RangePicker style={{width : "250px", height : "43px"}}/>
+                    :
+                    modalName === "Change Address" ? 
+                     <MapView storeAddress={bookingAddress}/>
                     :
                     <Input.TextArea rows={4} />
                     }

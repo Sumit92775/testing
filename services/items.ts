@@ -1,5 +1,6 @@
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
+
 export const getStoreByStoreId = () =>{
     
 var config = {
@@ -42,7 +43,6 @@ export const getServicesListByStoreId = () =>{
   });
   
 }
-
 
 export const addToCart = (object: any) =>{
   
@@ -147,42 +147,26 @@ export const editCartItem = (object: any) =>{
 
 }
 
-export const myOrders = (price: any) =>{
+export const myOrders = (object: any) =>{
   
   var data = JSON.stringify({
-    "storeId": 3,
+    "storeId": 1,
     "currencyId": 1,
     "patmentType": 1,
     "orderPriceWithoutPlatformChargesOrTaxes": 129,
     "PlatformCharges": 129,
     "taxes": 20,
-    "totalOrderPrice": 250,
+    "totalOrderPrice": object.price,
     "BookingTime": "2021-10-20 19:24:19",
     "giftCardID": [
       "GiftCard-Number1",
       "GiftCard-Number2"
     ],
-    "Services": [
-      {
-        "serviceId": 17,
-        "price": 50,
-        "cartId": 1
-      },
-      {
-        "serviceId": 6,
-        "price": 50,
-        "cartId": 2
-      },
-      {
-        "serviceId": 4,
-        "price": 150,
-        "cartId": 4
-      }
-    ]
+    "Services": object.services,
   });
   
   var config = {
-    method: 'post',
+    method: 'POST',
     // url: 'saloonplus.com:6001/api_v1/order/newOrder',
     headers: { 
       'Authorization': 'authToken', 

@@ -35,6 +35,7 @@
                 tr:first-child {
                     th {
                         border-top: var(--border);
+                        font-weight: 700;
                         &:first-child {
                             border-top-left-radius: var(--border-radius);
                         }

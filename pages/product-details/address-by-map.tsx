@@ -7,6 +7,7 @@ import { LocationCityRounded, MyLocation, TrainRounded } from '@material-ui/icon
 import confirm from 'antd/lib/modal/confirm';
 import useTranslation from 'next-translate/useTranslation';
 import { validateEmail } from '../../services/auth';
+import { addAddressUser } from '../../services/addresses';
 Geocode.setApiKey("AIzaSyBKowFDX0jDn687et4wgSmFpXiK-bj5Gj4");
 Geocode.setLanguage("en");
 Geocode.setRegion("es");
@@ -222,26 +223,6 @@ function AddressByMap(props : any) {
 
       console.log("Address data : 2 "+houseNo+ ":" + streetNo);
       let address1 = [];
-      
-      // if(houseNo.length > 1 && streetNo.length > 1){
-      //   setHouseNo(streetNo+", "+houseNo);
-      //   log
-      //   address1.push(streetNo);
-      //   address1.push(houseNo);
-
-      // }
-
-      // if(houseNo.length > 1 || streetNo.length > 1){
-      //   if(houseNo.length > 1){
-      //     setHouseNo(streetNo);
-      //     address1.push(streetNo);
-      //   }
-      // }
-
-      // console.log("House No. : ",houseNo);
-      // console.log("subLocality3 : ",subLocality3);
-      // console.log("subLocality2 : ",subLocality2);
-      // console.log("subLocality1 : ",subLocality1);
       
       if(houseNo.length > 1){
         address1.push(houseNo);
@@ -480,6 +461,7 @@ function AddressByMap(props : any) {
                                       streetNumber : streetNo,
                                       isDefault : 0,
                                   });
+
                                   props.closeModal();
                                   setName("");
                                   setMobileNumber("");

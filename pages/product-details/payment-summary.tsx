@@ -73,16 +73,41 @@ const PaymentSummary = (props: any) =>{
       }else{
 
         let updatedServicesArray = services;
+        let makeServiceArray = [];
+        let totalPrice = 0;
         for (const key in services) {
           if(services[key].qty > 1){
-            for(let i = 0 ; i < services[key].qty - 1 ; i++){
-              updatedServicesArray.push(updatedServicesArray[key])
+            for(let i = 0 ; i < services[key].qty ; i++){
+              let cartId = updatedServicesArray[key].id;
+              let serviceId = updatedServicesArray[key].serviceId;
+              let price = (updatedServicesArray[key].Service.price);
+              let storeId = updatedServicesArray[key].Service.storeId;
+              totalPrice+=parseInt(price);
+              makeServiceArray.push({
+                cartId: cartId,
+                serviceId: serviceId,
+                price: parseInt(price)
+              })
             }
           }
         }
 
-        console.log("UpdatedDServicesArray: ",updatedServicesArray);
-        
+
+
+        console.log("UpdatedDServicesArray: ",makeServiceArray);
+        console.log("Total price: ",totalPrice);
+      
+        try{
+          myOrders({
+            services: makeServiceArray,
+            price: totalPrice
+          }).then(res =>{
+            console.log(res);
+          })
+        }catch(error: any){
+          message.error(error);
+        }
+
       }
 
 
@@ -100,7 +125,7 @@ const PaymentSummary = (props: any) =>{
                 <div key={`${obj}`}>
                   <div className={styles['t1-container']}>
                       <h6>{`${obj?.Service?.primaryServiceName}`}</h6>
-                      <h6>{`${obj?.Service?.price}`}</h6>
+                      <h6>${`${obj?.Service?.price}`}</h6>
                   </div>
                   <h6 className="txt weight400">Qty: {`${obj?.qty}`}</h6>
                 </div>
