@@ -13,7 +13,6 @@ import Link from "next/link";
 const ServiceDetail = () => {
     const router = useRouter(),
     { slug } = router.query;
-    const [ map, toggleMap ] = useState(<div className="full mtn-25"></div>);
     const [ selected_tab, changeSelectedTab ] = useState('restaurants');
     
     const [serviceDetails, setServiceDetails] = useState([]);
@@ -21,7 +20,6 @@ const ServiceDetail = () => {
     const [cartItemList, setCartItemList] = useState([]);
 
     const [keyValueArray, setKeyValueArray] = useState([]);
-
     const [serviceDetail, setServiceDetail] = useState([]);
 
     const onTabClick = (key:string, event: any) => {
@@ -35,7 +33,7 @@ const ServiceDetail = () => {
                 console.log("Service Details Response: ",res);
                 setServiceDetails(res.data[0]);
             }else{
-                message.error(res)
+                message.error(res.status);
             }
 
             getServicesListByStoreId().then(res =>{
@@ -114,31 +112,36 @@ const ServiceDetail = () => {
                 var itemInCartArray = res.data;
                 getServicesListByStoreId().then(res =>{
                     if(res.status){
-                        console.log("Inside: ",itemInCartArray);
-                        // let cartItemsArray = itemInCartArray;
-                        let cartItems1Array = itemInCartArray;
-                        let serviceItemArray = res.data;
-                        let serviceItemArray1 = res.data;
-
-                        console.log("ServiceItemArray: ",serviceItemArray);
-                        
-                        for(let i = 0 ; i < serviceItemArray.length ; i++){
-                            for(let j = 0 ; j < cartItems1Array.length ; j++){
-                                if(serviceItemArray[i].id === cartItems1Array[j].serviceId){
-                                    serviceItemArray1[i].alreadyAdded = "true";
-                                    console.log("Array: ",serviceItemArray1[i]);
-                                    
-                                }else{
-                                    // serviceItemArray1[i].alreadyAdded = "check";
+                        if(res.data){
+                            
+                            console.log("Inside: ",itemInCartArray);
+                            // let cartItemsArray = itemInCartArray;
+                            let cartItems1Array = itemInCartArray;
+                            let serviceItemArray = res.data;
+                            let serviceItemArray1 = res.data;
+    
+                            console.log("ServiceItemArray: ",serviceItemArray);
+                            
+                            for(let i = 0 ; i < serviceItemArray.length ; i++){
+                                for(let j = 0 ; j < cartItems1Array.length ; j++){
+                                    if(serviceItemArray[i].id === cartItems1Array[j].serviceId){
+                                        serviceItemArray1[i].alreadyAdded = "true";
+                                        console.log("Array: ",serviceItemArray1[i]);
+                                        
+                                    }else{
+                                        // serviceItemArray1[i].alreadyAdded = "check";
+                                    }
+                                    console.log(serviceItemArray[i].id+" "+cartItems1Array[j].serviceId);
                                 }
-                                console.log(serviceItemArray[i].id+" "+cartItems1Array[j].serviceId);
                             }
+    
+                            console.log("Service Array After Sorting: ",serviceItemArray1);
+                            
+                            console.log("Service List Store By Store Id1: ",res);
+                            setServiceList(serviceItemArray1);
+                        }else{
+                            console.log(res.status);
                         }
-
-                        console.log("Service Array After Sorting: ",serviceItemArray1);
-                        
-                        console.log("Service List Store By Store Id1: ",res);
-                        setServiceList(serviceItemArray1);
                     }else{
                         console.log("Error in Service List Store By Store Id1: ",res);
                     }  
@@ -166,33 +169,37 @@ const ServiceDetail = () => {
         try{
             getItemInCart().then(res =>{
                 if(res.status){
-                    let cartItemArray = res.data;
-                    for (const key in cartItemArray) {
-                        if(cartItemArray[key].id === index){
-                           
-                            let keyValueObjectsArray = cartItemArray[key].CartProperties;
-                            let keyArray = [];
-                            let valueArray = [];
-
-                            for(let i = 0 ; i < keyValueObjectsArray.length ; i++){
-                                keyArray.push(keyValueObjectsArray[i].key)
-                                valueArray.push(keyValueObjectsArray[i].value)
-                            }
-                            // console.log("Key: ",keyArray);
-                            // console.log("Value: ",valueArray);
-                        
-                            // console.log("ID: ",index);
+                    if(res.data){
+                        let cartItemArray = res.data;
+                        for (const key in cartItemArray) {
+                            if(cartItemArray[key].id === index){
+                               
+                                let keyValueObjectsArray = cartItemArray[key].CartProperties;
+                                let keyArray = [];
+                                let valueArray = [];
+    
+                                for(let i = 0 ; i < keyValueObjectsArray.length ; i++){
+                                    keyArray.push(keyValueObjectsArray[i].key)
+                                    valueArray.push(keyValueObjectsArray[i].value)
+                                }
+                                // console.log("Key: ",keyArray);
+                                // console.log("Value: ",valueArray);
                             
-
-                            editCartItem({
-                                qty: qty,
-                                id: index,
-                                keys: keyArray,
-                                value: valueArray
-                            }).then(res =>{
-                                console.log(res);
-                            })
+                                // console.log("ID: ",index);
+                                
+    
+                                editCartItem({
+                                    qty: qty,
+                                    id: index,
+                                    keys: keyArray,
+                                    value: valueArray
+                                }).then(res =>{
+                                    console.log(res);
+                                })
+                            }
                         }
+                    }else{
+                        console.log(res.status);
                     }
                 }else{
                     console.log(res.status);

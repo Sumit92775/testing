@@ -385,7 +385,7 @@ function AddressByMap(props : any) {
                   <div className="grid-view grid-2 colgap-30 rowgap-20">
                     
                     <Form.Item className="mb-10" label="Name" required={true}>
-                      <Input value={name} type="text" onChange={(event : any) => setName(event.target.value)}></Input>
+                      <Input value={name} type="text" maxLength={80} onChange={(event : any) => setName(event.target.value)}></Input>
                     </Form.Item>
 
                     <Form.Item className="mb-10" name={['email']} hasFeedback label="Email" validateTrigger={['onBlur']} rules={[
@@ -401,26 +401,26 @@ function AddressByMap(props : any) {
                     <div className="grid-view grid-2 colgap-30 mb-10">
                       
                       <Form.Item label="Mobile Number" required={true}>
-                        <Input value={mobileNumber} onChange={(event : any) => setMobileNumber(event.target.value)}></Input>
+                        <Input value={mobileNumber} maxLength={10} onChange={(event : any) => setMobileNumber(event.target.value)}></Input>
                       </Form.Item>
                       
                       <Form.Item label={<label className="txt dark3">House No.<span>(Optional)</span></label>}>
-                        <Input value={streetNo} onChange={(event : any) => setStreetNo(event.target.value)}></Input>
+                        <Input value={streetNo} maxLength={15} onChange={(event : any) => setStreetNo(event.target.value)}></Input>
                       </Form.Item>
 
                     </div>
                   </Form.Item>
                   
                   <Form.Item label="Address Line: 1" required={true}>
-                    <Input value={addressone}></Input>
+                    <Input value={addressone} maxLength={255}></Input>
                   </Form.Item>
                   <Form.Item label="Address Line: 2">
-                    <Input value={addresstwo}></Input>
+                    <Input value={addresstwo} maxLength={255}></Input>
                   </Form.Item>
                   <Form.Item>
                     <div className="grid-view grid-2 colgap-20">
                       <Form.Item label="City" required={true}>
-                        <Input value={city} onChange={(event : any) => setCity(event.target.value)} contentEditable="true"></Input>
+                        <Input value={city} maxLength={25} onChange={(event : any) => setCity(event.target.value)} contentEditable="true"></Input>
                       </Form.Item>
                       <Form.Item label="Pincode" required={true}>
                         <Input value={pinCode} onChange={(event : any) => setPinCode(event.target.value)}></Input>
@@ -430,13 +430,13 @@ function AddressByMap(props : any) {
                   <Form.Item>
                     <div className="grid-view grid-2 colgap-20">
                       <Form.Item label="Country" required={true}>
-                        <Input value={country}></Input>
+                        <Input value={country} maxLength={20}></Input>
                       </Form.Item>
                     </div>
                   </Form.Item>
                   <Form.Item>
                     <div className="pt-20 pb-20 pr-0 pull right">
-                          <Button className="mr-25 float right" onClick={() =>{props.closeModal;
+                          <Button className="mr-25 float right" onClick={() =>{props?.closeModal;
                           setconfirmAndProceed(false);
                           setName("");
                           setMobileNumber("");
@@ -445,7 +445,7 @@ function AddressByMap(props : any) {
                           <Button className="ant-btn primary mr-21 float right" onClick={() => {
                             
                             if(name.length > 1 && mobileNumber.length  == 10){
-                              props.addAddress({
+                              props?.addAddress({
                                       name : name,
                                       mobileNumber : mobileNumber,
                                       email : email,
@@ -462,7 +462,7 @@ function AddressByMap(props : any) {
                                       isDefault : 0,
                                   });
 
-                                  props.closeModal();
+                                  props?.closeModal();
                                   setName("");
                                   setMobileNumber("");
                                   setEmail("");
@@ -521,7 +521,7 @@ function AddressByMap(props : any) {
                       setAddressLine2();
                       }}
                   >Confirm and Proceed</Button>
-                  <Button className="mr-0 mt-10 float pull right" onClick={props.closeModal}>Cancel</Button>
+                  <Button className="mr-0 mt-10 float pull right" onClick={props?.closeModal}>Cancel</Button>
             </div>
         </div>
           

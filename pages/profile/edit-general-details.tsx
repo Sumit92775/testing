@@ -45,11 +45,11 @@ const EditGeneralDetails = (props: any) => {
                 <Form.Item>
                     <div className="grid-view grid-2 colgap-30">
                         <Form.Item label="First Name">
-                            <Input value={props.firstName} onChange={(event) =>props.setFirstName(event.target.value)}></Input>
+                            <Input value={props.firstName} maxLength={20} onChange={(event) =>props.setFirstName(event.target.value)}></Input>
                         </Form.Item>
                         
                         <Form.Item className="mt-10" label="Last Name">
-                            <Input value={props.lastName} onChange={(event) =>props.setLastName(event.target.value)}></Input>
+                            <Input value={props.lastName} maxLength={30} onChange={(event) =>props.setLastName(event.target.value)}></Input>
                         </Form.Item>
                     </div>
                 </Form.Item>
@@ -73,8 +73,6 @@ const EditGeneralDetails = (props: any) => {
                         </Form.Item>
                     </div>
                 </Form.Item>
-
-               
             </Form>
         </div>
     )

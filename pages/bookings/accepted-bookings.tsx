@@ -14,8 +14,8 @@ const AcceptedBookings = () => {
     const [modalName, setModalName] = useState("");
     // const [cancelBookingModal, setRescheduleModal] = useState(false);
     
-    const [totalBookings, setTotalBookings] = useState([]);
-    const [dataSource, setDataSource] = useState([]);
+    const [totalBookings, setTotalBookings] = useState([] as any);
+    const [dataSource, setDataSource] = useState([] as any);
     const [bookingAddress, setBookingAddress] = useState([]);
 
     const status = ['Pending', 'Rescheduled'];
@@ -156,65 +156,65 @@ const AcceptedBookings = () => {
             }).then(res =>{
                 if(res.status){
                     console.log("Bookings Response: ",res);
-                    let dataSource:any[] = [];
+                    let dataSource:any[] = Array();
                     setTotalBookings(res.bookings);
 
-                        for(let i = 0; i < res.bookings.length; i++) {
-                            let serviceType="";
+                    for(let i = 0; i < res.bookings.length; i++) {
+                        let serviceType="";
 
-                            // Remove redundant object from array
-                            let cartProperties = res.bookings[i].Cart.CartProperties;
-                            var duplicateRemover = new Set();
-                              var distinctArrObj = cartProperties.filter((obj: any) => {
-                                if (duplicateRemover.has(JSON.stringify(obj))) return false;
-                                duplicateRemover.add(JSON.stringify(obj));
-                                return true;
-                              });
-                              
-                            //   console.log("Filtered Cart Properties: ",distinctArrObj);
-
-                            for(let i = 0 ; i < distinctArrObj.length ; i++){
-                                if(i == distinctArrObj.length-1){
-                                    serviceType+=distinctArrObj[i].value
-                                }else{
-                                    serviceType+=distinctArrObj[i].value+", ";
-                                }
-                            }
-
-                            // console.log("ServiceType: ", serviceType);
+                        // Remove redundant object from array
+                        let cartProperties = res.bookings[i].Cart.CartProperties;
+                        var duplicateRemover = new Set();
+                            var distinctArrObj = cartProperties.filter((obj: any) => {
+                            if (duplicateRemover.has(JSON.stringify(obj))) return false;
+                            duplicateRemover.add(JSON.stringify(obj));
+                            return true;
+                            });
                             
-                            setBookingAddress(res.bookings[i].Service.Store.Addresses);
+                        //   console.log("Filtered Cart Properties: ",distinctArrObj);
 
-                            let address = "";
-                            for(let i = 0 ; i < res.bookings[i].Service.Store.Addresses.length ; i++){
-                                if(i == res.bookings[i].Service.Store.Addresses.length - 1 ){
-                                    address+=res.bookings[i].Service.Store.Addresses[i].add1+", ";
-                                    address+=res.bookings[i].Service.Store.Addresses[i].add2+", "
-                                    address+=res.bookings[i].Service.Store.Addresses[i].city+", "
-                                    address+=res.bookings[i].Service.Store.Addresses[i].zipCode;
-                                }else{
-                                    address+=res.bookings[i].Service.Store.Addresses[i]+", ";
-                                }
+                        for(let i = 0 ; i < distinctArrObj.length ; i++){
+                            if(i == distinctArrObj.length-1){
+                                serviceType+=distinctArrObj[i].value
+                            }else{
+                                serviceType+=distinctArrObj[i].value+", ";
                             }
-
-                            dataSource.push({
-                                key: res.bookings[i].id,
-                                bookingId: res.bookings[i].bookingId,
-                                // spname: res.bookings[i].Service.Store.storeName,
-                                spname: {spname: res.bookings[i].Service.Store.storeName, address: address},
-                                // address: "Jeddah Nazlah Dist...",
-                                date: res.bookings[i].BookingTime,
-                                time: res.bookings[i].BookingTime,
-                                service: {service: res.bookings[i].Service.primaryServiceName, type: serviceType},
-                                // servicetype: 'In-Store',
-                                spfee: res.bookings[i].storePlatformFee,
-                                price: res.bookings[i].Service.price,
-                                status: res.bookings[i].BookingStatus
-                            })
                         }
 
-                        setDataSource(dataSource);
-                        console.log("DatSource: ",dataSource);
+                        // console.log("ServiceType: ", serviceType);
+                        
+                        setBookingAddress(res.bookings[i].Service.Store.Addresses);
+
+                        let address = "";
+                        for(let i = 0 ; i < res.bookings[i].Service.Store.Addresses.length ; i++){
+                            if(i == res.bookings[i].Service.Store.Addresses.length - 1 ){
+                                address+=res.bookings[i].Service.Store.Addresses[i].add1+", ";
+                                address+=res.bookings[i].Service.Store.Addresses[i].add2+", "
+                                address+=res.bookings[i].Service.Store.Addresses[i].city+", "
+                                address+=res.bookings[i].Service.Store.Addresses[i].zipCode;
+                            }else{
+                                address+=res.bookings[i].Service.Store.Addresses[i]+", ";
+                            }
+                        }
+
+                        dataSource.push({
+                            key: res.bookings[i].id,
+                            bookingId: res.bookings[i].bookingId,
+                            // spname: res.bookings[i].Service.Store.storeName,
+                            spname: {spname: res.bookings[i].Service.Store.storeName, address: address},
+                            // address: "Jeddah Nazlah Dist...",
+                            date: res.bookings[i].BookingTime,
+                            time: res.bookings[i].BookingTime,
+                            service: {service: res.bookings[i].Service.primaryServiceName, type: serviceType},
+                            // servicetype: 'In-Store',
+                            spfee: res.bookings[i].storePlatformFee,
+                            price: res.bookings[i].Service.price,
+                            status: res.bookings[i].BookingStatus
+                        })
+                    }
+
+                    setDataSource(dataSource);
+                    console.log("DatSource: ",dataSource);
 
                 }else{
                     message.error(res.status);
@@ -225,7 +225,7 @@ const AcceptedBookings = () => {
         }
     },[]);
 
-    const handlePagination = (page: Number) =>{
+    const handlePagination = (page: any) =>{
         try{
             bookings({
                 type: 1,
@@ -334,7 +334,9 @@ const AcceptedBookings = () => {
                 <Switch className="default mt-4 ml-15 pull left" size="small" />
             </div>
 
-            <Table className="bordered mt-25" rowSelection={{
+            <Table locale={{
+                emptyText: 'No booking in this category'
+            }}  className="bordered mt-25" rowSelection={{
                     type: 'checkbox',
                     onChange: (selectedRowKeys, selectedRows) => {
                         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)

@@ -246,3 +246,44 @@
         }
     }
 }
+// ant-empty-description
+.bookings-table {
+    .ant-table {
+        background-color: transparent;
+    }
+
+    .ant-empty-description{
+        
+    }
+    table {
+        th {
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: none;
+            &:first-child {
+                padding-left: 25px;
+            }
+        }
+        tbody {
+            tr {
+                td {
+                    font-weight: bold;
+                    &:first-child {
+                        font-weight: normal;
+                        padding-left: 25px;
+                    }
+                }
+                &:last-child {
+                    td {
+                        &:first-child {
+                            border-bottom-left-radius: var(--card-border-radius);
+                        }
+                        &:last-child {
+                            border-bottom-right-radius: var(--card-border-radius);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -64,7 +64,7 @@ const DefaultAddress = (props : any) =>{
 
                 </div>
             </div>
-            {props.type === "list" ? 
+            {props?.type === "list" ? 
            <>
            </> 
             : 

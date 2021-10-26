@@ -9,7 +9,7 @@ const ShoppingItem = (props : any) =>{
 
 
     useEffect(() =>{
-        console.log("Props Cart: ",props.itemObject);
+        console.log("Props Cart: ",props?.itemObject);
     },[]);
 
     const handleDelete = (itemId: any) =>{
@@ -50,7 +50,7 @@ const ShoppingItem = (props : any) =>{
                                 keyArray.push(keyValueObjectsArray.CartProperties[i].key)
                                 valueArray.push(keyValueObjectsArray.CartProperties[i].value)
                             }
-                            let oldServiceArray = props.serviceArray;
+                            // let oldServiceArray = props.serviceArray;
                             // console.log("KeyArray :",keyArray);
                             // console.log("valueArray :",valueArray);
                             
@@ -61,9 +61,9 @@ const ShoppingItem = (props : any) =>{
                                 keys: keyArray,
                                 value: valueArray
                             }).then(res =>{
-                                props.setUpdatedService(index, qty)
+                                props?.setUpdatedService(index, qty)
                                 console.log("Response Response: ",res);
-                                let oldServiceArray = props.serviceArray;
+                                // let oldServiceArray = props.serviceArray;
                                 // props.setUpdatedService(index, qty)
                                 
                             })
@@ -71,7 +71,6 @@ const ShoppingItem = (props : any) =>{
                     }
 
                     // ------------------------------------------
-                    
 
                 }else{
                     console.log(res.status);

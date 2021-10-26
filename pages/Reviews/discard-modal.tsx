@@ -2,7 +2,7 @@ import Avatar from 'antd/lib/avatar/avatar';
 import React from 'react';
 
 const DiscardModal = (props:any) =>{
-    console.log(props.modalContent);
+    // console.log(props.modalContent);
   
     return(
         <div className="container flex">

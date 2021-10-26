@@ -145,8 +145,6 @@ export default function GiftCards() {
                         } visible={createGiftCard} onOk={handleOk} onCancel={handleCancel}>
                             {/* < CreateGiftCard/> */}
                         </Modal>
-
-
                 </h3>
 
 

@@ -220,7 +220,7 @@ const PastBookings = () => {
     // const [cancelBookingModal, setRescheduleModal] = useState(false);
     
     const [totalBookings, setTotalBookings] = useState([]);
-    const [dataSource, setDataSource] = useState([]);
+    const [dataSource, setDataSource] = useState([] as any);
     const [bookingAddress, setBookingAddress] = useState([]);
 
     const status = ['Pending', 'Rescheduled'];
@@ -586,7 +586,9 @@ const PastBookings = () => {
                 <Switch className="default mt-4 ml-15 pull left" size="small" />
             </div>
 
-            <Table className="bordered mt-25" rowSelection={{
+            <Table locale={{
+                emptyText: 'No booking in this category'
+            }} className="bordered mt-25" rowSelection={{
                     type: 'checkbox',
                     onChange: (selectedRowKeys, selectedRows) => {
                         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)

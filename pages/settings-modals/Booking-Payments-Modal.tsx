@@ -1,4 +1,4 @@
-import {Button, Form, Input, InputNumber, Select} from 'antd';
+import {Form, InputNumber, Select} from 'antd';
 import Checkbox from 'antd/lib/checkbox/Checkbox';
 import { Option } from 'antd/lib/mentions';
 import React from 'react';
@@ -17,14 +17,13 @@ const BookingAndPaymentsModal = () =>{
     return(
         <div className="pl-12 pr-12">
             <Form>
-
                 <Form.Item label="Payout Frequency">
                     <Select className="h43" defaultValue="Daily" onChange={handleChange}>
                             <Option value="Daily">Daily</Option>
-                            <Option value="Daily">Daily</Option>
-                            <Option value="Daily">Daily</Option>
-                            <Option value="Daily">Daily</Option>
-                            <Option value="Daily">Daily</Option>
+                            <Option value="Daily1">Daily</Option>
+                            <Option value="Daily2">Daily</Option>
+                            <Option value="Daily3">Daily</Option>
+                            <Option value="Daily4">Daily</Option>
                     </Select>
                 </Form.Item>
                 

@@ -51,6 +51,8 @@ useEffect(() =>{
 
     getAdditionDetails().then(res =>{
         if(res){
+            console.log("Response: ",res);
+            
             setAdditionDetailsObject(res.addSettings);
             // message.success(res.message)
         }else{
@@ -164,7 +166,7 @@ const openModal = (type : any) => {
                 
                     <AdditionalDetails details={additionDetailsObject} setAdditionDetailsObject={setAdditionDetailsObject}/>
 
-                    <Card7AddAddress modal={openModal} title={setchooseModalTitle} addressArray={props.data}/>
+                    <Card7AddAddress modal={openModal} title={setchooseModalTitle} addressArray={props?.data}/>
                 </div>
 
                 <Modal style={{borderRadius :"15px", overflow : "hidden",width : "fit-content"}} title={

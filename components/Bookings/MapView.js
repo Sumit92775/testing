@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Table, Button, Select, Menu, Input, Form, Modal, Tooltip } from 'antd';
 import Image from 'next/image';
 import styles from './Style.module.scss';
@@ -44,20 +44,25 @@ const MapView = (props) => {
         },
     ]
     
-  const [latitude, setLatitude] = useState(28.701013012272828);
-  const [longitude, setLongitude] = useState(77.30239085333835);
+  const [latitude, setLatitude] = useState(parseFloat(props.storeAddress[0].latitude));
+  const [longitude, setLongitude] = useState( parseFloat(props.storeAddress[0].longitude));
 
   const center = {
-    lat: props.storeAddress[0].latitude,
-    lng: props.storeAddress[0].longitude
+    lat: latitude,
+    lng: longitude
   };
-
   
 const containerStyle = {
     width: '100%',
     height: '400px'
   };
-  
+
+
+// useEffect(() => {
+
+//     let message= parseInt(props.storeAddress[0].longitude
+//     // console.log(parseInt(props.storeAddress[0].latitude+" "+parseInt(props.storeAddress[0].longitude)
+// },[]);
 
     return (
         <>
@@ -72,7 +77,7 @@ const containerStyle = {
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}
-                zoom={15}
+                zoom={20}
                 onLoad={map => {
                   const bounds = new window.google.maps.LatLngBounds();
                   map.fitBounds(bounds);

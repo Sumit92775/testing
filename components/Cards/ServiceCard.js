@@ -11,9 +11,18 @@ const ServiceCard = ({item, resetUI, setKeyValueArray, setServiceDetail}) => {
     const [serviceValue, setServiceValue] = useState([]);
     const [modifiedServiceArray, setModifiedServiceArray] = useState([]);
     const [keyArray, setKeyArray] = useState([]);
+    const [chooseCartProperty, setChooseCartProperty] = useState(false);
 
     useEffect(() =>{
         setItems(item);
+        if(item.alreadyAdded){
+            setChooseCartProperty(true);
+        }else{
+            setChooseCartProperty(false);
+        }
+
+        console.log("Item: ",item);
+
         let keyArray = [];
         let valueArray = [];
         let valueArray1 = [];
@@ -267,7 +276,7 @@ const ServiceCard = ({item, resetUI, setKeyValueArray, setServiceDetail}) => {
                                     <Select className="medium" onChange={(event) => {
                                         handleValueSelected(item.id, obj.key, event)
                                         // setServiceValue(prev => [...prev, event]);
-                                        }}>
+                                        }} disabled={item.alreadyAdded ? true : false}>
                                         {checkIsArray(obj?.value).result.map(option => (
                                             <Select.Option key={option} value={option}>{option}</Select.Option>
                                         ))}

@@ -119,7 +119,7 @@ const AddAddress = (props : any) =>{
                         <div className="pt-20 pb-20 pr-0">
                             <Button className="mr-20" onClick={handleCancel}>Cancel</Button>
                             <Button className="ant-btn primary mr-21" onClick={() => {
-                                props.addAddress({
+                                props?.addAddress({
                                     name : name,
                                     mobileNumber : mobileNumber,
                                     email : email,
@@ -136,13 +136,13 @@ const AddAddress = (props : any) =>{
                                     isDefault : 0,
                                 });
                                 handleCancel();
-                                props.closeModal();
+                                props?.closeModal();
                                 }}>Save Chages</Button>
                         </div>} 
                     visible={chooseModal} onOk={handleOk} onCancel={handleCancel}>
                         {
                             chooseModalName === "mark-on-map" ? 
-                            <AddressByMap address={setAddress} houseNumber={setHouseNumber} state={setState} streetNumber={setStreetNumber} add1={setAdd1} add2={setAdd2} city={setCity} country={setCountry} pincode={setPincode} lat={setLatitude} long={setLongitude} addAddress={props.addAddress}></AddressByMap> 
+                            <AddressByMap address={setAddress} houseNumber={setHouseNumber} state={setState} streetNumber={setStreetNumber} add1={setAdd1} add2={setAdd2} city={setCity} country={setCountry} pincode={setPincode} lat={setLatitude} long={setLongitude} addAddress={props?.addAddress}></AddressByMap> 
                             : 
                             <AddAddress></AddAddress>
 
