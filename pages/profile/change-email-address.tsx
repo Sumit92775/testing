@@ -95,9 +95,7 @@ const ChangeEmail = (props:any) =>{
             OTP: `${formData.otp1}${formData.otp2}${formData.otp3}${formData.otp4}`
         })
         .then(res => {
-            if(res.statusCode == 404) {
-                message.error( 'Invalid OTP!' );
-            } else {
+            if(res.status) {
                 message.config({duration: 5, top: 60});
                 message.success( 'OTP Verified!' );
                 props?.setEmail(nEmail);
@@ -115,6 +113,8 @@ const ChangeEmail = (props:any) =>{
                 })        
                 setNewEmailSetted(false);
                 props.cancelModal();
+            } else {
+                message.error( 'Invalid OTP!' );
             }
         })
         .catch(error => {
@@ -138,7 +138,7 @@ const ChangeEmail = (props:any) =>{
 
             <div className={styles['container']}>
                 <Form>
-                    <Form.Item initialValue={nEmail}  name={['email']} hasFeedback label="Store Email" validateTrigger={['onBlur']} rules={[
+                    <Form.Item initialValue={nEmail}  name={['email']} hasFeedback label="New Email" validateTrigger={['onBlur']} rules={[
                         { validator: checkEmail },
                         ]}>
                         <Input placeholder="ex:halais" />

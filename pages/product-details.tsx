@@ -75,7 +75,7 @@ const handleCancel = () => {
 const openModal = (type : any) => {
 
     console.log(type);
-    setSelectedModal(!selectedModal      );
+    setSelectedModal(!selectedModal);
 
     switch(type){
         case "Edit Preferences" : setSelectedModalName("Edit Preferences");
@@ -132,7 +132,7 @@ const resetUI = () =>{
         <CustomerLayout>
             <div className={styles['container']}>
                 <div className={styles['left-container']}>
-                    <ShoppingCard modal={openModal} setCartItemList={cartItemList} resetUI={resetUI}  setFinalList={setFinalList}></ShoppingCard>
+                    <ShoppingCard modal={openModal} cartList={cartItemList} resetUI={resetUI}  finalList={setFinalList}></ShoppingCard>
                     <div>
                         <DefaultAddress></DefaultAddress>
                     </div>
@@ -143,7 +143,7 @@ const resetUI = () =>{
                 </div>
                 <div className={styles['right-container']}>
                     <OrderFrom></OrderFrom>
-                    <PaymentSummary ></PaymentSummary>
+                    <PaymentSummary orderItemList={total} newPrice={totalCost}></PaymentSummary>
                 </div>
             </div>
                 <Modal style={{borderRadius :"15px", overflow : "hidden",width : "fit-content"}} title={

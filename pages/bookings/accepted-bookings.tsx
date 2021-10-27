@@ -7,6 +7,7 @@ import styles from '../../components/Bookings/Style.module.scss';
 import cx from 'classnames';
 import { bookings } from '../../services/bookings';
 import MapView from '../../components/Bookings/MapView';
+import CancelBookingModal from './cancelBookingModal';
 
 const AcceptedBookings = () => {
     const [modal, setModal] = useState(false);
@@ -139,7 +140,9 @@ const AcceptedBookings = () => {
                     <Menu className="table-action-btn" mode="horizontal">
                         <Menu.SubMenu key="SubMenu" title="">
                             <Menu.Item key="Accept" className="txt dark1" onClick={() =>openModal("Reschedule")} icon={<span className="material-icons">done</span>}>Rechudule</Menu.Item>
-                            <Menu.Item key="Reject" className="txt danger" onClick={ () => openModal("Reason") } icon={<span className="material-icons">cancel</span>}>Cancel Bookings</Menu.Item>
+                            <Menu.Item key="Reject" className="txt danger" onClick={ () => {
+                                handleCancelBooking;
+                                openModal("Cancel Booking")} } icon={<span className="material-icons">cancel</span>}>Cancel Bookings</Menu.Item>
                         </Menu.SubMenu>
                     </Menu>
                 </>
@@ -302,6 +305,13 @@ const AcceptedBookings = () => {
         }
     } 
      
+    const handleCancelBooking = () =>{
+        try{
+            // cancelBooking()
+        }catch(error: any){
+            message.error(error);
+        }
+    }
     const openModal = (type :any) => {
         setModal(true);
         setModalName(type);
@@ -350,7 +360,7 @@ const AcceptedBookings = () => {
                 }} columns={columns} />
 
             <Modal width="500px" 
-                title={ modalName === "Reschedule" ?<><h3 className="txt primary">Reschedule</h3></> : modalName === "Change Address" ?<><h3 className="txt primary">Change Address</h3></> : <><p className="mb-10"><strong className="txt primary fz-30">Reason</strong></p><strong>Reject booking from ehsaan?</strong><p>ID: SP15912501</p></> }
+                title={ modalName === "Reschedule" ?<><h3 className="txt primary">Reschedule</h3></> : modalName === "Cancel Booking" ?<><h3 className="txt primary">Cancel Booking</h3></> : modalName === "Change Address" ?<><h3 className="txt primary">Change Address</h3></> : <><p className="mb-10"><strong className="txt primary fz-30">Reason</strong></p><strong>Reject booking from ehsaan?</strong><p>ID: SP15912501</p></> }
                 footer={
                 modalName === "Reschedule" ? 
                 <>
@@ -364,6 +374,14 @@ const AcceptedBookings = () => {
                 <>
                 </> 
                 :
+                modalName === "Cancel Booking" ? 
+                <>
+                    <div style={{ paddingBlock: '18px' }}>
+                        <Button className="" onClick={handleCancel}>Cancel</Button>
+                        <Button className="txt primary">Confirm</Button>
+                    </div>
+                </> 
+                :
                     <div style={{ paddingBlock: '18px' }}>
                         <Button className="primary ghost">Cancel</Button>
                         <Button className="danger">Reject Booking</Button>
@@ -375,6 +393,9 @@ const AcceptedBookings = () => {
                     :
                     modalName === "Change Address" ? 
                      <MapView storeAddress={bookingAddress}/>
+                    :
+                    modalName === "Cancel Booking" ? 
+                     <CancelBookingModal />
                     :
                     <Input.TextArea rows={4} />
                     }

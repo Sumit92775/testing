@@ -3,33 +3,40 @@ import React, { useEffect, useState } from 'react';
 import { myOrders } from '../../services/items';
 import styles from '../../styles/components/Product-Details.module.scss'
 
-const PaymentSummary = (props: any) =>{
+const PaymentSummary = ({orderItemList, newPrice}) =>{
  
         const [totalCost, setTotalCost] = useState(0);
+        const [orderItemList1, setOrderItemlist1] = useState([]);
+        // const [totalPrice, setTotalPrice] = useState(0);
+        useEffect(() =>{
+          // if(props.orderItemList)
+          // let orderItemList = orderItemList;
 
-        
-      //   useEffect(() =>{
-      //     // if(props.orderItemList)
-      //     let orderItemList = props?.orderItemList;
 
-      //     let totalPrice = 0;
+          setOrderItemlist1(orderItemList);
+          setTotalCost(newPrice);
 
-      //     for(let i = 0 ; i < orderItemList.length ; i++){
-      //       let qty = orderItemList[i].qty;
-      //       let price = orderItemList[i].Service.price;
-      //       totalPrice+=qty*price;
-      //     }
+          let totalPrice = 0;
 
-      //     console.log("TotalPrice: ",totalPrice);
-      //     setTotalCost(totalPrice);
+          // for(let i = 0 ; i < orderItemList1.length ; i++){
+          //   let qty = orderItemList1[i].qty;
+          //   let price = orderItemList1[i].Service.price;
+          //   totalPrice+=qty*price;
+          // }
 
-      // },[]);
+          console.log("TotalPrice: ",totalPrice);
+          // setTotalCost(totalPrice);
+
+      },[orderItemList]);
       
 
     const handleCheckoutNewOrder = () =>{
 
-      let services = props?.orderItemList;
-      console.log("Payment Summary: ",props?.orderItemList);
+      
+
+      let services = orderItemList1;
+      // console.log("Payment Summary: ",props?.orderItemList);
+      console.log("Payment Summary: ",orderItemList1);
       if(services == undefined || services.length == 0 || services == null){
         message.error("Cart is empty");
       }else{
@@ -63,9 +70,9 @@ const PaymentSummary = (props: any) =>{
             services: makeServiceArray,
             price: totalPrice
           }).then(res =>{
-            console.log(res);
+            console.log("Bookings: ",res);
           })
-        }catch(error: any){
+        }catch(error){
           message.error(error);
         }
 
@@ -77,11 +84,10 @@ const PaymentSummary = (props: any) =>{
 
     return(
         <div className="card card2 pt-20 pl-15 pr-15">
-            {/* <h5>Payment Summary</h5>
+            <h5>Payment Summary</h5>
             
             
-            {props?.orderItemList.map((obj: any) =>{
-              
+            {orderItemList1.map((obj) =>{
               return(
                 <div key={`${obj}`}>
                   <div className={styles['t1-container']}>
@@ -107,7 +113,7 @@ const PaymentSummary = (props: any) =>{
             
             <div className={styles['t1-container']} style={{marginBlockStart : "15px !important"}}>
                 <h5>Sub Total</h5>
-                <h5>${props?.newPrice}</h5>
+                <h5>${totalCost}</h5>
             </div>
 
 
@@ -117,10 +123,10 @@ const PaymentSummary = (props: any) =>{
             <div className={styles['t1-container']} style={{marginBlockStart : "5px !important"}}>
                 <Input></Input>
                 <Button className="primary" >Apply</Button>
-            </div> */}
+            </div>
 
             <Divider className="mt-19 mb-25"></Divider>
-            <Button className="primary full-width" style={{borderRadius : "8px"}} onClick={() => handleCheckoutNewOrder}>Checkout</Button>
+            <Button className="primary full-width" style={{borderRadius : "8px"}} onClick={handleCheckoutNewOrder}>Checkout</Button>
         </div>
     )
 }

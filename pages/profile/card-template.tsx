@@ -123,7 +123,7 @@ const CardTemplate = (props : any) =>{
                         }
                     visible={chooseModal} onOk={handleOk} onCancel={handleCancel}>
                         {
-                            <EditGeneralDetails setGender={setGender} setFirstName={setfirstName} setLastName={setLastName} setDob={setDob}></EditGeneralDetails>
+                            <EditGeneralDetails setGender={setGender} setFirstName={setfirstName} setLastName={setLastName} setDob={setDob} firstName={props?.itemList?.firstName} lastName={props?.itemList?.lastName} dob={props?.itemList?.dateOfBirth} gender={props?.itemList?.gender}></EditGeneralDetails>
                         }
                     </Modal>
     </div>

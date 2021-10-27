@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { DatePicker, Form, Input, Select } from 'antd';
+import { DatePicker, Form, Input, message, Select } from 'antd';
+import useTranslation from 'next-translate/useTranslation';
 
 const { Option } = Select;
 
 const EditGeneralDetails = (props: any) => {
 
- 
+    const { t } = useTranslation('validator');
+    const [form] = Form.useForm();
     
     function handleChange(value: any) {
         console.log(`selected ${value}`);
@@ -39,25 +41,63 @@ const EditGeneralDetails = (props: any) => {
         props.setDob(dateString);
       }
 
+      const  checkUserName = (rule: any, value: any, callback: any) => {
+        let name = value;
+        if(name.charAt(0) === ' '){
+            callback(t('First character never be space', {field: 'First Name'}));
+        }else{
+            for(let i = 0 ; i < name.length ; i++){
+                let ch = name.charAt(i);
+                if(parseInt(ch)){
+                    callback('Integer not allowed', {field: 'First Name'})
+                }else{
+                    callback();
+                }
+            }
+        }
+    };
+      
+    const  checkLastName = (rule: any, value: any, callback: any) => {
+        let name = value;
+        if(name.charAt(0) === ' '){
+            callback(t('First character never be space', {field: 'First Name'}));
+        }else{
+            for(let i = 0 ; i < name.length ; i++){
+                let ch = name.charAt(i);
+                if(parseInt(ch)){
+                    callback('Integer not allowed', {field: 'First Name'})
+                }else{
+                    callback();
+                }
+            }
+        }
+    };
+
     return(
         <div>
             <Form>
                 <Form.Item>
                     <div className="grid-view grid-2 colgap-30">
-                        <Form.Item label="First Name">
-                            <Input value={props.firstName} maxLength={20} onChange={(event) =>props.setFirstName(event.target.value)}></Input>
+                        <Form.Item name={['userName']}  label="First Name" validateTrigger={['onBlur']} rules={[
+                            { required: false, message: t('required', {field: 'First Name'}) },
+                            { validator: checkUserName },
+                            ]}>
+                            <Input placeholder={props.firstName} maxLength={20} onChange={(event) =>props.setFirstName(event.target.value)}></Input>
                         </Form.Item>
                         
-                        <Form.Item className="mt-10" label="Last Name">
-                            <Input value={props.lastName} maxLength={30} onChange={(event) =>props.setLastName(event.target.value)}></Input>
+                        <Form.Item  name={['lastName']}  label="Last Name" validateTrigger={['onBlur']} rules={[
+                            { required: false, message: t('required', {field: 'Last Name'}) },
+                            { validator: checkLastName },
+                            ]}>
+                            <Input placeholder={props.lastName} maxLength={30} onChange={(event) =>props.setLastName(event.target.value)}></Input>
                         </Form.Item>
                     </div>
                 </Form.Item>
                 
-                <Form.Item>
+                <Form.Item className="mt-10">
                     <div className="grid-view grid-2 colgap-30">
                         <Form.Item className="mt-10" label="Date of Birth">
-                            <DatePicker onChange={onChange} />
+                            <DatePicker placeholder={props.dob} onChange={onChange} />
                             {/* <Input value={props.dob} onChange={(event) => props.setDob(event.target.value)}></Input> */}
                         </Form.Item>
 

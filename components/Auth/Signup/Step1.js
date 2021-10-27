@@ -1,65 +1,3 @@
-// import { Form, Input, Button, Radio, Checkbox, Select } from 'antd';
-// import React, { useState } from 'react';
-// import { RequiredMark } from 'antd/lib/form/Form';
-// import { useDispatch } from 'react-redux';
-// import { next } from '../../../actions/signup';
-
-// const Step1 = () => {
-//     const [form] = Form.useForm(),
-//     dispatch = useDispatch(),
-
-//     nextStep = () => {
-//         dispatch(next());
-//     }
-
-//     return (
-//         <>
-//             <div>
-//                 <div className="content-wrapper table mb-56">
-//                     <h4 className="center-text mt-67 mb-67">Register To Sell Via Saloon Plus</h4>
-//                     <Form
-//                         className="grid-view grid-2 colgap-42 rowgap-24"
-//                         form={form}
-//                         layout="vertical">
-//                         <Form.Item className="span-2" label="Store Name">
-//                             <Input placeholder="ex:halais" />
-//                         </Form.Item>
-//                         <Form.Item label="Store Email">
-//                             <Input placeholder="ex:halais" />
-//                         </Form.Item>
-//                         <Form.Item className="phone-number" label="Store Mobile Number">
-//                             <Select placeholder="+91">
-//                                 <Select.Option value="+91">+91</Select.Option>
-//                             </Select>
-//                             <Input placeholder="ex:9385738374" />
-//                         </Form.Item>
-//                         <Form.Item label="Password">
-//                             <Input type="password" placeholder="Password" />
-//                         </Form.Item>
-//                         <Form.Item label="Confirm Password">
-//                             <Input type="password" placeholder="Password" />
-//                         </Form.Item>
-//                         <Form.Item className="span-2">
-//                             <Checkbox>Receive promotional emails &amp; Updates</Checkbox>
-//                         </Form.Item>
-//                         <div className="span-2 center">
-//                             <Button className="primary full-width" onClick={nextStep}>Save &amp; Continue</Button>
-//                             <p className="mt-14">
-//                                 By Signing Up you agree with the <strong><a>terms and conditions</a></strong> of Saloon Plus to Register with the platform
-//                             </p>
-//                         </div>
-//                     </Form>
-//                 </div>
-//             </div>
-//             <section className="mt-100">
-//                 <div className="banner banner-3"></div>
-//             </section>
-//         </>
-//     )
-// }
-
-// export default Step1
-
 import React, { useState } from 'react';
 import { RequiredMark } from 'antd/lib/form/Form';
 import { useDispatch } from 'react-redux';
@@ -88,7 +26,7 @@ const Step1 = ({ onNext }) => {
     onFinish = (values) => {
         message.config({duration: 5, top: 60})
         const formData = {
-            userType: 2,
+            userType: 1,
             userName: values.userName,
             password: values.password,
             phoneNumber: values.phoneNumber,
@@ -136,20 +74,32 @@ const Step1 = ({ onNext }) => {
 
     checkUserName = (rule, value, callback) => {
         if(value) {
-            validateUserName({userName: value})
-            .then(res => {
-                if(res.status) {
-                    callback();
-                } else {
-                    callback('');
-                    message.error(t('value already taken', { value: value }));
+            let len = value.trim().length// 
+            if(len > 1){
+                let ch = value.charAt(0);
+                console.log("ch: ",ch);
+                if(ch === ' '){
+                    // console.log("Value: ",value);
+                    callback(t('first character not be space', {field: 'userName'}));
+                }else{
+                    validateUserName({userName: value})
+                    .then(res => {
+                        if(res.status) {
+                            callback();
+                        } else {
+                            callback('');
+                            message.error(t('value already taken', { value: value }));
+                        }
+                    })
                 }
-            })
+            }else{
+                callback(t('invalid username', {field: 'userName'}));
+            }
         } else {
             callback()
         }
     },
-
+    
     checkPhoneNumber = (rule, value, callback) => {
         if(form.getFieldsValue().phoneNumber) {
             if(form.getFieldsValue().countryCode) {
@@ -212,7 +162,7 @@ const Step1 = ({ onNext }) => {
                                     { required: true, message: t('required', {field: 'Store Mobile Number'}) },
                                     { validator: checkPhoneNumber }
                                     ]}>
-                                    <Input placeholder="ex:9385738374" />
+                                    <Input placeholder="ex:9385738374" maxLength={10}/>
                                 </Form.Item>
                             </div>
                         </div>

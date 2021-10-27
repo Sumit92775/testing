@@ -63,7 +63,8 @@ const ShoppingItem = (props : any) =>{
                             }).then(res =>{
                                 props?.setUpdatedService(index, qty)
                                 console.log("Response Response: ",res);
-                                // let oldServiceArray = props.serviceArray;
+                                let oldServiceArray = props.serviceArray;
+                                // props.resetUI;
                                 // props.setUpdatedService(index, qty)
                                 
                             })
@@ -99,7 +100,6 @@ const ShoppingItem = (props : any) =>{
                 <span className={styles['align']}>by <strong>{props?.itemObject?.Service?.Store?.storeName}</strong></span>
                 <div className={styles['q-container']}>
                     
-                {/* <InputNumber min={1} max={10} contentEditable={false} defaultValue={props?.itemObject?.qty} /> */}
                 <InputNumber min={1} max={10} contentEditable={false} defaultValue={props?.itemObject?.qty} onChange={(event) => {
                     handelEditQuantity(event, props?.itemObject?.id);}} />
                 </div>

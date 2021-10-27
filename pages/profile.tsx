@@ -123,6 +123,11 @@ const openModal = (type : any) => {
           }
       }
 
+
+      const resetUI = (edittedDetails: any) =>{
+          setAdditionDetailsObject(edittedDetails);
+      }
+
     return(
         <CustomerLayout>
         <div className={styles['main-container']}>
@@ -164,7 +169,7 @@ const openModal = (type : any) => {
                         </div>
                     </div>
                 
-                    <AdditionalDetails details={additionDetailsObject} setAdditionDetailsObject={setAdditionDetailsObject}/>
+                    <AdditionalDetails details={additionDetailsObject} setAdditionDetailsObject={setAdditionDetailsObject} resetUI={resetUI}/>
 
                     <Card7AddAddress modal={openModal} title={setchooseModalTitle} addressArray={props?.data}/>
                 </div>

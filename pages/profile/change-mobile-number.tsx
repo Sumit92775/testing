@@ -12,6 +12,12 @@ const ChangeMobileNumber = (props: any) => {
     const [btnEnabled, setBtnEnabled] = useState(true);
     const [btnEnabled1, setBtnEnabled1] = useState(true);
     const [msg, setMsg] = useState("");
+     
+    const [otp1, setOtp1] = useState("");
+    const [otp2, setOtp2] = useState("");
+    const [otp3, setOtp3] = useState("");
+    const [otp4, setOtp4] = useState("");
+
 
     const [number, setNumber] = useState("");
     const { t } = useTranslation('validator');
@@ -87,30 +93,36 @@ const ChangeMobileNumber = (props: any) => {
 
     const reVerifyOTP = () => {
         const formData = form.getFieldsValue();
+        setOtp1(formData.otp1);
+        setOtp2(formData.otp2);
+        setOtp3(formData.otp3);
+        setOtp4(formData.otp4);
+
+
+        // const formData = form.getFieldsValue();
         verifyPhoneOTP({
             phoneNumber: number,
             OTP: `${formData.otp1}${formData.otp2}${formData.otp3}${formData.otp4}`
         })
         .then(res => {
-            if(res.statusCode == 404) {
-                message.error( 'Invalid OTP!' );
-            } else {
+            if(res.status) {
                 message.config({duration: 5, top: 60});
                 message.success( 'OTP Verified!' );
                 props?.setMobileNumber(number);
                 setNumber("");
-                // setNumber("");
                 form.setFieldsValue({phoneNumber: ""});
                 form.setFieldsValue({otp1: ""});
                 form.setFieldsValue({otp2: ""});
                 form.setFieldsValue({otp3: ""});
                 form.setFieldsValue({otp4: ""});
-                setMsg("")
+                setMsg("");
                 props.cancelModal();
                 setNewEmailSetted(false);
+            } else {
+                message.error( 'Invalid OTP!' );
             }
         })
-        .catch(error => console.error(error))
+        .catch(error => console.error(error));
     }
 
     const onKeyPress = (e: any) => {
@@ -134,7 +146,7 @@ const ChangeMobileNumber = (props: any) => {
                         layout="vertical">
                    <Form.Item>
                    <div className="phone-number grid-view">
-                                <Form.Item className="full no-control mb-5" name={['countryCode']} label="Store Mobile Number" rules={[{ required: true }]}>
+                                <Form.Item className="full no-control mb-5" name={['countryCode']} label="New Mobile Number" rules={[{ required: true }]}>
                                     
                                 </Form.Item>
                                 <Form.Item name={['countryCode']}  validateTrigger={['onSelect']} rules={[
@@ -147,7 +159,7 @@ const ChangeMobileNumber = (props: any) => {
                                 <Form.Item initialValue={number} name={['phoneNumber']} hasFeedback validateTrigger={['onBlur']} rules={[
                                     { validator: checkPhoneNumber },
                                     ]}>
-                                    <Input defaultValue="8687" onChange={(event) => console.log(event)
+                                    <Input defaultValue="8687" maxLength={10} onChange={(event) => console.log(event)
                                     } placeholder="ex:9385738374" />
                                 </Form.Item>
                             </div>

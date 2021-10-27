@@ -13,7 +13,7 @@ const AdditionalDetails = (props : any) =>{
     const [chooseModal, setchooseModal] = useState(false);
     const [timezone, setTimeZone] = useState("");
     const [dateformat, setDateFormat] = useState("");
-    const [chooseemailorsms, setChooseEmailOrSms] = useState("");
+    const [chooseemailorsms, setChooseEmailOrSms] = useState("1");
 
     const handleOk = (evt : any) => {
         console.log('ok clicked', evt)
@@ -34,8 +34,8 @@ const AdditionalDetails = (props : any) =>{
         editAdditionDetails({
             "dateFormat": dateformat,
             "timeZone": timezone,
-            "EmailNotify": chooseemailorsms === "1" ? "1" : "0",
-            "smsNotify": chooseemailorsms === "2" ? "1" : "0",
+            "EmailNotify": chooseemailorsms === "1" ? '1' : '0',
+            "smsNotify": chooseemailorsms === "2" ? '1' : '0',
 
         }).then(res =>{
             if(res?.status == true){
@@ -44,12 +44,21 @@ const AdditionalDetails = (props : any) =>{
                 setDateFormat("");
                 setTimeZone("");
                 setChooseEmailOrSms("");
+
+                console.log(props?.details?.updatedAt);
+                
+                // props.resetUI({
+                //     "dateFormat": dateformat,
+                //     "timeZone": timezone,
+                //     "EmailNotify": chooseemailorsms === "1" ? '1' : '0',
+                //     "smsNotify": chooseemailorsms === "2" ? '1' : '0',
+                // })
                 props.setAdditionDetailsObject({
                     "dateFormat": dateformat,
                     "timeZone": timezone,
-                    "EmailNotify": chooseemailorsms === "1" ? "1" : "0",
-                    "smsNotify": chooseemailorsms === "2" ? "1" : "0",
-        
+                    "EmailNotify": chooseemailorsms === "1" ? '1' : '0',
+                    "smsNotify": chooseemailorsms === "2" ? '1' : '0',
+                    "updatedAt" : props?.details?.updatedAt
                 });
             }else{
                 message.error(res.message);
@@ -95,7 +104,7 @@ const AdditionalDetails = (props : any) =>{
                             
                             <div>
                                 <strong>{"Notification Preference"}</strong>
-                                <span>{"Email"}</span>
+                                <span>{props?.details?.smsNotify === '1' ? "SMS" : "EMAIL"}</span>
                                 {/* <span>{props?.itemList.userName}</span> */}
                             </div>
               
@@ -135,31 +144,36 @@ const AdditionalDetails = (props : any) =>{
             visible={chooseModal} onOk={handleOk} onCancel={handleCancel}>
                 {
                     <Form>
-                        <Form.Item className="mb-15" label="Timezone">
-                            <Select value={timezone} onSelect={(event) => {setTimeZone(`${event}`);
-                        console.log("Timezone: ",event);
-                        }}>
-                                <Option value="1">11</Option>
-                                <Option value="2">22</Option>
-                                <Option value="3">33</Option>
-                            </Select>
+                        <Form.Item>
+                            <div className="grid-view grid-2 colgap-20">
+                                <Form.Item className="mb-15" label="Timezone">
+                                    <Select value={timezone} onSelect={(event) => {setTimeZone(`${event}`);
+                                console.log("Timezone: ",event);
+                                }}>
+                                        <Option value="1">11</Option>
+                                        <Option value="2">22</Option>
+                                        <Option value="3">33</Option>
+                                    </Select>
+                                </Form.Item>
+                        
+                                <Form.Item className="mb-15" label="Date Format">
+                                    <Select value={dateformat} onSelect={(event) => {setDateFormat(`${event}`);
+                                console.log("Dateformat:",event);
+                                }}>
+                                        <Option value="YYYY-MM-DD">YYYY-MM-DD</Option>
+                                        <Option value="MM-DD-YYYY">MM-DD-YYYY</Option>
+                                        <Option value="DD-MM-YYYY">DD-MM-YYYY</Option>
+                                    </Select>
+                                </Form.Item>
+                            </div>
                         </Form.Item>
                         
-                        <Form.Item className="mb-15" label="Date Format">
-                            <Select value={dateformat} onSelect={(event) => {setDateFormat(`${event}`);
-                        console.log("Dateformat:",event);
-                        }}>
-                                <Option value="YYYY-MM-DD">YYYY-MM-DD</Option>
-                                <Option value="MM-DD-YYYY">MM-DD-YYYY</Option>
-                                <Option value="DD-MM-YYYY">DD-MM-YYYY</Option>
-                            </Select>
-                        </Form.Item>
                         
-                        <Form.Item className="mb-15" label="Set Notification Preferences">
+                        <Form.Item className="mb-15 mt-20" label="Set Notification Preferences">
                             
                             <Radio.Group defaultValue={chooseemailorsms} onChange={onChange} value={value}>
-                                <Radio value={1}>EMAIL</Radio>
-                                <Radio value={2}>SMS</Radio>
+                                <Radio value={'1'}>EMAIL</Radio>
+                                <Radio value={'2'}>SMS</Radio>
                             </Radio.Group>
 
                         </Form.Item>

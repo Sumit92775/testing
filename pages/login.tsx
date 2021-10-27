@@ -33,7 +33,7 @@ export default function Search(props:any) {
     },
     onFinish = (values: any) => {
         login({
-            userType: 2,
+            userType: 1,
             userName: values.userName,
             password: values.password
         })

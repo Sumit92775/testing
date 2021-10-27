@@ -49,6 +49,7 @@ function AddressByMap(props : any) {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [state, setState] = useState("");
+  const [additionalNumber, setAdditionalNumber] = useState("");
 
     // console.log(props);
 
@@ -385,7 +386,7 @@ function AddressByMap(props : any) {
                   <div className="grid-view grid-2 colgap-30 rowgap-20">
                     
                     <Form.Item className="mb-10" label="Name" required={true}>
-                      <Input value={name} type="text" maxLength={80} onChange={(event : any) => setName(event.target.value)}></Input>
+                      <Input value={name} type="text" maxLength={70} onChange={(event : any) => setName(event.target.value)}></Input>
                     </Form.Item>
 
                     <Form.Item className="mb-10" name={['email']} hasFeedback label="Email" validateTrigger={['onBlur']} rules={[
@@ -419,8 +420,8 @@ function AddressByMap(props : any) {
                   </Form.Item>
                   <Form.Item>
                     <div className="grid-view grid-2 colgap-20">
-                      <Form.Item label="City" required={true}>
-                        <Input value={city} maxLength={25} onChange={(event : any) => setCity(event.target.value)} contentEditable="true"></Input>
+                      <Form.Item label="Additional Number" >
+                        <Input value={additionalNumber} maxLength={10} onChange={(event) => setAdditionalNumber(event.target.value)}></Input>
                       </Form.Item>
                       <Form.Item label="Pincode" required={true}>
                         <Input value={pinCode} onChange={(event : any) => setPinCode(event.target.value)}></Input>
@@ -429,6 +430,9 @@ function AddressByMap(props : any) {
                   </Form.Item>
                   <Form.Item>
                     <div className="grid-view grid-2 colgap-20">
+                      <Form.Item label="City" required={true}>
+                        <Input value={city} maxLength={25} onChange={(event : any) => setCity(event.target.value)} contentEditable="true"></Input>
+                      </Form.Item>
                       <Form.Item label="Country" required={true}>
                         <Input value={country} maxLength={20}></Input>
                       </Form.Item>
@@ -488,7 +492,7 @@ function AddressByMap(props : any) {
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}
-                zoom={5}
+                zoom={10}
                 onLoad={map => {
                   const bounds = new window.google.maps.LatLngBounds();
                   map.fitBounds(bounds);
