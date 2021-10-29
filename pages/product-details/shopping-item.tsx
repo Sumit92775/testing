@@ -19,7 +19,7 @@ const ShoppingItem = (props : any) =>{
                 if(res.status){
                     props?.resetUI();
                 }else{
-
+                    props?.resetUI();
                 }
 
             }).catch(error =>{
@@ -111,7 +111,7 @@ const ShoppingItem = (props : any) =>{
                            </span>
                        ) 
                     })}
-                    <DeleteFilled style={{fontSize : "20px", color : "var(--red-1)"}} onClick={() =>handleDelete(props?.itemObject?.id)}/>
+                    <DeleteFilled style={{fontSize : "20px", color : "var(--red-1)", position: 'absolute', right: "0px"}} onClick={() =>handleDelete(props?.itemObject?.id)}/>
                 </div>
                 <span className="mt-3">Date &amp; Time: <strong>{props?.itemObject?.addedToCartAt}</strong></span>
                 <span className="mt-3 mb-0" onClick={()=>props.modal("Edit Preferences")}><EditFilled></EditFilled>Edit  Preferences</span>

@@ -5,9 +5,10 @@ const { RangePicker } = DatePicker;
 import { LocationOnOutlined } from '@material-ui/icons';
 import styles from '../../components/Bookings/Style.module.scss';
 import cx from 'classnames';
-import { bookings } from '../../services/bookings';
+import { bookings, cancelBookingRequest, confirmBookingCancel, confirmRescheduleBooking, reschedulingBookingRequest } from '../../services/bookings';
 import MapView from '../../components/Bookings/MapView';
 import CancelBookingModal from './cancelBookingModal';
+import ReschedulingBookingRequest from './reschedulingBookingModal';
 
 const AcceptedBookings = () => {
     const [modal, setModal] = useState(false);
@@ -18,6 +19,14 @@ const AcceptedBookings = () => {
     const [totalBookings, setTotalBookings] = useState([] as any);
     const [dataSource, setDataSource] = useState([] as any);
     const [bookingAddress, setBookingAddress] = useState([]);
+    
+    const [cancelbookingObject, setCancelbookingObject] = useState({});
+    const [cancelBookingId, setCancelBookingId] = useState(0);
+    
+    const [reschedulingId, setReschedulingId] = useState(0);
+    const [reschedulingFee, setReschedulingFee] = useState(0);
+    const [reschedulingObject, setReschedulingObject] = useState({});
+    const [newReschedulingDate, setNewReschedulingDate] = useState('');
 
     const status = ['Pending', 'Rescheduled'];
     const columns = [
@@ -135,14 +144,18 @@ const AcceptedBookings = () => {
             title: 'actions',
             dataIndex: 'actions',
             key: 'actions',
-            render: function action() {
+            render: function action(id: any) {
                 return <>
                     <Menu className="table-action-btn" mode="horizontal">
                         <Menu.SubMenu key="SubMenu" title="">
-                            <Menu.Item key="Accept" className="txt dark1" onClick={() =>openModal("Reschedule")} icon={<span className="material-icons">done</span>}>Rechudule</Menu.Item>
+                            <Menu.Item key="Accept" className="txt dark1" onClick={() =>{
+                        handelRescheduleBooking(id);
+                        setReschedulingId(id);
+                        }} icon={<span className="material-icons">done</span>}>Rechudule</Menu.Item>
                             <Menu.Item key="Reject" className="txt danger" onClick={ () => {
-                                handleCancelBooking;
-                                openModal("Cancel Booking")} } icon={<span className="material-icons">cancel</span>}>Cancel Bookings</Menu.Item>
+                                handleCancelBooking(id);
+                                setCancelBookingId(id);
+                            }} icon={<span className="material-icons">cancel</span>}>Cancel Bookings</Menu.Item>
                         </Menu.SubMenu>
                     </Menu>
                 </>
@@ -150,6 +163,11 @@ const AcceptedBookings = () => {
         },
 
     ];
+
+    message.config({
+        duration: 5,
+        top: 100
+    })
 
     useEffect(() =>{
         try{
@@ -161,7 +179,6 @@ const AcceptedBookings = () => {
                     console.log("Bookings Response: ",res);
                     let dataSource:any[] = Array();
                     setTotalBookings(res.bookings);
-
                     for(let i = 0; i < res.bookings.length; i++) {
                         let serviceType="";
 
@@ -174,7 +191,7 @@ const AcceptedBookings = () => {
                             return true;
                             });
                             
-                        //   console.log("Filtered Cart Properties: ",distinctArrObj);
+                          console.log("Filtered Cart Properties: ",distinctArrObj);
 
                         for(let i = 0 ; i < distinctArrObj.length ; i++){
                             if(i == distinctArrObj.length-1){
@@ -187,18 +204,12 @@ const AcceptedBookings = () => {
                         // console.log("ServiceType: ", serviceType);
                         
                         setBookingAddress(res.bookings[i].Service.Store.Addresses);
-
+                        
                         let address = "";
-                        for(let i = 0 ; i < res.bookings[i].Service.Store.Addresses.length ; i++){
-                            if(i == res.bookings[i].Service.Store.Addresses.length - 1 ){
-                                address+=res.bookings[i].Service.Store.Addresses[i].add1+", ";
-                                address+=res.bookings[i].Service.Store.Addresses[i].add2+", "
-                                address+=res.bookings[i].Service.Store.Addresses[i].city+", "
-                                address+=res.bookings[i].Service.Store.Addresses[i].zipCode;
-                            }else{
-                                address+=res.bookings[i].Service.Store.Addresses[i]+", ";
-                            }
-                        }
+                        address+=res.bookings[i].Service.Store.Addresses[0].add1+", ";
+                        address+=res.bookings[i].Service.Store.Addresses[0].add2+", "
+                        address+=res.bookings[i].Service.Store.Addresses[0].city+", "
+                        address+=res.bookings[i].Service.Store.Addresses[0].zipCode;
 
                         dataSource.push({
                             key: res.bookings[i].id,
@@ -212,7 +223,8 @@ const AcceptedBookings = () => {
                             // servicetype: 'In-Store',
                             spfee: res.bookings[i].storePlatformFee,
                             price: res.bookings[i].Service.price,
-                            status: res.bookings[i].BookingStatus
+                            status: res.bookings[i].BookingStatus,
+                            actions: res.bookings[i].id
                         })
                     }
 
@@ -303,20 +315,186 @@ const AcceptedBookings = () => {
         }catch(error: any){
             console.log(error);
         }
-    } 
-     
-    const handleCancelBooking = () =>{
+    }
+    
+    // cancellation
+
+    const handleCancelBooking = (id: any) =>{
         try{
             // cancelBooking()
+            cancelBookingRequest(id).then(res =>{
+                if(res.status){
+                    console.log("Status: ",res.status);
+                    setCancelbookingObject(res.info);
+                    openModal("Cancel Booking");
+                }else{
+                    console.log(res);
+                    message.error("Cancellation Not Allowed.");
+                }
+            })
         }catch(error: any){
             message.error(error);
         }
     }
+
+    const confirmCancelBooking = (id: any) =>{
+        try{
+            confirmBookingCancel(id).then(res => {
+                if(res.status){
+                    setCancelBookingId(0);
+                    setCancelbookingObject({});
+                    resetUI();
+                    handleCancel();
+                    message.success(res.message);
+                }else{
+                    console.log(res);
+                }
+            })
+        }catch(error: any){
+            message.error(error)
+        }
+    }
+
+    // rescheduling
+
+    const handelRescheduleBooking = (id: any) =>{
+        try{
+            reschedulingBookingRequest(id).then(res =>{
+                if(res.status){
+                    console.log(res.status);
+                    openModal("Reschedule");
+                    let rescheduleAmount = res.info.rescheduleFee;
+                    if(rescheduleAmount === 0){      
+                        setReschedulingObject({
+                            type: 'free',
+                        })
+                    }else{
+                        setReschedulingFee(rescheduleAmount);
+                        setReschedulingObject({
+                            type: 'paid',
+                            rescheduleFee: rescheduleAmount
+                        })
+                    }
+                }else{
+                    console.log(res);
+                    message.error('Rescheduling not allowed of this booking.')
+                }
+            })
+        }catch(error: any){
+            console.log("Error: ",error);
+        }
+    }
+
+    const confirmReschedulingBooking = (id: any) =>{
+        try{
+            confirmRescheduleBooking({
+                rescheduleId: id,
+                newBookingTime: newReschedulingDate,
+                comment: 'Ab Mat Karwaeo Reschedule'
+            }).then(res =>{
+                if(res.status){
+                    setReschedulingId(0);
+                    setReschedulingFee(0);
+                    setReschedulingObject({});
+                    setNewReschedulingDate('');
+                    resetUI();
+                    handleCancel();
+                    message.success(res.message);
+                }else{
+                    message.error(res.message)
+                }
+            })
+        }catch(error){
+            console.log("Error: ",error);
+        }
+    } 
+
     const openModal = (type :any) => {
         setModal(true);
         setModalName(type);
     };
 
+    // reset ui after successfully booking cancellation or booking rescheduling
+    
+    const resetUI = () => {
+        try{
+            bookings({
+                type: 1,
+                page: 1
+            }).then(res =>{
+                if(res.status){
+                    console.log("Bookings Response: ",res);
+                    let dataSource:any[] = Array();
+                    setTotalBookings(res.bookings);
+
+                    for(let i = 0; i < res.bookings.length; i++) {
+                        let serviceType="";
+
+                        // Remove redundant object from array
+                        let cartProperties = res.bookings[i].Cart.CartProperties;
+                        var duplicateRemover = new Set();
+                            var distinctArrObj = cartProperties.filter((obj: any) => {
+                            if (duplicateRemover.has(JSON.stringify(obj))) return false;
+                            duplicateRemover.add(JSON.stringify(obj));
+                            return true;
+                            });
+                            
+                          console.log("Filtered Cart Properties: ",distinctArrObj);
+
+                        for(let i = 0 ; i < distinctArrObj.length ; i++){
+                            if(i == distinctArrObj.length-1){
+                                serviceType+=distinctArrObj[i].value
+                            }else{
+                                serviceType+=distinctArrObj[i].value+", ";
+                            }
+                        }
+
+                        // console.log("ServiceType: ", serviceType);
+                        
+                        setBookingAddress(res.bookings[i].Service.Store.Addresses);
+
+                        console.log("Error: ",res.bookings[i].Service);
+                        
+                        let address = "";
+                        for(let i = 0 ; i < res.bookings[i].Service.Store.Addresses.length ; i++){
+                            if(i == res.bookings[i].Service.Store.Addresses.length - 1 ){
+                                address+=res.bookings[i].Service.Store.Addresses[i].add1+", ";
+                                address+=res.bookings[i].Service.Store.Addresses[i].add2+", "
+                                address+=res.bookings[i].Service.Store.Addresses[i].city+", "
+                                address+=res.bookings[i].Service.Store.Addresses[i].zipCode;
+                            }else{
+                                address+=res.bookings[i].Service.Store.Addresses[i]+", ";
+                            }
+                        }
+
+                        dataSource.push({
+                            key: res.bookings[i].id,
+                            bookingId: res.bookings[i].bookingId,
+                            // spname: res.bookings[i].Service.Store.storeName,
+                            spname: {spname: res.bookings[i].Service.Store.storeName, address: address},
+                            // address: "Jeddah Nazlah Dist...",
+                            date: res.bookings[i].BookingTime,
+                            time: res.bookings[i].BookingTime,
+                            service: {service: res.bookings[i].Service.primaryServiceName, type: serviceType},
+                            // servicetype: 'In-Store',
+                            spfee: res.bookings[i].storePlatformFee,
+                            price: res.bookings[i].Service.price,
+                            status: res.bookings[i].BookingStatus,
+                            actions: res.bookings[i].id
+                        })
+                    }
+
+                    setDataSource(dataSource);
+                    console.log("DatSource: ",dataSource);
+
+                }else{
+                    message.error(res.status);
+                }
+            })
+        }catch(error: any){
+            console.log(error);
+        }
+    }
 
     const handleCancel = () => {
         setModal(false);
@@ -339,9 +517,9 @@ const AcceptedBookings = () => {
             </Form>
 
             <div className="pull-right auto-width txt icon1" style={{ minWidth: '150px' }}>
-                <span className="material-icons fz-22 mr-5 lh-22 pull left">picture_in_picture</span>
+                {/* <span className="material-icons fz-22 mr-5 lh-22 pull left">picture_in_picture</span>
                 <span className="fz-12 lh-22 pull left">Calendar View</span>
-                <Switch className="default mt-4 ml-15 pull left" size="small" />
+                <Switch className="default mt-4 ml-15 pull left" size="small" /> */}
             </div>
 
             <Table locale={{
@@ -365,8 +543,8 @@ const AcceptedBookings = () => {
                 modalName === "Reschedule" ? 
                 <>
                     <div style={{ paddingBlock: '18px' }}>
-                        <Button className="">Cancel</Button>
-                        <Button className="txt primary">Confirm</Button>
+                        <Button className="" onClick={handleCancel}>Cancel</Button>
+                        <Button className="txt primary" onClick={() => confirmReschedulingBooking(reschedulingId)}>Confirm Rescheduling</Button>
                     </div>
                 </> 
                 :
@@ -378,24 +556,27 @@ const AcceptedBookings = () => {
                 <>
                     <div style={{ paddingBlock: '18px' }}>
                         <Button className="" onClick={handleCancel}>Cancel</Button>
-                        <Button className="txt primary">Confirm</Button>
+                        <Button className="txt primary" onClick={() => confirmCancelBooking(cancelBookingId)}>Confirm Cancel</Button>
                     </div>
                 </> 
                 :
                     <div style={{ paddingBlock: '18px' }}>
-                        <Button className="primary ghost">Cancel</Button>
+                        <Button className="primary ghost" onClick={handleCancel}>Cancel</Button>
                         <Button className="danger">Reject Booking</Button>
                     </div>
                 } visible={modal} onCancel={handleCancel}>
                     {
                     modalName === "Reschedule" ? 
-                     <RangePicker style={{width : "250px", height : "43px"}}/>
+                     <ReschedulingBookingRequest reschedulingDate={setNewReschedulingDate} reschedulingDetails={{
+                         reschedulingId: reschedulingId,
+                         reschedulingObject: reschedulingObject
+                     }} />
                     :
                     modalName === "Change Address" ? 
                      <MapView storeAddress={bookingAddress}/>
                     :
                     modalName === "Cancel Booking" ? 
-                     <CancelBookingModal />
+                     <CancelBookingModal cancelbookingDetails = {cancelbookingObject} />
                     :
                     <Input.TextArea rows={4} />
                     }

@@ -12,6 +12,7 @@ const config = {
     // api_url: 'https://reqres.in',
     date_format: 'DD MMM, YYYY',
     time_format: 'hh:mm A',
+    googleMapApi: 'AIzaSyBKowFDX0jDn687et4wgSmFpXiK-bj5Gj4',
     currency: '$'
   },
 

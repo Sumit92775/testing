@@ -22,11 +22,11 @@ const ShoppingCard = ({modal, cartList, resetUI, finalList }) =>{
             {/* modal={props?.modal} resetUI={props?.resetUI} itemObject={obj} */}
             <div className="card card2 pt-0 pl-0 mb-37">
                 <h4 className="ml-32 mt-20">Shopping Cart</h4>
+                {productDetailDataObj.length >= 1 ? 
                 <div>
-                    
                     {productDetailDataObj.map((obj) =>{
                         return(
-                            <div key={`${obj.id}`}>
+                            <div key={`${obj.id}`} style={{position: 'relative'}}>
                                 <ShoppingItem modal={modal} resetUI={resetUI} itemObject={obj} setUpdatedService={setUpdatedService}></ShoppingItem>
                                 {obj.id === cartList.length ? 
                                 <>
@@ -37,7 +37,12 @@ const ShoppingCard = ({modal, cartList, resetUI, finalList }) =>{
                             </div>
                         )
                     })}
-                </div>    
+                </div>
+                : 
+                <div style={{textAlign: "center"}}>
+                    <span><strong>Cart is Empty.</strong></span>
+                </div>
+                }
             </div>
             
             <Button style={{height : "60px"}} className="full-width mr-0 center-content"><span className="material-icons mr-5">add_circle_outline</span>Add Another Service</Button>

@@ -39,8 +39,8 @@ const DefaultAddress = (props : any) =>{
     
 
     return(
-        <div className="mt-54 mb-10 grid-view grid-1" style={{width : "300px"}}>
-            <div className="card card2 pl-10 pt-10 pr-10 pb-10">
+        <div className="mt-54 mb-10 grid-view grid-2" style={{width : "300px"}}>
+            <div className="card card2 pl-10 pt-10 pr-10 pb-10" style={{width: "300px"}}>
                 <div className="grid-view grid-1 rowgap-5">
                     <div className="grid-view auto-width grid-1 mb-5">
                         <h5>Default Address</h5>
@@ -68,7 +68,7 @@ const DefaultAddress = (props : any) =>{
            <>
            </> 
             : 
-            <Button style={{height : "60px", width : "fit-content"}} className="full-width mr-0 center-content ml-30" onClick={openModal}><span className="material-icons mr-5">add_circle_outline</span>Add Another Address</Button>
+            <Button style={{height : "60px", width : "fit-content"}} className="full-width center-content mr-0 ml-30 mt-80" onClick={openModal}><span className="material-icons mr-5">add_circle_outline</span>Add Another Address</Button>
            
             }
             <div className={ cx('ant-modal-body',styles['modal']) }>

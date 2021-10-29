@@ -157,7 +157,7 @@ export const myOrders = (object: any) =>{
     "PlatformCharges": 129,
     "taxes": 20,
     "totalOrderPrice": object.price,
-    "BookingTime": "2021-10-20 19:24:19",
+    "BookingTime": "2021-11-20 19:24:19",
     "giftCardID": [
       "GiftCard-Number1",
       "GiftCard-Number2"

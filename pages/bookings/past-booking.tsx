@@ -546,7 +546,7 @@ const PastBookings = () => {
                         
                     
                 }else{
-                    message.error(res.status);
+                    // message.error(res.status);
                 }
             })
         }catch(error: any){
@@ -581,9 +581,9 @@ const PastBookings = () => {
             </Form>
 
             <div className="pull-right auto-width txt icon1" style={{ minWidth: '150px' }}>
-                <span className="material-icons fz-22 mr-5 lh-22 pull left">picture_in_picture</span>
+                {/* <span className="material-icons fz-22 mr-5 lh-22 pull left">picture_in_picture</span>
                 <span className="fz-12 lh-22 pull left">Calendar View</span>
-                <Switch className="default mt-4 ml-15 pull left" size="small" />
+                <Switch className="default mt-4 ml-15 pull left" size="small" /> */}
             </div>
 
             <Table locale={{

@@ -2,10 +2,43 @@ import React, { useState, useEffect } from 'react';
 import PublicLayout from '../components/Public/Layout';
 import SearchResultCard from '../components/Cards/SearchResult';
 import SearchFilters from '../components/Cards/SearchFilter';
-import { Tree, Collapse, Select, Form, Switch, Divider } from 'antd';
-
+import { Tree, Collapse, Select, Form, Switch, Divider, message } from 'antd';
+import MapViewUser from '../components/Common/MapViewUser'
+import { getStoreByLocation } from '../services/home';
 const Search = () => {
+
     const [ map, toggleMap ] = useState(<div className="full mtn-25"></div>);
+    const [storeLatLong, setStoreLatLong] = useState([] as any);
+    
+    useEffect(() => {
+        try{
+            getStoreByLocation().then( res =>{
+                if(res.status){
+                    console.log("Response: ",res);
+                    if(res.data){
+                        let totalStores = res.data;
+                        let dataArray = [];
+                        for(let i = 0 ; i < totalStores.length ; i++){
+                            dataArray.push({
+                                lat: totalStores[i].latitude,
+                                lng: totalStores[i].longitude
+                            })
+                        }
+
+                        console.log("DataArray: ",dataArray);
+                        setStoreLatLong(dataArray);
+                    }
+
+                }else{
+
+                }
+            }).catch(error =>{
+
+            })
+        }catch(error: any){
+            message.error(error);
+        }
+    },[])
 
     let listing = [
         {
@@ -122,14 +155,15 @@ const Search = () => {
 
     const switchMap = (checked:boolean, event:Event) => {
         if(checked) {
-            toggleMap(<div className="full mtn-25"><div className="map-placeholder"></div></div>)
+            // toggleMap(<div className="full mtn-25"><div className="map-placeholder"></div></div>)
+            toggleMap(<div className="full mtn-25"><MapViewUser storeLatLong={storeLatLong}></MapViewUser></div>)
         } else {
             toggleMap(<div className="full mtn-25"></div>)
         }
     }
 
     return (
-        <PublicLayout >
+        <PublicLayout>
             <div className="search-page">
                 <div>
                     <SearchFilters />
