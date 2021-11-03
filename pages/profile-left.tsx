@@ -18,8 +18,6 @@ const ProfileLeft = () =>{
     const onImageChange = (event:any) => {
 
         console.log(event);
-        
-
         if (event.target.files && event.target.files[0]) {
           let reader = new FileReader();
           reader.onload = (e :any) => {

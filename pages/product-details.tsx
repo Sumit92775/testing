@@ -11,6 +11,8 @@ import { Button, Modal } from 'antd';
 import EditPreferences from './product-details/edit-preferences-modal';
 import cx from 'classnames';
 import { getItemInCart } from '../services/items';
+import { getNotifications } from '../services/notification';
+import { getCartStatus } from '../services/header';
 
 const ProductDetails = () =>{
    
@@ -19,7 +21,8 @@ const [selectedModal, setSelectedModal] = useState(false);
 const [subscriptionTiers, setSubscriptionTiers] = useState(false);
 
 const [cartItemList, setCartItemList] = useState([]);
-
+const [notificationCount, setNotificationCount] = useState(0);
+    const [cartItemCount, setCartItemCount] = useState(0);
 
 // Manish
 // Manish@123
@@ -57,11 +60,39 @@ useEffect(() =>{
         })
 
 
+        getNotifications(1).then(res =>{
+            if(res.status === 404 || res.status === 403 || res.status == false){
+                setNotificationCount(0);
+            }else{
+                setNotificationCount(res?.newNotifications);
+            }
+        }).catch(error =>{
+            console.log(error);
+        })
+
+        getCartStatus().then(res =>{
+            if(res.status == false || res.status == 404 || res.status == 403){
+                setCartItemCount(0);
+                console.log("ResponseCart: ",res);
+            }else{
+                if(res.data){
+                    console.log("Cart Count: ",res.data[0]);
+                    setCartItemCount(res.data[0].cartCount);
+                }else{
+
+                }
+            }
+        })
+
     }catch(error: any){
         console.log(error);
     }
     
 },[])
+
+
+
+
 
 const handleOk = (evt : any) => {
     console.log('ok clicked', evt)
@@ -119,20 +150,52 @@ const resetUI = () =>{
             }else{
                 console.log(res.status);
                 setCartItemList([]);
+                setTotal([]);
             }
         })
 
+        getNotifications(1).then(res =>{
+            if(res.status === 404 || res.status === 403 || res.status == false){
+                setNotificationCount(0);
+            }else{
+                setNotificationCount(res?.newNotifications);
+            }
+        }).catch(error =>{
+            console.log(error);
+        })
+
+        getCartStatus().then(res =>{
+            if(res.status == false || res.status == 404 || res.status == 403){
+                setCartItemCount(0);
+                console.log("ResponseCart: ",res);
+            }else{
+                if(res.data){
+                    console.log("Cart Count: ",res.data[0]);
+                    setCartItemCount(res.data[0].cartCount);
+                }else{
+
+                }
+            }
+        })
 
     }catch(error: any){
         console.log(error);
     }
 }
 
+const updateCardCount = (newValue: any) =>{
+    setCartItemCount(newValue);
+}
+
+const updateNotificationCount = (newValue: any) =>{
+    setNotificationCount(newValue)
+}
+
     return(
-        <CustomerLayout>
+        <CustomerLayout data={{cartCount: cartItemCount, notificationCount: notificationCount}}>
             <div className={styles['container']}>
                 <div className={styles['left-container']}>
-                    <ShoppingCard modal={openModal} cartList={cartItemList} resetUI={resetUI}  finalList={setFinalList}></ShoppingCard>
+                    <ShoppingCard modal={openModal} updateCardCount={updateCardCount} updateNotificationCount={updateNotificationCount} cartList={cartItemList} resetUI={resetUI}  finalList={setFinalList}></ShoppingCard>
                     <div>
                         <DefaultAddress></DefaultAddress>
                     </div>

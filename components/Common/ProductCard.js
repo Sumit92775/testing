@@ -9,9 +9,19 @@ const ProductCard = (data) => {
     const dispatch = useDispatch();
 
     console.log("Data: ",data.product);
+    
+    const fun = () =>{
+
+    }
+
 
     return (
-        <Link href="/service-detail" passHref={true}>
+        <Link href={{
+        pathname: "/service-detail",
+        query: {
+            id: data.product.id,
+        }
+    }} passHref={true} >
             <div className={styles['product-card']} onClick={() => dispatch(removeProvider(data.product.id))}>
                 <div className={styles['product-image']}>
                     <Image layout="fill" src="/product (2).png" alt={""} />

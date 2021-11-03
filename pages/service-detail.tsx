@@ -9,10 +9,15 @@ import Image from 'next/image';
 import { StarOutlined } from '@material-ui/icons';
 import { editCartItem, getItemInCart, getServicesListByStoreId, getStoreByStoreId } from '../services/items';
 import Link from "next/link";
+import { getNotifications } from '../services/notification';
+import { getCartStatus } from '../services/header';
 
 const ServiceDetail = () => {
     const router = useRouter(),
     { slug } = router.query;
+    let query = router.query;
+    let id = query.id;
+    console.log("Router Router: ",id);
     const [ selected_tab, changeSelectedTab ] = useState('restaurants');
     
     const [serviceDetails, setServiceDetails] = useState([]);
@@ -22,82 +27,115 @@ const ServiceDetail = () => {
     const [keyValueArray, setKeyValueArray] = useState([]);
     const [serviceDetail, setServiceDetail] = useState([]);
 
+    
+    const [notificationCount, setNotificationCount] = useState(0);
+    const [cartItemCount, setCartItemCount] = useState(0);
+
     const onTabClick = (key:string, event: any) => {
         changeSelectedTab(key);
     };
     
     useEffect(() =>{
+
+        let query = router.query;
+        let id = query.id;
+        console.log("Router: ",id);
+
         try{
-            getStoreByStoreId().then(res =>{
-            if(res.status){
-                console.log("Service Details Response: ",res);
-                setServiceDetails(res.data[0]);
-            }else{
-                message.error(res.status);
-            }
-
-            getServicesListByStoreId().then(res =>{
+            getStoreByStoreId(id).then(res =>{
                 if(res.status){
-                    console.log("Service List Store By Store Id: ",res);
-                    setServiceList(res.data);
+                    console.log("Service Details Response: ",res);
+                    setServiceDetails(res.data[0]);
                 }else{
-                    console.log("Error in Service List Store By Store Id: ",res);
+                    message.error(res.status);
                 }
-            })
 
-            getItemInCart().then(res =>{
-                if(res.status){
-                    setCartItemList(res.data);
-                    console.log("Cart List: ",res.data);
-                    var itemInCartArray = res.data;
-                    getServicesListByStoreId().then(res =>{
-                        if(res.status){
-                            console.log("Inside: ",itemInCartArray);
-                            // let cartItemsArray = itemInCartArray;
-                            let cartItems1Array = itemInCartArray;
-                            let serviceItemArray = res.data;
-                            let serviceItemArray1 = res.data;
-
-                            console.log("ServiceItemArray: ",serviceItemArray);
-                            
-                            for(let i = 0 ; i < serviceItemArray.length ; i++){
-                                for(let j = 0 ; j < cartItems1Array.length ; j++){
-                                    if(serviceItemArray[i].id === cartItems1Array[j].serviceId){
-                                        serviceItemArray1[i].alreadyAdded = "true";
-                                        console.log("Array: ",serviceItemArray1[i]);
-                                        
-                                    }else{
-                                        // serviceItemArray1[i].alreadyAdded = "check";
-                                    }
-                                    console.log(serviceItemArray[i].id+" "+cartItems1Array[j].serviceId);
-                                }
-                            }
-
-                       
-
-                            console.log("Service Array After Sorting: ",serviceItemArray1);
-                            
-                            console.log("Service List Store By Store Id1: ",res);
-                            setServiceList(serviceItemArray1);
-                        }else{
-                            console.log("Error in Service List Store By Store Id1: ",res);
-                        }  
-                    })
-
-                    let cartItemArray = res.data;
-                    for(let i = 0 ; i < res.data.length ; i++){
-                        if(res.data[i].id == 1){
-
-                        }else{
-
-                        }
+                getServicesListByStoreId(id).then(res =>{
+                    if(res.status){
+                        console.log("Service List Store By Store Id: ",res);
+                        setServiceList(res.data);
+                    }else{
+                        console.log("Error in Service List Store By Store Id: ",res);
                     }
-                }else{
-                    console.log(res.status);
-                }
+                })
+
+                getItemInCart().then(res =>{
+                    if(res.status){
+                        setCartItemList(res.data);
+                        console.log("Cart List: ",res.data);
+                        var itemInCartArray = res.data;
+                        getServicesListByStoreId(id).then(res =>{
+                            if(res.status){
+                                console.log("Inside: ",itemInCartArray);
+                                // let cartItemsArray = itemInCartArray;
+                                let cartItems1Array = itemInCartArray;
+                                let serviceItemArray = res.data;
+                                let serviceItemArray1 = res.data;
+
+                                console.log("ServiceItemArray: ",serviceItemArray);
+                                
+                                for(let i = 0 ; i < serviceItemArray.length ; i++){
+                                    for(let j = 0 ; j < cartItems1Array.length ; j++){
+                                        if(serviceItemArray[i].id === cartItems1Array[j].serviceId){
+                                            serviceItemArray1[i].alreadyAdded = "true";
+                                            console.log("Array: ",serviceItemArray1[i]);
+                                            
+                                        }else{
+                                            // serviceItemArray1[i].alreadyAdded = "check";
+                                        }
+                                        console.log(serviceItemArray[i].id+" "+cartItems1Array[j].serviceId);
+                                    }
+                                }
+
+                        
+
+                                console.log("Service Array After Sorting: ",serviceItemArray1);
+                                
+                                console.log("Service List Store By Store Id1: ",res);
+                                setServiceList(serviceItemArray1);
+                            }else{
+                                console.log("Error in Service List Store By Store Id1: ",res);
+                            }  
+                        })
+
+                        let cartItemArray = res.data;
+                        for(let i = 0 ; i < res.data.length ; i++){
+                            if(res.data[i].id == 1){
+
+                            }else{
+
+                            }
+                        }
+                    }else{
+                        console.log(res.status);
+                    }
+                })
+
             })
 
-        })
+            getNotifications(1).then(res =>{
+                if(res.status === 404 || res.status === 403 || res.status == false){
+                    setNotificationCount(0);
+                }else{
+                    setNotificationCount(res?.newNotifications);
+                }
+            }).catch(error =>{
+                console.log(error);
+            })
+
+            getCartStatus().then(res =>{
+                if(res.status == false || res.status == 404 || res.status == 403){
+                    setCartItemCount(0);
+                    console.log("ResponseCart: ",res);
+                }else{
+                    if(res.data){
+                        console.log("Cart Count: ",res.data[0]);
+                        setCartItemCount(res.data[0].cartCount);
+                    }else{
+
+                    }
+                }
+            })
         }catch(error){
             console.log("Error in getting store by store id: ",error);   
         }
@@ -110,7 +148,7 @@ const ServiceDetail = () => {
                 setCartItemList(res.data);
                 console.log("Cart List: ",res.data);
                 var itemInCartArray = res.data;
-                getServicesListByStoreId().then(res =>{
+                getServicesListByStoreId(id).then(res =>{
                     if(res.status){
                         if(res.data){
                             
@@ -149,7 +187,7 @@ const ServiceDetail = () => {
             }else{
                console.log(res.status);
                setCartItemList([]);
-               getServicesListByStoreId().then(res =>{
+               getServicesListByStoreId(id).then(res =>{
                 if(res.status){
                     console.log("Reset UI: ",res);
                     setServiceList(res.data);
@@ -160,6 +198,30 @@ const ServiceDetail = () => {
             }
         }).catch(error =>{
             console.log("Error in resetUI",error);
+        })
+
+        getNotifications(1).then(res =>{
+            if(res.status === 404 || res.status === 403 || res.status == false){
+                setNotificationCount(0);
+            }else{
+                setNotificationCount(res?.newNotifications);
+            }
+        }).catch(error =>{
+            console.log(error);
+        })
+
+        getCartStatus().then(res =>{
+            if(res.status == false || res.status == 404 || res.status == 403){
+                setCartItemCount(0);
+                console.log("ResponseCart: ",res);
+            }else{
+                if(res.data){
+                    console.log("Cart Count: ",res.data[0]);
+                    setCartItemCount(res.data[0].cartCount);
+                }else{
+
+                }
+            }
         })
     }
 
@@ -218,8 +280,9 @@ const ServiceDetail = () => {
     const user_types = ['Low to High', 'High to Low'];
     const location = ['Location 1', 'Location 2'];
 
+
     return (
-        <PublicLayout>
+        <PublicLayout data={{cartCount: cartItemCount, notificationCount: notificationCount}}>
             <section className="banner banner-3">
                 <Image layout="fill" src="/slider 1.jpg" alt="" />
             </section>

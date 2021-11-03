@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Divider, Tabs } from 'antd';
 import styles from '../styles/components/Settings.module.scss';
 import SettingCard from '../components/Common/SettingCard'
@@ -10,6 +10,8 @@ import NotificationAndSecurity from './settings-modals/Notification-And-Security
 import SubscriptionTiersModal from './settings-modals/Subscription-Tiers-Modal';
 import ProfileLeft from './profile-left';
 import CustomerLayout from '../components/User/Customer-Layout';
+import { getNotifications } from '../services/notification';
+import { getCartStatus } from '../services/header';
 
 
 const Settings = () => {
@@ -81,9 +83,44 @@ const openModal = (type : any) => {
     }
 };
 
+const [notificationCount, setNotificationCount] = useState(0);
+const [cartItemCount, setCartItemCount] = useState(0);
+
+useEffect(() =>{
+    try{
+        console.log("CHECK");
+        
+        getNotifications(1).then(res =>{
+            if(res.status === 404 || res.status === 403 || res.status == false){
+                setNotificationCount(0);
+            }else{
+                setNotificationCount(res?.newNotifications);
+            }
+        }).catch(error =>{
+            console.log(error);
+        })
+
+        getCartStatus().then(res =>{
+            if(res.status == false || res.status == 404 || res.status == 403){
+                setCartItemCount(0);
+                console.log("ResponseCart: ",res);
+            }else{
+                if(res.data){
+                    console.log("Cart Count: ",res.data[0]);
+                    setCartItemCount(res.data[0].cartCount);
+                }else{
+
+                }
+            }
+        })
+
+    }catch(error: any){
+        console.log(error);
+    }
+},[]);
 
     return(
-        <CustomerLayout>
+        <CustomerLayout data={{cartCount: cartItemCount, notificationCount: notificationCount}}>
             <div className={styles['main-container']}>
                 <div>
                     <ProfileLeft></ProfileLeft>

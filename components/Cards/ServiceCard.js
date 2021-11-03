@@ -99,7 +99,10 @@ const ServiceCard = ({item, resetUI, setKeyValueArray, setServiceDetail}) => {
                 }else{
                     console.log(res.status);
                 }
-            })
+            });
+
+            
+
         }catch(error){
             message.error(error)
             console.log(error);
@@ -149,15 +152,6 @@ const ServiceCard = ({item, resetUI, setKeyValueArray, setServiceDetail}) => {
         }catch(error){
             console.log(error);
         }
-    }
-
-    const handel = (value) =>{
-        // setConstantValue(value)
-    }
-
-    const handelValue = (e) =>{
-        console.log("Value Selected: ",e);
-        // setServiceValue(prev => [...prev, e]);
     }
 
     const handleValueSelected = (itemId, propertyKey, selectedValue) =>{

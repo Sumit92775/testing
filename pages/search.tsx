@@ -5,11 +5,16 @@ import SearchFilters from '../components/Cards/SearchFilter';
 import { Tree, Collapse, Select, Form, Switch, Divider, message } from 'antd';
 import MapViewUser from '../components/Common/MapViewUser'
 import { getStoreByLocation } from '../services/home';
+import { getNotifications } from '../services/notification';
+import { getCartStatus } from '../services/header';
 const Search = () => {
 
     const [ map, toggleMap ] = useState(<div className="full mtn-25"></div>);
     const [storeLatLong, setStoreLatLong] = useState([] as any);
     
+    const [notificationCount, setNotificationCount] = useState(0);
+    const [cartItemCount, setCartItemCount] = useState(0);
+
     useEffect(() => {
         try{
             getStoreByLocation().then( res =>{
@@ -32,9 +37,32 @@ const Search = () => {
                 }else{
 
                 }
-            }).catch(error =>{
-
             })
+
+            getNotifications(1).then(res =>{
+                if(res.status === 404 || res.status === 403 || res.status == false){
+                    setNotificationCount(0);
+                }else{
+                    setNotificationCount(res?.newNotifications);
+                }
+            }).catch(error =>{
+                console.log(error);
+            })
+
+            getCartStatus().then(res =>{
+                if(res.status == false || res.status == 404 || res.status == 403){
+                    setCartItemCount(0);
+                    console.log("ResponseCart: ",res);
+                }else{
+                    if(res.data){
+                        console.log("Cart Count: ",res.data[0]);
+                        setCartItemCount(res.data[0].cartCount);
+                    }else{
+    
+                    }
+                }
+            })
+
         }catch(error: any){
             message.error(error);
         }
@@ -163,7 +191,7 @@ const Search = () => {
     }
 
     return (
-        <PublicLayout>
+        <PublicLayout data={{cartCount: cartItemCount, notificationCount: notificationCount}}>
             <div className="search-page">
                 <div>
                     <SearchFilters />

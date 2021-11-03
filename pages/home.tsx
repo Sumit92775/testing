@@ -26,6 +26,8 @@ export default function Home() {
 
   const [notificationCount, setNotificationCount] = useState(0);
   const [cartItemCount, setCartItemCount] = useState(0);
+  const [ourTopProvider, setOurTopProvider] = useState([]);
+
 
 
   useEffect( () =>{
@@ -83,8 +85,6 @@ export default function Home() {
     }
 
  },[])
-
-const [ourTopProvider, setOurTopProvider] = useState([]);
 
  const handleApiFetch = async () =>{
   try{
@@ -198,7 +198,7 @@ const [ourTopProvider, setOurTopProvider] = useState([]);
   };
 
   return (
-    <PublicLayout>
+    <PublicLayout data={{cartCount: cartItemCount, notificationCount: notificationCount}}>
       <section className="banner home">
         <Image layout="fill" src="/slider 1.jpg" alt="" />
       </section>

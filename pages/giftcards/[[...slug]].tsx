@@ -1,16 +1,15 @@
 import Head from 'next/head'
-import GiftCard from '../components/Gift Card/GiftCard';
-import ExpiredGiftCards from '../components/Gift Card/Expired-GiftCards';
-import ShopCard from '../components/Gift Card/ShopCard';
+import GiftCard from '../../components/Gift Card/GiftCard';
+import ExpiredGiftCards from '../../components/Gift Card/Expired-GiftCards';
+import ShopCard from '../../components/Gift Card/ShopCard';
 import { Tabs, Button } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import CustomerLayout from '../components/User/Customer-Layout';
-import styles from '../styles/components/GiftCards.module.scss'
-import { getItemInCart } from '../services/items';
-import { getNotifications } from '../services/notification';
-import { getCartStatus } from '../services/header';
+import CustomerLayout from '../../components/User/Customer-Layout';
+import styles from '../../styles/components/GiftCards.module.scss'
+import { getNotifications } from '../../services/notification';
+import { getCartStatus } from '../../services/header';
 
 const { TabPane } = Tabs;
 
@@ -98,9 +97,35 @@ export default function GiftCards() {
     ];
 
     const [createGiftCard, setCreateGiftCard] = useState(false);
+
+    const handleOk = () => {
+        // console.log('ok clicked', evt);
+    }
+
+    const handleCancel = () => {
+        setCreateGiftCard(false);
+    }
+    
+    const openModal = (type :any) => {
+
+        console.log(type);
+        if(type === "create-gift-card"){
+            setCreateGiftCard(true);
+        }
+    };
+
+    const router = useRouter(),
+    { slug } = router.query,
+    selected_tab = slug && slug[0] ? slug[0] : 'providers',
+    
+    onTabClick = (key:string, event: any) => {
+        console.log("Event And Key: ",event);
+        
+        router.push(`${process.env.base_url}giftcards/${key}`)
+    };
+
     const [notificationCount, setNotificationCount] = useState(0);
     const [cartItemCount, setCartItemCount] = useState(0);
-    const [cartItemList, setCartItemList] = useState([]);
 
     useEffect(() =>{
         try{
@@ -134,30 +159,7 @@ export default function GiftCards() {
             console.log(error);
         }
     },[]);
-
-    const handleOk = () => {
-        // console.log('ok clicked', evt);
-    }
-
-    const handleCancel = () => {
-        setCreateGiftCard(false);
-    }
     
-    const openModal = (type :any) => {
-
-        console.log(type);
-        if(type === "create-gift-card"){
-            setCreateGiftCard(true);
-        }
-    };
-
-    const router = useRouter(),
-    { slug } = router.query,
-    selected_tab = slug && slug[0] ? slug[0] : 'providers',
-    
-    onTabClick = (key:string, event: any) => {
-        router.push(`${process.env.base_url}gift-cards/${key}`)
-    };
 
     return (
         <CustomerLayout data={{cartCount: cartItemCount, notificationCount: notificationCount}}>
@@ -183,26 +185,29 @@ export default function GiftCards() {
                         </div>
                         } visible={createGiftCard} onOk={handleOk} onCancel={handleCancel}>
                             {/* < CreateGiftCard/> */}
-                    </Modal>
+                        </Modal>
                 </h3>
+
 
                 <Tabs defaultActiveKey="1" activeKey={selected_tab} onTabClick={onTabClick}>
                     <TabPane tab="Active" key="1">
                         <h5>Your Active Gift Cards</h5>
-                        <div className={styles['res-grid']}>
+                        <GiftCard></GiftCard>
+                        {/* <div className={styles['res-grid']}>
                             {count.map((a, i) => {
                                 return <GiftCard key={i} card={a} />
                             })}
-                        </div>
+                        </div> */}
                     </TabPane>
 
                     <TabPane tab="Expired" key="2">
                         <h5>Your Expired Gift Cards</h5>
-                        <div className={styles['res-grid']}>
+                        <ExpiredGiftCards />
+                        {/* <div className={styles['res-grid']}>
                             {ExpiredCardList.map((a, i) => {
                                 return <ExpiredGiftCards key={i} card={a} />
                             })}
-                        </div>
+                        </div> */}
                     </TabPane>
 
                     <TabPane tab="Shop" key="3">

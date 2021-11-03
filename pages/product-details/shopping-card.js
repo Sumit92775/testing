@@ -2,7 +2,7 @@ import { Button, Divider } from 'antd';
 import React, { useEffect, useState } from 'react';
 import ShoppingItem from './shopping-item';
 
-const ShoppingCard = ({modal, cartList, resetUI, finalList }) =>{
+const ShoppingCard = ({modal, cartList, resetUI, finalList, updateCardCount, updateNotificationCount }) =>{
 
     const [productDetailDataObj, setProductDetailDataObj ] = useState([]);
 
@@ -13,6 +13,8 @@ const ShoppingCard = ({modal, cartList, resetUI, finalList }) =>{
     const setUpdatedService = (itemId, qty) =>{
         finalList(itemId, qty);
         resetUI();
+        updateCardCount();
+        updateNotificationCount();
     }
 
     // props?.setCartItemList

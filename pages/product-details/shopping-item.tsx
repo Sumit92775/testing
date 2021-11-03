@@ -7,7 +7,6 @@ import { deleteFromCart, editCartItem, getItemInCart } from '../../services/item
 
 const ShoppingItem = (props : any) =>{
 
-
     useEffect(() =>{
         console.log("Props Cart: ",props?.itemObject);
     },[]);
@@ -17,6 +16,7 @@ const ShoppingItem = (props : any) =>{
         try{
             deleteFromCart(itemId).then(res =>{
                 if(res.status){
+                    console.log("Response: ",res);
                     props?.resetUI();
                 }else{
                     props?.resetUI();
@@ -28,7 +28,7 @@ const ShoppingItem = (props : any) =>{
         }catch(error){
             console.log(error);
         }
-    }
+    };
 
     const handelEditQuantity = (qty: any, index: any) =>{
         // console.log("Quantity Edited: ",qty);
@@ -85,7 +85,7 @@ const ShoppingItem = (props : any) =>{
             console.log(error);
             
         }
-    }
+    };
 
     return(
         <div className={styles['container']}>
@@ -119,5 +119,4 @@ const ShoppingItem = (props : any) =>{
         </div>
     )
 }
-
 export default ShoppingItem;

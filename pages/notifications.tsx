@@ -7,6 +7,7 @@ import NotificationCard from '../components/Common/notification-card';
 import ProfileLeft from './profile-left';
 import CustomerLayout from '../components/User/Customer-Layout';
 import {getNotifications, setNotificationRead} from '../services/notification';
+import { getCartStatus } from '../services/header';
 
 
 const Notifications = () => {
@@ -17,6 +18,10 @@ const Notifications = () => {
     const [paginationPage, setPaginationPage] = useState(1);
     const [newNotifications, setNewNotifications] = useState(0);
     const [notificationAvailable, setNotificationAvailable] = useState(true);
+
+    const [notificationCount, setNotificationCount] = useState(0);
+    const [cartItemCount, setCartItemCount] = useState(0);
+
 
     useEffect(() =>{
         console.log("UseEffect Run 1 !!");
@@ -43,6 +48,31 @@ const Notifications = () => {
                     message.error(error);
                 })
                
+                getNotifications(1).then(res =>{
+                    if(res.status === 404 || res.status === 403 || res.status == false){
+                        setNotificationCount(0);
+                    }else{
+                        setNotificationCount(res?.newNotifications);
+                    }
+                }).catch(error =>{
+                    console.log(error);
+                })
+    
+                getCartStatus().then(res =>{
+                    if(res.status == false || res.status == 404 || res.status == 403){
+                        setCartItemCount(0);
+                        console.log("ResponseCart: ",res);
+                    }else{
+                        if(res.data){
+                            console.log("Cart Count: ",res.data[0]);
+                            setCartItemCount(res.data[0].cartCount);
+                        }else{
+        
+                        }
+                    }
+                })
+    
+
             }catch(error:any){
                 message.error(error);
             }
@@ -78,7 +108,7 @@ const openModal = (type : any) => {
 };
 
     return(
-        <CustomerLayout>
+        <CustomerLayout data={{cartCount: cartItemCount, notificationCount: 0}}>
             <div className={styles['main-container']}>
                 <div>
                     <ProfileLeft></ProfileLeft>

@@ -8,6 +8,9 @@ import { addProvider } from '../actions/sponsoredProviders'
 import astyles from '../styles/components/ContactUs.module.scss';
 import {Form} from 'antd';
 import { Option } from 'antd/lib/mentions';
+import { getCartStatus } from '../services/header';
+import { useEffect, useState } from 'react';
+import { getNotifications } from '../services/notification';
 
 const { TextArea } = Input;
 
@@ -17,12 +20,50 @@ export default function Home() {
     console.log(`selected ${value}`);
   }
   
-const quantityList = [{value : 1},{value : 2}];
+const quantityList = [{value : 1},{value : 2}]; 
+const [notificationCount, setNotificationCount] = useState(0);
+const [cartItemCount, setCartItemCount] = useState(0);
+
+
+
+useEffect(() =>{
+  try{
+      console.log("CHECK");
+      
+      getNotifications(1).then(res =>{
+          if(res.status === 404 || res.status === 403 || res.status == false){
+              setNotificationCount(0);
+          }else{
+              setNotificationCount(res?.newNotifications);
+          }
+      }).catch(error =>{
+          console.log(error);
+      })
+
+      getCartStatus().then(res =>{
+          if(res.status == false || res.status == 404 || res.status == 403){
+              setCartItemCount(0);
+              console.log("ResponseCart: ",res);
+          }else{
+              if(res.data){
+                  console.log("Cart Count: ",res.data[0]);
+                  setCartItemCount(res.data[0].cartCount);
+              }else{
+
+              }
+          }
+      })
+
+  }catch(error: any){
+      console.log(error);
+  }
+},[]);
+
 
   return (
 
     <div className={astyles['container']}>
-      <PublicLayout>
+      <PublicLayout data={{cartCount: cartItemCount, notificationCount: notificationCount}}>
           <section className="banner home" id="test">
             <Image className="ht-100" layout="fill" src="/slider 1.jpg" alt="" />
             <div className={astyles['about-us-text-container']}>

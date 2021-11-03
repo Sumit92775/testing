@@ -163,7 +163,7 @@ const AcceptedBookings = () => {
         },
 
     ];
-
+    
     message.config({
         duration: 5,
         top: 100

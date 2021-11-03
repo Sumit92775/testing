@@ -14,42 +14,30 @@ import { getNotifications } from '../../services/notification';
 import cx from 'classnames';
 import {SettingFilled} from '@ant-design/icons'
 import { getCartStatus } from '../../services/header';
+import { getMyDetails } from '../../services/addresses';
 
 const cookies = new Cookies();
 
-const Header = () => {
+const Header = (props) => {
     const { t } = useTranslation('common');
+    console.log("Public Layout Header Props: ", props);
 
-    const [notificationCount, setNotificationCount] = useState(0);
-    const [cartItemCount, setCartItemCount] = useState(0);
-    
+    // const [notificationCount, setNotificationCount] = useState(0);
+    // const [cartItemCount, setCartItemCount] = useState(0);
+    const [username, setUsername] = useState('')
     
     useEffect( () =>{
         if(cookies.get('accessToken')){
             try{
-                getNotifications(1).then(res =>{
-                    if(res.status === 404){
-                      setNotificationCount(0);
+                getMyDetails().then(res =>{
+                    if(res.status){
+                        if(res.UserData){
+                            setUsername(res.UserData.userName)
+                        }
                     }else{
-                      setNotificationCount(res?.newNotifications);
-                      
+
                     }
-                }).catch(error =>{
-                    console.log(error);
                 })
-              getCartStatus().then(res =>{
-                if(res.status == false || res.status == 404 || res.status == 403){
-                    setCartItemCount(0);
-                    console.log("ResponseCart: ",res);
-                }else{
-                    if(res.data){
-                        console.log("Cart Count Header: ",res.data);
-                        setCartItemCount(res.data[0].cartCount);
-                    }
-                  }
-                console.log("RES: ",res);
-              })
-        
             }catch(error){
               console.log(error);
               message.error(error);
@@ -58,7 +46,9 @@ const Header = () => {
     
         }
   
-   },[])
+    },[])
+
+
 
 
     return (
@@ -79,12 +69,12 @@ const Header = () => {
                         {/* <Avatar className="mr-8" size={22} icon={<UserOutlined />} /> */}
                         {/* <span>Arabic</span> */}
                         </div>
-                    <Badge className="mt-5 mr-20" count={notificationCount}>
+                    <Badge className="mt-5 mr-20" count={props?.data.notificationCount}>
                         <Link href="/notifications" passHref={true}>
                             <span className="cursor txt light1"><NotificationsIcon /></span>
                         </Link>
                     </Badge>
-                    <Badge className="mt-5 mr-20" count={cartItemCount}>
+                    <Badge className="mt-5 mr-20" count={props?.data.cartCount}>
                         <Link href="/product-details" passHref={true}>
                             <span className="cursor txt light1"><ShoppingCart/></span>
                         </Link>
@@ -93,7 +83,7 @@ const Header = () => {
                         <span className="cursor txt light1 mr-20"><SettingFilled /></span>   
                     </Link>
                         <Menu mode="horizontal" className="user-actions transparent-bg">
-                            <SubMenu key="SubMenu" icon={<Avatar className="mr-5" size={22} icon={<UserOutlined />} />} title="Halais">
+                            <SubMenu key="SubMenu" icon={<Avatar className="mr-5" size={22} icon={<UserOutlined />} />} title={username}>
                                 <Menu.Item key="setting-1">
                                     <Link href={ process.env.base_url + "bookings" } passHref={true}>
                                         My Bookings

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Divider, Tabs } from 'antd';
 import styles from '../../styles/components/Payment.module.scss';
 import { useRouter } from 'next/router';
@@ -15,6 +15,8 @@ import PaymentDetails4 from '../../components/Payments/payment-details-4';
 import PaymentMethods2 from '../../components/Payments/payment-methods-2';
 import CustomerLayout from '../../components/User/Customer-Layout';
 import PaymentDetails1 from '../../components/Payments/payment-details-1';
+import { getNotifications } from '../../services/notification';
+import { getCartStatus } from '../../services/header';
 
 const Payments = () => {
 
@@ -26,8 +28,44 @@ const Payments = () => {
         router.push(`${process.env.base_url}payments/${key}`)
     };
 
+    const [notificationCount, setNotificationCount] = useState(0);
+    const [cartItemCount, setCartItemCount] = useState(0);
+
+    useEffect(() =>{
+        try{
+            console.log("CHECK");
+            
+            getNotifications(1).then(res =>{
+                if(res.status === 404 || res.status === 403 || res.status == false){
+                    setNotificationCount(0);
+                }else{
+                    setNotificationCount(res?.newNotifications);
+                }
+            }).catch(error =>{
+                console.log(error);
+            })
+
+            getCartStatus().then(res =>{
+                if(res.status == false || res.status == 404 || res.status == 403){
+                    setCartItemCount(0);
+                    console.log("ResponseCart: ",res);
+                }else{
+                    if(res.data){
+                        console.log("Cart Count: ",res.data[0]);
+                        setCartItemCount(res.data[0].cartCount);
+                    }else{
+    
+                    }
+                }
+            })
+
+        }catch(error: any){
+            console.log(error);
+        }
+    },[]);
+
     return(
-        <CustomerLayout>
+        <CustomerLayout data={{cartCount: cartItemCount, notificationCount: notificationCount}}>
         <div className="">
             <h3 className="mb-24">Payments</h3>
             <Tabs className="wide-tabs" activeKey={selected_tab} onTabClick={ onTabClick }>

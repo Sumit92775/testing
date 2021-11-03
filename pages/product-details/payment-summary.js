@@ -1,6 +1,6 @@
 import { Button, Divider, Input, message } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { myOrders } from '../../services/items';
+import { emptyCartAfterShopping, myOrders } from '../../services/items';
 import styles from '../../styles/components/Product-Details.module.scss'
 import { useRouter } from 'next/router';
 
@@ -9,24 +9,10 @@ const PaymentSummary = ({orderItemList, newPrice}) =>{
         const router = useRouter();
         const [totalCost, setTotalCost] = useState(0);
         const [orderItemList1, setOrderItemlist1] = useState([]);
-        // const [totalPrice, setTotalPrice] = useState(0);
+        
         useEffect(() =>{
-          // if(props.orderItemList)
-          // let orderItemList = orderItemList;
-
           setOrderItemlist1(orderItemList);
           setTotalCost(newPrice);
-
-          let totalPrice = 0;
-
-          // for(let i = 0 ; i < orderItemList1.length ; i++){
-          //   let qty = orderItemList1[i].qty;
-          //   let price = orderItemList1[i].Service.price;
-          //   totalPrice+=qty*price;
-          // }
-
-          console.log("TotalPrice: ",totalPrice);
-          // setTotalCost(totalPrice);
 
       },[orderItemList, newPrice]);
       
@@ -81,7 +67,9 @@ const PaymentSummary = ({orderItemList, newPrice}) =>{
             price: totalPrice
           }).then(res =>{
             console.log("Bookings: ",res);
-            router.push(`${ process.env.base_url }bookings`);
+            emptyCartAfterShopping().then(res =>{
+              router.push(`${ process.env.base_url }bookings`);
+            })
           })
         }catch(error){
           message.error(error);

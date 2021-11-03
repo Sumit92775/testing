@@ -1,40 +1,39 @@
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
 
-export const getStoreByStoreId = () =>{
+export const getStoreByStoreId = (storeId: any) =>{
     
 var config = {
     method: 'GET',
     // url: 'saloonplus.com:8000/api_v1/store/public/getStoreByStoreId?storeId=1&&',
     headers: { 
-      'accesstoken': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjksInVzZXJOYW1lIjoic2hpdmkxMjUiLCJlbWFpbCI6InJpc2hhYmhAY3liZXJ0cm9ucy5pbiIsInBob25lTnVtYmVyIjoiOTk5IiwidXNlclR5cGUiOjIsImlhdCI6MTYzMzU4MzQ4Mn0.fyeZ_pWFt6PmeQVJEJqEBmBTtJmHuDM1YBIwfKyteuI', 
+      accesstoken: cookies.get('accessToken'), 
       'Content-Type': 'application/json', 
       'Authorization': 'authToken'
     }
   };
 
-  return fetch(`http://saloonplus.com:8000/api_v1/store/public/getStoreByStoreId?storeId=1&&`, config)
+  return fetch(`http://saloonplus.com:8000/api_v1/store/public/getStoreByStoreId?storeId=${storeId}&&`, config)
   .then(response => {
       return response.json();
-
   }).catch(error =>{
     console.log(error);
   });
   
 }
 
-export const getServicesListByStoreId = () =>{
+export const getServicesListByStoreId = (storeId: any) =>{
     
     var config = {
-        method: 'get',
-        url: 'saloonplus.com:8000/api_v1/store/public/getServiceListByStoreId?storeId=1',
+        method: 'GET',
+        // url: 'saloonplus.com:8000/api_v1/store/public/getServiceListByStoreId?storeId=1',
         headers: { 
           'Authorization': 'authToken', 
           'Content-Type': 'application/json'
         }
       };
       
-  return fetch(`http://saloonplus.com:8000/api_v1/store/public/getServiceListByStoreId?storeId=1`, config)
+  return fetch(`http://saloonplus.com:8000/api_v1/store/public/getServiceListByStoreId?storeId=${storeId}`, config)
   .then(response => {
       return response.json();
 
@@ -116,6 +115,28 @@ export const deleteFromCart = (itemId: any) =>{
 
 }
 
+export const emptyCartAfterShopping = () =>{
+  
+var data = '';
+
+var config = {
+  method: 'DELETE',
+  headers: { 
+    'Authorization': 'authToken', 
+    'Content-Type': 'application/json', 
+    accesstoken: cookies.get('accessToken')
+  },
+  body : data
+};
+
+return fetch(`http://saloonplus.com:6001/api_v1/cart/emptyCart`, config)
+.then(response => {
+    return response.json();
+}).catch(error =>{
+  console.log(error);
+});
+
+}
 
 export const editCartItem = (object: any) =>{
   

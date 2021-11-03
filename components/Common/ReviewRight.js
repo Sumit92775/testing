@@ -75,7 +75,11 @@ const ReviewRight = (props) =>{
 
     return(
         <div className={ cx(styles["reviews"], "reviews") }>
-        <List
+
+            <div className="txt pull center mt-50">
+                <span>No Reviews Available.</span>
+            </div>
+        {/* <List
             itemLayout="vertical"
             pagination={{
                 onChange: page => {
@@ -127,7 +131,7 @@ const ReviewRight = (props) =>{
                     ></List.Item.Meta>
                 </List.Item>
             )}
-        ></List>
+        ></List> */}
     </div>
 
     )

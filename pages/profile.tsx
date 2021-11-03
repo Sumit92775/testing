@@ -17,6 +17,8 @@ import { changePassword } from '../services/auth';
 import cx from 'classnames';
 import AdditionalDetails from './profile/additional-details';
 import { Form} from 'antd';
+import { getNotifications } from '../services/notification';
+import { getCartStatus } from '../services/header';
 
 const Profile = (props: any) =>{
 
@@ -32,10 +34,45 @@ const [userName, setUserName] = useState("");
 const [email, setEmail] = useState("");
 const [mobileNumber, setMobileNumber] = useState("");
 
+const [notificationCount, setNotificationCount] = useState(0);
+const [cartItemCount, setCartItemCount] = useState(0);
+
+
 useEffect(() =>{
     message.config({duration: 5, top: 60})
     // message.error("hello");
 
+    try{
+
+        console.log("CHECK");
+        
+        getNotifications(1).then(res =>{
+            if(res.status === 404 || res.status === 403 || res.status == false){
+                setNotificationCount(0);
+            }else{
+                setNotificationCount(res?.newNotifications);
+            }
+        }).catch(error =>{
+            console.log(error);
+        })
+
+        getCartStatus().then(res =>{
+            if(res.status == false || res.status == 404 || res.status == 403){
+                setCartItemCount(0);
+                console.log("ResponseCart: ",res);
+            }else{
+                if(res.data){
+                    console.log("Cart Count: ",res.data[0]);
+                    setCartItemCount(res.data[0].cartCount);
+                }else{
+
+                }
+            }
+        })
+
+    }catch(error: any){
+
+    }
     getMyDetails().then((res)=>{
         if(res.status == true){
             setUserDetailsArray(res.UserData);
@@ -129,7 +166,7 @@ const openModal = (type : any) => {
       }
 
     return(
-        <CustomerLayout>
+        <CustomerLayout data={{cartCount: cartItemCount, notificationCount: notificationCount}}>
         <div className={styles['main-container']}>
             <div>
                 <ProfileLeft></ProfileLeft>

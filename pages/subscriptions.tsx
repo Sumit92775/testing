@@ -5,6 +5,9 @@ import Image from 'next/image';
 import SubscriptionCard from "../components/Common/SubscriptionCard";
 import Switch from '../components/Common/Switch';
 import styles from '../styles/components/Subscriptions-Tier.module.scss';
+import { useEffect, useState } from 'react';
+import { getNotifications } from '../services/notification';
+import { getCartStatus } from '../services/header';
 
 // const { Step } = Steps;
 
@@ -107,8 +110,44 @@ export default function Subscriptions() {
         }
       };
 
+    const [notificationCount, setNotificationCount] = useState(0);
+    const [cartItemCount, setCartItemCount] = useState(0);
+
+    useEffect(() =>{
+        try{
+            console.log("CHECK");
+            
+            getNotifications(1).then(res =>{
+                if(res.status === 404 || res.status === 403 || res.status == false){
+                    setNotificationCount(0);
+                }else{
+                    setNotificationCount(res?.newNotifications);
+                }
+            }).catch(error =>{
+                console.log(error);
+            })
+
+            getCartStatus().then(res =>{
+                if(res.status == false || res.status == 404 || res.status == 403){
+                    setCartItemCount(0);
+                    console.log("ResponseCart: ",res);
+                }else{
+                    if(res.data){
+                        console.log("Cart Count: ",res.data[0]);
+                        setCartItemCount(res.data[0].cartCount);
+                    }else{
+    
+                    }
+                }
+            })
+
+        }catch(error: any){
+            console.log(error);
+        }
+    },[]);
+
     return (
-        <PublicLayout>
+        <PublicLayout data={{cartCount: cartItemCount, notificationCount: notificationCount}}>
             <section className="banner home">
                 <Image layout="fill" src="/Subscription-banner.png" alt="" />
                 <div className="overlay-content">

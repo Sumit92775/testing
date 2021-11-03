@@ -383,7 +383,7 @@ const Cancellations = () => {
                         
                     
                 }else{
-                    message.error(res.status);
+                    // message.error(res.status);
                 }
             })
         }catch(error){

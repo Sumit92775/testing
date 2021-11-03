@@ -1,111 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tree, Collapse, Button, Image, Divider } from 'antd';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { getGiftCardsByStoreId } from '../../services/gift-cards';
 
 const ServiceDetails = (props) => {
-
+    
+    const router = useRouter();
     console.log(props.serviceDetails);
+    const [shopgiftCards, setShopGiftCards] = useState([]);
+    
+    useEffect(() =>{
+        console.log("Props: ",router.query.id);
+    })
 
-    const BusinessType = [
-        {
-            title: 'Business',
-            key: 'business',
-        },
-        {
-            title: 'Freelancer',
-            key: 'freelancer',
-            children: [
-                {
-                    title: 'Male',
-                    key: 'freelancer-male'
-                },
-                {
-                    title: 'Female',
-                    key: 'freelancer-female'
-                }
-            ],
-        },
-    ],
-    Ratings = [
-        {
-            title: <span>4 <span className="material-icons">star</span> &amp; above</span>,
-            key: 1
-        },
-        {
-            title: <span>3 <span className="material-icons">star</span> &amp; above</span>,
-            key: 2
-        },
-        {
-            title: <span>2 <span className="material-icons">star</span> &amp; above</span>,
-            key: 3
-        },
-        {
-            title: <span>1 <span className="material-icons">star</span> &amp; above</span>,
-            key: 4
-        }
-    ],
-    DemographyServing = [
-        {
-            title: 'Male',
-            key: 1
-        },
-        {
-            title: 'Female',
-            key: 2
-        },
-        {
-            title: 'Kids',
-            key: 3
-        },
-    ],
-    Price = [
-        {
-            title: `Under ${process.env.currency}50`,
-            key: 1
-        },
-        {
-            title: `Under ${process.env.currency}100`,
-            key: 2
-        },
-        {
-            title: `Under ${process.env.currency}300`,
-            key: 3
-        },
-    ],
-    Categories = [
-        {
-            // title: <span><span className="material-icons mr-5">restaurant</span> <strong>Restaurants</strong></span>,
-            title: 'Restaurants',
-            icon: 'restaurant',
-            key: 1,
-            children: [
-                {
-                    title: `Fine Dining`,
-                    key: '1-1'
-                },
-                {
-                    title: `Casual Dining`,
-                    key: '1-2'
-                },
-                {
-                    title: `Food Truck`,
-                    key: '1-3'
-                },
-            ]
-        },
-        {
-            title: `Bakery & Desert`,
-            key: 2
-        },
-        {
-            title: 'Beauty Shop',
-            key: 3
-        },
-    ];
 
     const onSelect = (selectedKeys, info) => {
         console.log('selected', selectedKeys, info);
@@ -114,6 +26,28 @@ const ServiceDetails = (props) => {
     const onCheck = (checkedKeys, info) => {
         console.log('onCheck', checkedKeys, info);
     };
+
+    const handelShowGiftCards = () =>{
+        console.log("Entered");
+        try{
+            getGiftCardsByStoreId(6).then(res =>{
+                if(res.status){
+                    if(res.data){
+                        console.log("Gift Card: ",res.data);
+                        setShopGiftCards(res.data);
+                        router.push({
+                            pathname: '/giftcards/3',
+                            query: { name: 'Someone' },
+                        })
+                    }
+                }else{
+                    
+                }
+            })
+        }catch(error){
+            console.log(error);
+        }
+    }
 
     return (
         <div className="search-filter card no-shadow">
@@ -158,13 +92,14 @@ const ServiceDetails = (props) => {
             
             <Divider className="mt-10 mb-10" />
             <h5 className="pl-12">Gift Cards</h5>
-            <div className="giftcard-images p-12">
+            <div className="p-12">
+                <Button onClick={handelShowGiftCards}>Show Gift Cards.</Button>
+                {/* <Image src="/Subscription-banner.png" alt=""/>
                 <Image src="/Subscription-banner.png" alt=""/>
                 <Image src="/Subscription-banner.png" alt=""/>
                 <Image src="/Subscription-banner.png" alt=""/>
                 <Image src="/Subscription-banner.png" alt=""/>
-                <Image src="/Subscription-banner.png" alt=""/>
-                <Image src="/Subscription-banner.png" alt=""/>
+                <Image src="/Subscription-banner.png" alt=""/> */}
             </div>
             
             <Divider className="mt-10 mb-10" />

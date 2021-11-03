@@ -14,7 +14,6 @@ export const getAccessToken = (req:any) => {
 }
 
 export const getAddresses = (req = null) =>{
-
   console.log(cookies.get('accessToken'));
     
     return fetch(`http://saloonplus.com:3004/api_v1/profile/user/getMyAddresslist`, {
@@ -150,7 +149,9 @@ export const getMyDetails = () =>{
 
 
   return fetch(`http://saloonplus.com:3004/api_v1/profile/user/getMyDetails`, config)
-  .then(response => response.json()).catch(error =>{
+  .then(response => 
+    {return response.json()}
+    ).catch(error =>{
     console.log("Error in gettinMyDetails: ",error);
   });
 

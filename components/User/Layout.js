@@ -8,7 +8,9 @@ const Layout = ({children, base_url}) => {
     return (
         <div className={styles['main-layout']}>
             <LeftSidebar></LeftSidebar>
-            <Header base_url={base_url}></Header>
+            <Header base_url={base_url} data={{
+                cartCount: 1, notificationCount: 2
+            }}></Header>
             <main className={styles['main-content']}>
                 {children}
             </main>
